@@ -4,6 +4,8 @@ namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Forum
@@ -13,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Forum
 {
+    use Timestampable;
+
     /**
      * @var integer
      *
@@ -37,14 +41,19 @@ class Forum
      */
     private $position = 0;
 
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nbMessage", type="integer", nullable=false, options={"default":0})
+     */
+    private $nbMessage = 0;
 
     /**
-     * @return string
+     * @var integer
+     *
+     * @ORM\Column(name="nbTopic", type="integer", nullable=false, options={"default":0})
      */
-    public function __toString()
-    {
-        return \sprintf('%s [%s]', $this->getLibForum(), $this->getIdForum());
-    }
+    private $nbTopic = 0;
 
     /**
      * @var Category
@@ -57,6 +66,26 @@ class Forum
      */
     private $category;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", mappedBy="forum")
+     */
+    private $topics;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return \sprintf('%s [%s]', $this->getLibForum(), $this->getIdForum());
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->topics = new ArrayCollection();
+    }
 
     /**
      * Set idForum
@@ -127,6 +156,52 @@ class Forum
     }
 
     /**
+     * Set nbMessage
+     *
+     * @param integer $nbMessage
+     * @return $this
+     */
+    public function setNbMessage($nbMessage)
+    {
+        $this->nbMessage = $nbMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get nbMessage
+     *
+     * @return integer
+     */
+    public function getNbMessage()
+    {
+        return $this->nbMessage;
+    }
+
+    /**
+     * Set nbTopic
+     *
+     * @param integer $nbTopic
+     * @return $this
+     */
+    public function setNbTopic($nbTopic)
+    {
+        $this->nbTopic = $nbTopic;
+
+        return $this;
+    }
+
+    /**
+     * Get nbTopic
+     *
+     * @return integer
+     */
+    public function getNbTopic()
+    {
+        return $this->nbTopic;
+    }
+
+    /**
      * Set category
      * @param Category $category
      * @return Forum
@@ -144,5 +219,13 @@ class Forum
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopics()
+    {
+        return $this->topics;
     }
 }

@@ -4,6 +4,8 @@ namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Category
@@ -13,6 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Category
 {
+    use Timestampable;
+
     /**
      * @var integer
      *
@@ -51,6 +55,13 @@ class Category
         return \sprintf('%s [%s]', $this->getLibCategory(), $this->getIdCategory());
     }
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->forums = new ArrayCollection();
+    }
 
     /**
      * Set idCategory

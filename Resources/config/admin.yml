@@ -15,4 +15,12 @@ services:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Forum
             - ~
+    sonata.admin.forum.topic:
+        class: ProjetNormandie\ForumBundle\Admin\TopicAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Topic" }
+        arguments:
+            - ~
+            - ProjetNormandie\ForumBundle\Entity\Topic
+            - ~
 
