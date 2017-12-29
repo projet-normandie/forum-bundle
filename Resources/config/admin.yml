@@ -1,0 +1,10 @@
+services:
+    sonata.admin.forum.category:
+        class: ProjetNormandie\ForumBundle\Admin\CategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Category" }
+        arguments:
+            - ~
+            - ProjetNormandie\ForumBundle\Entity\Category
+            - ~
+
