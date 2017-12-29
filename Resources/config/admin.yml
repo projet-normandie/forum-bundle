@@ -7,4 +7,12 @@ services:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Category
             - ~
+    sonata.admin.forum.forum:
+        class: ProjetNormandie\ForumBundle\Admin\ForumAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Forum" }
+        arguments:
+            - ~
+            - ProjetNormandie\ForumBundle\Entity\Forum
+            - ~
 
