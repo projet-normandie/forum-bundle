@@ -37,6 +37,11 @@ class Category
      */
     private $position = 0;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", mappedBy="category")
+     */
+    private $forums;
+
 
     /**
      * @return string
@@ -113,5 +118,13 @@ class Category
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForums()
+    {
+        return $this->forums;
     }
 }

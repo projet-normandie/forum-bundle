@@ -5,8 +5,8 @@ namespace ProjetNormandie\ForumBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 
 /**
- * Specific repository that serves the Category entity.
+ * Specific repository that serves the Forum entity.
  */
-class CategoryRepository extends EntityRepository
+class ForumRepository extends EntityRepository
 {
 }
