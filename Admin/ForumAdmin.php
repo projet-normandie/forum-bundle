@@ -8,6 +8,8 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -32,6 +34,14 @@ class ForumAdmin extends AbstractAdmin
         $formMapper->add('idForum', 'text', ['label' => 'idForum', 'attr' => ['readonly' => true]])
             ->add('libForum', 'text', ['label' => 'libForum'])
             ->add('category')
+            ->add(
+                'status',
+                ChoiceType::class,
+                [
+                    'label' => 'Status',
+                    'choices' => Forum::getStatusChoices(),
+                ]
+            )
             ->add('position', 'text', ['label' => 'position', 'required' => true]);
     }
 
@@ -42,7 +52,8 @@ class ForumAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('category')
-            ->add('libForum');
+            ->add('libForum')
+            ->add('status');
     }
 
     /**
@@ -54,6 +65,7 @@ class ForumAdmin extends AbstractAdmin
         $listMapper->addIdentifier('idForum')
             ->add('libForum', null, ['label' => 'libForum'])
             ->add('category')
+            ->add('status')
             ->add('position', null, ['label' => 'position'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }

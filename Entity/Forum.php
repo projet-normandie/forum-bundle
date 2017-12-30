@@ -17,6 +17,9 @@ class Forum
 {
     use Timestampable;
 
+    const STATUS_PRIVATE = 'private';
+    const STATUS_PUBLIC = 'public';
+
     /**
      * @var integer
      *
@@ -40,6 +43,13 @@ class Forum
      * @ORM\Column(name="position", type="integer", nullable=true, options={"default":0})
      */
     private $position = 0;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", nullable=false)
+     */
+    private $status = self::STATUS_PUBLIC;
 
     /**
      * @var integer
@@ -156,6 +166,29 @@ class Forum
     }
 
     /**
+     * Set status
+     *
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
      * Set nbMessage
      *
      * @param integer $nbMessage
@@ -227,5 +260,16 @@ class Forum
     public function getTopics()
     {
         return $this->topics;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getStatusChoices()
+    {
+        return [
+            self::STATUS_PRIVATE => self::STATUS_PRIVATE,
+            self::STATUS_PUBLIC => self::STATUS_PUBLIC,
+        ];
     }
 }
