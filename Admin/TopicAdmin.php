@@ -55,6 +55,7 @@ class TopicAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('idTopic')
+            ->add('language')
             ->add('libTopic', null, ['label' => 'libTopic'])
             ->add('type')
             ->add('forum')
@@ -69,6 +70,7 @@ class TopicAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper->add('idTopic')
+            ->add('language')
             ->add('libTopic')
             ->add('type')
             ->add('forum')
