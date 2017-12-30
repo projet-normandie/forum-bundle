@@ -66,6 +66,7 @@ class ForumAdmin extends AbstractAdmin
     {
         $showMapper->add('idForum')
             ->add('libForum')
-            ->add('position');
+            ->add('position')
+            ->add('topics');
     }
 }

@@ -5,6 +5,7 @@ namespace ProjetNormandie\ForumBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Topic
@@ -75,11 +76,35 @@ class Topic
     private $type;
 
     /**
+     * @var Language
+     *
+     * @Assert\NotNull
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Language")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idLanguage", referencedColumnName="idLanguage")
+     * })
+     */
+    private $language;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", mappedBy="topic")
+     */
+    private $messages;
+
+    /**
      * @return string
      */
     public function __toString()
     {
         return \sprintf('%s [%s]', $this->getLibTopic(), $this->getIdTopic());
+    }
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->messages = new ArrayCollection();
     }
 
     /**
@@ -197,5 +222,33 @@ class Topic
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set language
+     * @param Language $language
+     * @return $this
+     */
+    public function setLanguage(Language $language = null)
+    {
+        $this->language = $language;
+        return $this;
+    }
+
+    /**
+     * Get language
+     * @return Language
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }
