@@ -12,9 +12,9 @@ use Sonata\AdminBundle\Route\RouteCollection;
 /**
  * Administration manager for the Forum Bundle.
  */
-class TopicAdmin extends AbstractAdmin
+class MessageAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_topic';
+    protected $baseRouteName = 'pnforumbundle_admin_message';
 
     /**
      * @inheritdoc
@@ -30,10 +30,8 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('idTopic', 'text', ['label' => 'idTopic', 'attr' => ['readonly' => true]])
-            ->add('libTopic', 'text', ['label' => 'libTopic'])
-            ->add('forum')
-            ->add('type');
+        $formMapper->add('idMessage', 'text', ['label' => 'idTopic', 'attr' => ['readonly' => true]])
+            ->add('message', 'textarea', ['label' => 'Message', 'attr' => ['rows' => 20]]);
     }
 
     /**
@@ -42,9 +40,8 @@ class TopicAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('libTopic')
-            ->add('forum', 'doctrine_orm_model_autocomplete', [], null, [
-                'property' => 'libForum',
+            ->add('topic', 'doctrine_orm_model_autocomplete', [], null, [
+                'property' => 'libTopic',
             ]);
     }
 
@@ -54,10 +51,8 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('idTopic')
-            ->add('libTopic', null, ['label' => 'libTopic'])
-            ->add('type')
-            ->add('forum')
+        $listMapper->addIdentifier('idMessage')
+            ->add('message', null, ['label' => 'Message'])
             ->add('user')
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
@@ -68,10 +63,8 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('idTopic')
-            ->add('libTopic')
-            ->add('type')
-            ->add('forum')
-            ->add('user');
+        $showMapper->add('idMessage')
+            ->add('user')
+            ->add('message');
     }
 }

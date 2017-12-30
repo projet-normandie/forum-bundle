@@ -23,4 +23,12 @@ services:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Topic
             - ~
+    sonata.admin.forum.message:
+        class: ProjetNormandie\ForumBundle\Admin\MessageAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Message" }
+        arguments:
+            - ~
+            - ProjetNormandie\ForumBundle\Entity\Message
+            - ~
 

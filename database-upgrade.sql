@@ -42,3 +42,10 @@ ALTER TABLE `forum_topic` ADD CONSTRAINT `forum_topic_ibfk_1` FOREIGN KEY (`idUs
 ALTER TABLE `forum_message` CHANGE `idMembre` `idUser` INT(13) NOT NULL DEFAULT '0';
 ALTER TABLE `forum_message` CHANGE `dateCreation` `created_at` DATETIME NOT NULL;
 ALTER TABLE `forum_message` CHANGE `dateModification` `updated_at` DATETIME NOT NULL;
+ALTER TABLE `forum_message` CHANGE `texte` `message` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+ALTER TABLE forum_message DROP FOREIGN KEY forum_message_ibfk_2;
+UPDATE forum_message m, vgr_player p
+SET m.idUser = p.normandie_user_id
+WHERE m.idUser = p.idPlayer;
+ALTER TABLE `forum_message` ADD CONSTRAINT `forum_message_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
