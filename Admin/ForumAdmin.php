@@ -41,7 +41,8 @@ class ForumAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('category');
+            ->add('category')
+            ->add('libForum');
     }
 
     /**

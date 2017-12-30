@@ -2,7 +2,6 @@
 
 namespace ProjetNormandie\ForumBundle\Entity;
 
-use AppBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
@@ -54,10 +53,10 @@ class Topic
     private $forum;
 
     /**
-     * @var User
+     * @var UserInterface
      *
      * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
      * })
@@ -173,7 +172,7 @@ class Topic
 
     /**
      * Get user
-     * @return User
+     * @return UserInterface
      */
     public function getUser()
     {
@@ -199,6 +198,4 @@ class Topic
     {
         return $this->type;
     }
-
-
 }
