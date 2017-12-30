@@ -31,4 +31,12 @@ services:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Message
             - ~
+    sonata.admin.forum.topicUser:
+        class: ProjetNormandie\ForumBundle\Admin\TopicUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "TopicUser" }
+        arguments:
+            - ~
+            - ProjetNormandie\ForumBundle\Entity\TopicUser
+            - ~
 
