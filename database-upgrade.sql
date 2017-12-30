@@ -7,6 +7,7 @@ RENAME TABLE t_forum TO forum_forum;
 RENAME TABLE t_forum_message TO forum_message;
 RENAME TABLE t_forum_topic TO forum_forumforum_topic;
 RENAME TABLE t_forum_typetopic TO forum_topic_type;
+RENAME TABLE t_forum_topic_membre TO forum_topic_user;
 
 DROP TRIGGER IF EXISTS `tForumTopicAfterDelete`;
 DROP TRIGGER IF EXISTS `tForumTopicAfterInsert`;
@@ -71,3 +72,13 @@ ALTER TABLE `forum_language` DROP `drapeau`;
 ALTER TABLE `forum_language` CHANGE `fichier` `code` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'lang_french';
 
 UPDATE `forum_language` SET `libLanguage` = 'French' WHERE `forum_language`.`idLanguage` = 1;
+
+
+ALTER TABLE `forum_topic_user` CHANGE `idMembre` `idUser` INT(13) NOT NULL DEFAULT '0';
+ALTER TABLE `forum_topic_user` CHANGE `estLu` `boolRead` TINYINT(4) NOT NULL DEFAULT '0';
+ALTER TABLE `forum_topic_user` CHANGE `estNotif` `boolNotif` TINYINT(4) NOT NULL DEFAULT '0';
+
+ALTER TABLE forum_topic_user DROP FOREIGN KEY forum_topic_user_ibfk_1;
+TRUNCATE table forum_topic_user;
+ALTER TABLE `forum_topic_user` ADD CONSTRAINT `forum_topic_user_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+INSERT INTO forum_topic_user (idUser,idTopic) SELECT id,idTopic FROM forum_topic,member;
