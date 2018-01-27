@@ -1,0 +1,12 @@
+###############################################################################
+# /!\ Important: User-specific files must not appear in the .gitignore file.  #
+#                Please edit your local ".git/info/exclude" file to ignore    #
+#                user-specific files.                                         #
+###############################################################################
+
+## Ignoring backup php files from editors.
+*.php~
+
+## Ignoring composer dependencies.
+vendor/
+composer.lock
