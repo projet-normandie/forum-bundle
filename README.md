@@ -1,7 +1,17 @@
 ProjetNormandieForumBundle
 =========================
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/c0215ae4-ee59-4836-a289-cf56db336677/small.png)](https://insight.sensiolabs.com/projects/c0215ae4-ee59-4836-a289-cf56db336677)
+Master
+------
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/projet-normandie/ForumBundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/projet-normandie/ForumBundle/?branch=master)
+[![Build Status](https://travis-ci.org/projet-normandie/ForumBundle.svg?branch=master)](https://travis-ci.org/projet-normandie/ForumBundle)
+
+Develop
+-------
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/projet-normandie/ForumBundle/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/projet-normandie/ForumBundle/?branch=develop)
+[![Build Status](https://travis-ci.org/projet-normandie/ForumBundle.svg?branch=develop)](https://travis-ci.org/projet-normandie/ForumBundle)
 
 Installation
 ============

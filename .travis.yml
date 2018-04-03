@@ -1,0 +1,26 @@
+sudo: false
+
+services:
+  - mysql
+
+language: php
+
+php:
+  - '7.0'
+  - '7.1'
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+before_script:
+  - export SYMFONY_ENV="test"
+  - composer install --no-interaction
+
+script:
+  - find -L . -path ./vendor -prune -o -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+  - ./vendor/bin/phpcs --extensions=php -n --standard=PSR2 --report=full --ignore=vendor/ .
+  - ./vendor/bin/phpunit
+
+notifications:
+  email: false
