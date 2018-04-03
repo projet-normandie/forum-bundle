@@ -26,7 +26,7 @@ class Message
     private $idMessage;
 
     /**
-     * @var integer
+     * @var string
      * @ORM\Column(name="message", type="text", nullable=true)
      */
     private $message;

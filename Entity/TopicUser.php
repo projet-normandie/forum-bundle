@@ -3,7 +3,6 @@
 namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Topic
