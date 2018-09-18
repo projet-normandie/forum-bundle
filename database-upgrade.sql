@@ -5,7 +5,7 @@ SET CHARACTER SET utf8;
 RENAME TABLE t_forum_categorie TO forum_category;
 RENAME TABLE t_forum TO forum_forum;
 RENAME TABLE t_forum_message TO forum_message;
-RENAME TABLE t_forum_topic TO forum_forumforum_topic;
+RENAME TABLE t_forum_topic TO forum_topic;
 RENAME TABLE t_forum_typetopic TO forum_topic_type;
 RENAME TABLE t_forum_topic_membre TO forum_topic_user;
 
