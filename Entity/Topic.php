@@ -20,11 +20,11 @@ class Topic
     /**
      * @var integer
      *
-     * @ORM\Column(name="idTopic", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idTopic;
+    private $id;
 
     /**
      * @var string
@@ -48,7 +48,7 @@ class Topic
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="topics")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idForum", referencedColumnName="idForum")
+     *   @ORM\JoinColumn(name="idForum", referencedColumnName="id")
      * })
      */
     private $forum;
@@ -96,7 +96,7 @@ class Topic
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibTopic(), $this->getIdTopic());
+        return \sprintf('%s [%s]', $this->getLibTopic(), $this->getId());
     }
 
     /**
@@ -108,25 +108,25 @@ class Topic
     }
 
     /**
-     * Set idTopic
+     * Set id
      *
-     * @param integer $idTopic
+     * @param integer $id
      * @return Topic
      */
-    public function setIdTopic($idTopic)
+    public function setId($id)
     {
-        $this->idTopic = $idTopic;
+        $this->id = $id;
         return $this;
     }
 
     /**
-     * Get idTopic
+     * Get id
      *
      * @return integer
      */
-    public function getIdTopic()
+    public function getId()
     {
-        return $this->idTopic;
+        return $this->id;
     }
 
     /**

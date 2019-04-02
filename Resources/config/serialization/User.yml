@@ -1,0 +1,9 @@
+App\Entity\User:
+  attributes:
+    id:
+      groups:
+        - 'forum_home'
+    username:
+      groups:
+        - 'forum_home'
+

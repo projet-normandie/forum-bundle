@@ -30,7 +30,7 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('idTopic', 'text', ['label' => 'idTopic', 'attr' => ['readonly' => true]])
+        $formMapper->add('id', 'text', ['label' => 'id', 'attr' => ['readonly' => true]])
             ->add('libTopic', 'text', ['label' => 'libTopic'])
             ->add('forum')
             ->add('type');
@@ -54,7 +54,7 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('idTopic')
+        $listMapper->addIdentifier('id')
             ->add('language')
             ->add('libTopic', null, ['label' => 'libTopic'])
             ->add('type')
@@ -69,7 +69,7 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('idTopic')
+        $showMapper->add('id')
             ->add('language')
             ->add('libTopic')
             ->add('type')
