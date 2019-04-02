@@ -5,9 +5,9 @@ CREATE TRIGGER forumMessageAfterInsert AFTER INSERT ON forum_message
 FOR EACH ROW
 BEGIN
 	UPDATE forum_topic
-	SET nbMessage = (SELECT COUNT(idMessage) FROM forum_message WHERE idTopic = NEW.idTopic),
-		idMessageMax = NEW.idMessage
-	WHERE idTopic = NEW.idTopic;
+	SET nbMessage = (SELECT COUNT(id) FROM forum_message WHERE id = NEW.idTopic),
+		idMessageMax = NEW.id
+	WHERE id = NEW.idTopic;
 
 	-- UPDATE t_membre SET nbForumMessage = nbForumMessage + 1 WHERE idMembre = NEW.idMembre;
 
@@ -23,9 +23,9 @@ CREATE TRIGGER forumMessageAfterDelete AFTER DELETE ON forum_message
 FOR EACH ROW
 BEGIN
 	UPDATE forum_topic
-	SET nbMessage = (SELECT COUNT(idMessage) FROM forum_message WHERE idTopic = OLD.idTopic),
-		idMessageMax = (SELECT MAX(idMessage) FROM forum_message WHERE idTopic = OLD.idTopic)
-	WHERE idTopic = OLD.idTopic;
+	SET nbMessage = (SELECT COUNT(id) FROM forum_message WHERE idTopic = OLD.idTopic),
+		idMessageMax = (SELECT MAX(id) FROM forum_message WHERE idTopic = OLD.idTopic)
+	WHERE id = OLD.idTopic;
 END //
 delimiter ;
 
@@ -37,8 +37,8 @@ CREATE TRIGGER forumTopicAfterInsert AFTER INSERT ON forum_topic
 FOR EACH ROW
 BEGIN
 	UPDATE forum_forum
-	SET nbTopic = (SELECT COUNT(idTopic) FROM forum_topic WHERE idForum = NEW.idForum)
-	WHERE idForum = NEW.idForum;
+	SET nbTopic = (SELECT COUNT(id) FROM forum_topic WHERE idForum = NEW.idForum)
+	WHERE id = NEW.idForum;
 END //
 delimiter ;
 
@@ -49,12 +49,12 @@ CREATE TRIGGER forumTopicAfterDelete AFTER DELETE ON forum_topic
 FOR EACH ROW
 BEGIN
 	UPDATE forum_forum
-	SET nbTopic = (SELECT COUNT(idTopic) FROM forum_topic WHERE idForum = OLD.idForum),
+	SET nbTopic = (SELECT COUNT(id) FROM forum_topic WHERE idForum = OLD.idForum),
 	    nbMessage = (SELECT SUM(nbMessage) FROM forum_topic WHERE idForum = OLD.idForum),
-	    idMessageMax = (SELECT MAX(a.idMessage)
-		    				FROM forum_message a INNER JOIN forum_topic b ON a.idTopic = b.idTopic
+	    idMessageMax = (SELECT MAX(a.id)
+		    				FROM forum_message a INNER JOIN forum_topic b ON a.idTopic = b.id
 		    				WHERE idForum = OLD.idForum)
-		WHERE idForum = OLD.idForum;
+		WHERE id = OLD.idForum;
 END //
 delimiter ;
 
@@ -67,28 +67,28 @@ BEGIN
 	IF OLD.nbMessage != NEW.nbMessage THEN
 		UPDATE forum_forum
 		SET nbMessage = (SELECT SUM(nbMessage) FROM forum_topic WHERE idForum = NEW.idForum)
-		WHERE idForum = NEW.idForum;
+		WHERE id = NEW.idForum;
 	END IF;
 	IF OLD.idMessageMax != NEW.idMessageMax	THEN
 		UPDATE forum_forum
 		SET idMessageMax = NEW.idMessageMax
-		WHERE idForum = NEW.idForum;
+		WHERE id = NEW.idForum;
 	END IF;
 	IF OLD.idForum != NEW.idForum THEN
 		UPDATE forum_forum
-		SET nbTopic = (SELECT COUNT(idTopic) FROM forum_topic WHERE idForum = NEW.idForum),
+		SET nbTopic = (SELECT COUNT(id) FROM forum_topic WHERE idForum = NEW.idForum),
 		    nbMessage = (SELECT SUM(nbMessage) FROM forum_topic WHERE idForum = NEW.idForum),
-		    idMessageMax = (SELECT MAX(a.idMessage)
-		    				FROM forum_message a INNER JOIN forum_topic b ON a.idTopic = b.idTopic
+		    idMessageMax = (SELECT MAX(a.id)
+		    				FROM forum_message a INNER JOIN forum_topic b ON a.idTopic = b.id
 		    				WHERE idForum = NEW.idForum)
-		WHERE idForum = NEW.idForum;
+		WHERE id = NEW.idForum;
 		UPDATE forum_forum
-		SET nbTopic = (SELECT COUNT(idTopic) FROM forum_topic WHERE idForum = OLD.idForum),
+		SET nbTopic = (SELECT COUNT(id) FROM forum_topic WHERE idForum = OLD.idForum),
 		    nbMessage = (SELECT SUM(nbMessage) FROM forum_topic WHERE idForum = OLD.idForum),
-			  idMessageMax = (SELECT MAX(a.idMessage)
-		    				FROM forum_message a INNER JOIN forum_topic b ON a.idTopic = b.idTopic
+			idMessageMax = (SELECT MAX(a.id)
+		    				FROM forum_message a INNER JOIN forum_topic b ON a.idTopic = b.id
 		    				WHERE idForum = OLD.idForum)
-		WHERE idForum = OLD.idForum;
+		WHERE id = OLD.idForum;
 	END IF;
 END //
 delimiter ;

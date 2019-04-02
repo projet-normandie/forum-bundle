@@ -1,0 +1,18 @@
+ProjetNormandie\ForumBundle\Entity\Category:
+  attributes:
+    id:
+      groups:
+        - 'forum_home'
+    libCategory:
+      groups:
+        - 'forum_home'
+    forums:
+      groups:
+        - 'forum_home'
+    position:
+      groups:
+        - 'forum_home'
+    createdAt:
+      groups: []
+    updatedAt:
+      groups: []

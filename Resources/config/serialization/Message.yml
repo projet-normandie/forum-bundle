@@ -1,0 +1,17 @@
+ProjetNormandie\ForumBundle\Entity\Message:
+  attributes:
+    id:
+      groups:
+        - 'forum_home'
+    user:
+      groups:
+        - 'forum_home'
+    topic:
+      groups: []
+    message:
+      groups: []
+    createdAt:
+      groups:
+        - 'forum_home'
+    updatedAt:
+      groups: []

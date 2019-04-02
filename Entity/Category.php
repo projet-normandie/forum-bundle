@@ -20,11 +20,11 @@ class Category
     /**
      * @var integer
      *
-     * @ORM\Column(name="idCategory", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idCategory;
+    private $id;
 
     /**
      * @var string
@@ -52,7 +52,7 @@ class Category
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibCategory(), $this->getIdCategory());
+        return \sprintf('%s [%s]', $this->getLibCategory(), $this->getId());
     }
 
     /**
@@ -64,25 +64,25 @@ class Category
     }
 
     /**
-     * Set idCategory
+     * Set id
      *
-     * @param integer $idCategory
+     * @param integer $id
      * @return Category
      */
-    public function setIdCategory($idCategory)
+    public function setId($id)
     {
-        $this->idCategory = $idCategory;
+        $this->id = $id;
         return $this;
     }
 
     /**
-     * Get idCategory
+     * Get id
      *
      * @return integer
      */
-    public function getIdCategory()
+    public function getId()
     {
-        return $this->idCategory;
+        return $this->id;
     }
 
     /**
