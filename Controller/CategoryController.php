@@ -22,5 +22,4 @@ class CategoryController extends Controller
             ->getResult();
         return $categories;
     }
-
 }
