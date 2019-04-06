@@ -92,6 +92,16 @@ class Topic
     private $messages;
 
     /**
+     * @var Message
+     *
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id")
+     * })
+     */
+    private $lastMessage;
+
+    /**
      * @return string
      */
     public function __toString()
@@ -250,5 +260,14 @@ class Topic
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * Get lastMessage
+     * @return Message
+     */
+    public function getLastMessage()
+    {
+        return $this->lastMessage;
     }
 }
