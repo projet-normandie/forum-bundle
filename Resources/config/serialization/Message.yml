@@ -2,16 +2,19 @@ ProjetNormandie\ForumBundle\Entity\Message:
   attributes:
     id:
       groups:
-        - 'forum_home'
+        - 'forum_list'
+        - 'topic_list'
     user:
       groups:
-        - 'forum_home'
+        - 'forum_list'
+        - 'topic_list'
     topic:
       groups: []
     message:
       groups: []
     createdAt:
       groups:
-        - 'forum_home'
+        - 'forum_list'
+        - 'topic_list'
     updatedAt:
       groups: []

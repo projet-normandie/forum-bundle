@@ -4,7 +4,7 @@ resources:
             get: ~
             home:
                 method: 'GET'
-                normalization_context: {'groups': [forum_home]}
+                normalization_context: {'groups': [forum_home, forum_list]}
                 path: '/categorie/home'
                 controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::home'
         itemOperations:
@@ -13,14 +13,24 @@ resources:
                 method: 'GET'
                 path: '/categorie/{id}/forums-father'
                 controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::forumFather'
+
     ProjetNormandie\ForumBundle\Entity\Forum:
         collectionOperations:
             get: ~
         itemOperations:
             get: ~
+        properties:
+            topics:
+                subresource:
+                    resourceClass: 'ProjetNormandie\ForumBundle\Entity\Topic'
+                    collection: false
     ProjetNormandie\ForumBundle\Entity\Topic:
         collectionOperations:
-            get: ~
+            get:
+                normalization_context: {'groups': [topic_list]}
+            api_forums_topics_get_subresource:
+                method: 'GET'
+                normalization_context: {'groups': [topic_list]}
         itemOperations:
             get: ~
     ProjetNormandie\ForumBundle\Entity\Message:

@@ -2,23 +2,23 @@ ProjetNormandie\ForumBundle\Entity\Forum:
   attributes:
     id:
       groups:
-        - 'forum_home'
+        - 'forum_list'
     libForum:
       groups:
-        - 'forum_home'
+        - 'forum_list'
     category:
       groups: []
     position:
       groups: []
     nbTopic:
       groups:
-        - 'forum_home'
+        - 'forum_list'
     nbMessage:
       groups:
-        - 'forum_home'
+        - 'forum_list'
     lastMessage:
       groups:
-        - 'forum_home'
+        - 'forum_list'
     createdAt:
       groups: []
     updatedAt:

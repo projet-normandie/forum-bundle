@@ -3,6 +3,7 @@
 namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 
 /**
  * Specific repository that serves the Category entity.
@@ -23,7 +24,9 @@ class CategoryRepository extends EntityRepository
             ->join('m.user', 'u')
             ->addSelect('f')
             ->addSelect('m')
-            ->addSelect('u');
+            ->addSelect('u')
+            ->where('f.status = :status')
+            ->setParameter('status', Forum::STATUS_PUBLIC);
 
         $query->orderBy('c.position', 'ASC')
             ->addOrderBy('f.position', 'ASC');

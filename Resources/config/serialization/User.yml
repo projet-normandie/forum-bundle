@@ -2,8 +2,10 @@ App\Entity\User:
   attributes:
     id:
       groups:
-        - 'forum_home'
+        - 'forum_list'
+        - 'topic_list'
     username:
       groups:
-        - 'forum_home'
+        - 'forum_list'
+        - 'topic_list'
 
