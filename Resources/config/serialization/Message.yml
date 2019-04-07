@@ -4,17 +4,22 @@ ProjetNormandie\ForumBundle\Entity\Message:
       groups:
         - 'forum_list'
         - 'topic_list'
+        - 'message_list'
     user:
       groups:
         - 'forum_list'
         - 'topic_list'
+        - 'message_list'
     topic:
       groups: []
     message:
-      groups: []
+      groups:
+        - 'message_list'
     createdAt:
       groups:
         - 'forum_list'
         - 'topic_list'
+        - 'message_list'
     updatedAt:
-      groups: []
+      groups:
+        - 'message_list'

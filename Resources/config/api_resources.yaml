@@ -23,6 +23,7 @@ resources:
             topics:
                 subresource:
                     resourceClass: 'ProjetNormandie\ForumBundle\Entity\Topic'
+                    maxDepth: 1
                     collection: false
     ProjetNormandie\ForumBundle\Entity\Topic:
         collectionOperations:
@@ -33,8 +34,18 @@ resources:
                 normalization_context: {'groups': [topic_list]}
         itemOperations:
             get: ~
+        properties:
+            messages:
+                subresource:
+                    resourceClass: 'ProjetNormandie\ForumBundle\Entity\Message'
+                    collection: false
     ProjetNormandie\ForumBundle\Entity\Message:
         collectionOperations:
             get: ~
+            api_topics_messages_get_subresource:
+                method: 'GET'
+                normalization_context: {'groups': [message_list]}
         itemOperations:
             get: ~
+            put: ~
+

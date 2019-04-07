@@ -4,8 +4,10 @@ App\Entity\User:
       groups:
         - 'forum_list'
         - 'topic_list'
+        - 'message_list'
     username:
       groups:
         - 'forum_list'
         - 'topic_list'
+        - 'message_list'
 
