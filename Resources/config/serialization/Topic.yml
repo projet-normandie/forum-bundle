@@ -3,6 +3,7 @@ ProjetNormandie\ForumBundle\Entity\Topic:
     id:
       groups:
         - 'forum_list'
+        - 'topic_list'
     libTopic:
       groups:
         - 'topic_list'
