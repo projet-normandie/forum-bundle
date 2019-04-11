@@ -6,12 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * Topic
  *
  * @ORM\Table(name="forum_topic")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
+ * @ApiResource(attributes={"order"={"lastMessage.id": "DESC"}})
+ *
  */
 class Topic
 {

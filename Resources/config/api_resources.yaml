@@ -26,6 +26,10 @@ resources:
                     maxDepth: 1
                     collection: false
     ProjetNormandie\ForumBundle\Entity\Topic:
+        attributes:
+            pagination_items_per_page: 20
+#            order:
+#                - 'lastMessage.id'
         collectionOperations:
             get:
                 normalization_context: {'groups': [topic_list]}
@@ -40,6 +44,8 @@ resources:
                     resourceClass: 'ProjetNormandie\ForumBundle\Entity\Message'
                     collection: false
     ProjetNormandie\ForumBundle\Entity\Message:
+        attributes:
+            pagination_items_per_page: 20
         collectionOperations:
             get: ~
             api_topics_messages_get_subresource:
