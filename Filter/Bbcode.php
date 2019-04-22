@@ -121,7 +121,6 @@ class Bbcode
         $keys = array_keys($this->_smileys);
         $values = array_values($this->_smileys);
         $text = str_replace($this->_getSmileyKey(), $this->_getSmileyImg(), $text);
-
     }
 
     protected function _getSmileyKey()
