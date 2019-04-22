@@ -53,5 +53,6 @@ resources:
                 normalization_context: {'groups': [message_list]}
         itemOperations:
             get: ~
-            put: ~
+            put:
+                access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
 
