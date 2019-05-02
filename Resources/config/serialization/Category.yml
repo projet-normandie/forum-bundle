@@ -2,16 +2,15 @@ ProjetNormandie\ForumBundle\Entity\Category:
   attributes:
     id:
       groups:
-        - 'forum_home'
+        - 'category_read'
     libCategory:
       groups:
-        - 'forum_home'
+        - 'category_read'
     forums:
       groups:
-        - 'forum_home'
+        - 'forum_read'
     position:
-      groups:
-        - 'forum_home'
+      groups: []
     createdAt:
       groups: []
     updatedAt:

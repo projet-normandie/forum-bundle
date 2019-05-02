@@ -2,26 +2,33 @@ ProjetNormandie\ForumBundle\Entity\Topic:
   attributes:
     id:
       groups:
-        - 'forum_list'
-        - 'topic_list'
+        - 'topic_read'
+    forum:
+      groups:
+        - 'topic_post'
     libTopic:
       groups:
-        - 'topic_list'
+        - 'topic_read'
+        - 'topic_post'
     type:
-      groups: []
+      groups:
+        - 'topic_post'
     nbMessage:
       groups:
-        - 'forum_list'
-        - 'topic_list'
+        - 'topic_read'
     user:
       groups:
-        - 'forum_list'
-        - 'topic_list'
+        - 'topic_read'
+        - 'topic_post'
+    language:
+      groups:
+        - 'topic_post'
     lastMessage:
       groups:
-        - 'topic_list'
+        - 'topic_read'
     messages:
-      groups: []
+      groups:
+        - 'topic_post'
     createdAt:
       groups: []
     updatedAt:

@@ -90,7 +90,7 @@ class Topic
     private $language;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", mappedBy="topic")
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", mappedBy="topic", cascade={"persist"})
      */
     private $messages;
 
@@ -208,6 +208,18 @@ class Topic
         return $this->forum;
     }
 
+
+    /**
+     * Set user
+     * @param UserInterface $user
+     * @return Topic
+     */
+    public function setUser($user = null)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
     /**
      * Get user
      * @return UserInterface
@@ -255,6 +267,28 @@ class Topic
     public function getLanguage()
     {
         return $this->language;
+    }
+
+    /**
+     * Set messages
+     * @param array $messages
+     * @return $this
+     */
+    public function setMessages(array $messages = null)
+    {
+        foreach ($messages as $message) {
+            $this->addMessage($message);
+        }
+        return $this;
+    }
+
+    /**
+     * @param Message $message
+     */
+    public function addMessage(Message $message)
+    {
+        $message->setTopic($this);
+        $this->messages[] = $message;
     }
 
     /**

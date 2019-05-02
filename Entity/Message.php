@@ -126,6 +126,17 @@ class Message
     }
 
     /**
+     * Set user
+     * @param UserInterface $user
+     * @return Message
+     */
+    public function setUser($user = null)
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
      * Get user
      * @return UserInterface
      */
