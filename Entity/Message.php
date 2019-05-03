@@ -27,6 +27,8 @@ class Message
 
     /**
      * @var string
+     * @Assert\NotNull
+     * @Assert\NotBlank
      * @ORM\Column(name="message", type="text", nullable=true)
      */
     private $message;
@@ -123,6 +125,17 @@ class Message
     public function getTopic()
     {
         return $this->topic;
+    }
+
+    /**
+     * Set user
+     * @param UserInterface $user
+     * @return Message
+     */
+    public function setUser($user = null)
+    {
+        $this->user = $user;
+        return $this;
     }
 
     /**

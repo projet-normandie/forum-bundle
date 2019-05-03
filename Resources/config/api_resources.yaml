@@ -4,21 +4,18 @@ resources:
             get: ~
             home:
                 method: 'GET'
-                normalization_context: {'groups': [forum_home, forum_list]}
+                normalization_context: {'groups': [category_read, forum_read, message_read, user_read]}
                 path: '/categorie/home'
                 controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::home'
         itemOperations:
             get: ~
-            forums-father:
-                method: 'GET'
-                path: '/categorie/{id}/forums-father'
-                controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::forumFather'
-
     ProjetNormandie\ForumBundle\Entity\Forum:
         collectionOperations:
             get: ~
+
         itemOperations:
-            get: ~
+            get:
+                normalization_context: {'groups': [forum_read]}
         properties:
             topics:
                 subresource:
@@ -32,27 +29,41 @@ resources:
 #                - 'lastMessage.id'
         collectionOperations:
             get:
-                normalization_context: {'groups': [topic_list]}
+                normalization_context: {'groups': [topic_read, message_read, user_read]}
             api_forums_topics_get_subresource:
                 method: 'GET'
-                normalization_context: {'groups': [topic_list]}
+                normalization_context: {'groups': [topic_read, message_read, user_read]}
+            post:
+                access_control: 'is_granted("ROLE_USER")'
+                denormalization_context: {'groups': [topic_post]}
         itemOperations:
             get: ~
+            put:
+                access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
         properties:
             messages:
                 subresource:
                     resourceClass: 'ProjetNormandie\ForumBundle\Entity\Message'
                     collection: false
+    ProjetNormandie\ForumBundle\Entity\TopicType:
+        itemOperations:
+            get: ~
+    ProjetNormandie\ForumBundle\Entity\Language:
+        itemOperations:
+            get: ~
     ProjetNormandie\ForumBundle\Entity\Message:
         attributes:
             pagination_items_per_page: 20
         collectionOperations:
             get: ~
+            post: ~
             api_topics_messages_get_subresource:
                 method: 'GET'
-                normalization_context: {'groups': [message_list]}
+                normalization_context: {'groups': [message_read]}
         itemOperations:
-            get: ~
+            get:
+                normalization_context: {'groups': [message_read]}
             put:
                 access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
+                denormalization_context: {'groups': [message_put]}
 
