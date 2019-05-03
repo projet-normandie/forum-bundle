@@ -7,10 +7,9 @@ ProjetNormandie\ForumBundle\Entity\Message:
     user:
       groups:
         - 'message_read'
-        - 'message_put'
+        - 'topic_post'
     topic:
-      groups:
-        - 'message_put'
+      groups: []
     message:
       groups:
         - 'message_read'
@@ -19,8 +18,6 @@ ProjetNormandie\ForumBundle\Entity\Message:
     createdAt:
       groups:
         - 'message_read'
-        - 'message_put'
     updatedAt:
       groups:
         - 'message_read'
-        - 'message_put'

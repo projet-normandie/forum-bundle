@@ -27,6 +27,8 @@ class Message
 
     /**
      * @var string
+     * @Assert\NotNull
+     * @Assert\NotBlank
      * @ORM\Column(name="message", type="text", nullable=true)
      */
     private $message;

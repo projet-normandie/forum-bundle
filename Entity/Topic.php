@@ -32,6 +32,9 @@ class Topic
     /**
      * @var string
      *
+     * @Assert\NotNull
+     * @Assert\NotBlank
+     * @Assert\Length(min="5")
      * @Assert\Length(max="255")
      * @ORM\Column(name="libTopic", type="string", length=255, nullable=false)
      */

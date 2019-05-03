@@ -34,6 +34,7 @@ resources:
                 method: 'GET'
                 normalization_context: {'groups': [topic_read, message_read, user_read]}
             post:
+                access_control: 'is_granted("ROLE_USER")'
                 denormalization_context: {'groups': [topic_post]}
         itemOperations:
             get: ~
@@ -63,6 +64,6 @@ resources:
             get:
                 normalization_context: {'groups': [message_read]}
             put:
-                #access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
+                access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
                 denormalization_context: {'groups': [message_put]}
 

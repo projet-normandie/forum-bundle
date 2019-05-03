@@ -3,9 +3,7 @@ App\Entity\User:
     id:
       groups:
         - 'message_read'
-        - 'message_put'
     username:
       groups:
         - 'message_read'
-        - 'message_put'
 
