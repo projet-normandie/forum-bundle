@@ -12,7 +12,6 @@ resources:
     ProjetNormandie\ForumBundle\Entity\Forum:
         collectionOperations:
             get: ~
-
         itemOperations:
             get:
                 normalization_context: {'groups': [forum_read]}
@@ -37,14 +36,15 @@ resources:
                 access_control: 'is_granted("ROLE_USER")'
                 denormalization_context: {'groups': [topic_post]}
         itemOperations:
-            get: ~
+            get:
+                normalization_context: {'groups': [topic_read, forum_read]}
             put:
                 access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
         properties:
             messages:
                 subresource:
                     resourceClass: 'ProjetNormandie\ForumBundle\Entity\Message'
-                    collection: false
+                    collection: true
     ProjetNormandie\ForumBundle\Entity\TopicType:
         itemOperations:
             get: ~
@@ -54,8 +54,10 @@ resources:
     ProjetNormandie\ForumBundle\Entity\Message:
         attributes:
             pagination_items_per_page: 20
+            filters: ['forum_message.order_filter']
         collectionOperations:
-            get: ~
+            get:
+                normalization_context: {'groups': [message_read]}
             post: ~
             api_topics_messages_get_subresource:
                 method: 'GET'
