@@ -1,0 +1,6 @@
+services:
+    forum_message.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ {id: ~ } ]
+        tags:  [  { name: 'api_platform.filter', id: 'forum_message.order_filter' }  ]
+

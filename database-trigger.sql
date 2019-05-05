@@ -5,7 +5,7 @@ CREATE TRIGGER forumMessageAfterInsert AFTER INSERT ON forum_message
 FOR EACH ROW
 BEGIN
 	UPDATE forum_topic
-	SET nbMessage = (SELECT COUNT(id) FROM forum_message WHERE id = NEW.idTopic),
+	SET nbMessage = (SELECT COUNT(id) FROM forum_message WHERE idTopic = NEW.idTopic),
 		idMessageMax = NEW.id
 	WHERE id = NEW.idTopic;
 
