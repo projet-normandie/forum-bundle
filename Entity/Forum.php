@@ -52,6 +52,13 @@ class Forum
     private $status = self::STATUS_PUBLIC;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="role", type="string", nullable=true)
+     */
+    private $role = null;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="nbMessage", type="integer", nullable=false, options={"default":0})
@@ -92,19 +99,19 @@ class Forum
     private $lastMessage;
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return \sprintf('%s [%s]', $this->getLibForum(), $this->getId());
-    }
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         $this->topics = new ArrayCollection();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return \sprintf('%s [%s]', $this->getLibForum(), $this->getId());
     }
 
     /**
@@ -198,6 +205,30 @@ class Forum
         return $this->status;
     }
 
+
+    /**
+     * Set role
+     *
+     * @param string $role
+     * @return $this
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
     /**
      * Set nbMessage
      *
@@ -280,6 +311,7 @@ class Forum
     {
         return $this->lastMessage;
     }
+
 
     /**
      * @return array

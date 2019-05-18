@@ -98,3 +98,14 @@ SET idMessageMax = 0;
 
 UPDATE forum_topic t
 SET t.idMessageMax = (SELECT MAX(id) FROM forum_message WHERE idTopic = t.id);
+
+
+ALTER TABLE `forum_forum` ADD `role` VARCHAR(50) NULL AFTER `status`;
+UPDATE `forum_forum` SET role = 'ROLE_FORUM_VGR_TEAM' WHERE id = 38;
+UPDATE `forum_forum` SET role = 'ROLE_FORUM_ADMINISTRATION' WHERE id = 16;
+
+DROP TABLE t_groupeutilisateur_membre;
+DROP TABLE t_forum_groupeutilisateur;
+DROP TABLE t_groupeutilisateur;
+
+
