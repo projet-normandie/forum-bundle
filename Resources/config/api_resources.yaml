@@ -15,6 +15,7 @@ resources:
         itemOperations:
             get:
                 normalization_context: {'groups': [forum_read]}
+                access_control: 'object.getStatus() == "public" or is_granted(object.getRole())'
         properties:
             topics:
                 subresource:
@@ -29,6 +30,7 @@ resources:
         collectionOperations:
             get:
                 normalization_context: {'groups': [topic_read, message_read, user_read]}
+                access_control: 'object.getForum().getStatus() == "public" or is_granted(object.getForum().getRole())'
             api_forums_topics_get_subresource:
                 method: 'GET'
                 normalization_context: {'groups': [topic_read, message_read, user_read]}
