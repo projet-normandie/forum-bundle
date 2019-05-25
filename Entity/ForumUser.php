@@ -7,12 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Topic
  *
- * @ORM\Table(name="forum_topic_user")
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicUserRepository")
+ * @ORM\Entity(readOnly=true)
+ * @ORM\Table(name="forum_forum_user")
+ * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumUserRepository")
  */
-class TopicUser
+class ForumUser
 {
-
     /**
      * @var integer
      *
@@ -35,12 +35,12 @@ class TopicUser
     /**
      * @var Topic
      *
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic")
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="forumUser")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idForum", referencedColumnName="id")
      * })
      */
-    private $topic;
+    private $forum;
 
     /**
      * @var boolean
@@ -49,27 +49,22 @@ class TopicUser
      */
     private $boolRead = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="boolNotif", type="boolean", nullable=false, options={"default":0})
-     */
-    private $boolNotif = false;
+
+    public function __construct() {}
 
     /**
      * @return string
      */
     public function __toString()
     {
-        return \sprintf('%s - %s', $this->getUser(), $this->getTopic());
+        return \sprintf('%s - %s', $this->getUser(), $this->getForum());
     }
-
 
     /**
      * Set id
      *
      * @param integer $id
-     * @return TopicUser
+     * @return ForumUser
      */
     public function setId($id)
     {
@@ -110,25 +105,25 @@ class TopicUser
     }
 
     /**
-     * Set topic
+     * Set forum
      *
-     * @param Topic $topic
+     * @param Forum $forum
      * @return $this
      */
-    public function setTopic(Topic $topic = null)
+    public function setForum(Forum $forum = null)
     {
-        $this->topic = $topic;
+        $this->forum = $forum;
         return $this;
     }
 
     /**
-     * Get topic
+     * Get forum
      *
      * @return Topic
      */
-    public function getTopic()
+    public function getForum()
     {
-        return $this->topic;
+        return $this->forum;
     }
 
     /**
@@ -152,28 +147,5 @@ class TopicUser
     public function getBoolRead()
     {
         return $this->boolRead;
-    }
-
-    /**
-     * Set boolNotif
-     *
-     * @param boolean $boolNotif
-     * @return $this
-     */
-    public function setBoolNotif($boolNotif)
-    {
-        $this->boolNotif = $boolNotif;
-
-        return $this;
-    }
-
-    /**
-     * Get boolNotif
-     *
-     * @return boolean
-     */
-    public function getBoolNotif()
-    {
-        return $this->boolNotif;
     }
 }

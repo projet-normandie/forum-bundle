@@ -11,7 +11,7 @@ BEGIN
 
 	-- UPDATE t_membre SET nbForumMessage = nbForumMessage + 1 WHERE idMembre = NEW.idMembre;
 
-	-- UPDATE t_forum_topic_membre SET estLu = 0 WHERE idTopic = NEW.idTopic AND idMembre != NEW.idMembre;
+	UPDATE forum_topic_user SET boolRead = 0 WHERE idTopic = NEW.idTopic AND idUser != NEW.idUser;
 
 END //
 delimiter ;
@@ -39,6 +39,10 @@ BEGIN
 	UPDATE forum_forum
 	SET nbTopic = (SELECT COUNT(id) FROM forum_topic WHERE idForum = NEW.idForum)
 	WHERE id = NEW.idForum;
+
+	INSERT INTO forum_topic_user (idUser, idTopic, boolRead)
+	SELECT DISTINCT idUser, NEW.id, 1
+	FROM forum_forum_user;
 END //
 delimiter ;
 
@@ -92,3 +96,38 @@ BEGIN
 	END IF;
 END //
 delimiter ;
+
+
+
+delimiter //
+DROP TRIGGER IF EXISTS `forumTopicUserAfterUpdate`//
+CREATE TRIGGER forumTopicUserAfterUpdate AFTER UPDATE ON forum_topic_user
+    FOR EACH ROW
+BEGIN
+    IF OLD.boolRead != NEW.boolRead THEN
+        SELECT idForum INTO @idForum FROM forum_topic WHERE id = NEW.idTopic;
+
+        IF NEW.boolRead = 0 THEN
+            UPDATE forum_forum_user
+            SET boolRead = 0
+            WHERE idUser = NEW.idUser
+                    AND idForum = @idForum;
+        ELSE
+            SELECT COUNT(forum_topic.id) INTO @nbTopicNotRead
+               FROM forum_topic_user, forum_topic
+               WHERE forum_topic_user.idTopic = forum_topic.id
+               AND idForum = @idForum;
+
+            IF (@nbTopicNotRead = 0) THEN
+                UPDATE forum_forum_user
+                SET boolRead = 0
+                WHERE idUser = NEW.idUser
+                AND idForum = @idForum;
+            END IF;
+        END IF;
+    END IF;
+END //
+delimiter ;
+
+
+

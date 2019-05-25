@@ -1,48 +1,7 @@
-SET NAMES 'utf8';
-SET CHARACTER SET utf8;
 
--- RENAME
-RENAME TABLE t_forum_categorie TO forum_category;
-RENAME TABLE t_forum TO forum_forum;
-RENAME TABLE t_forum_message TO forum_message;
-RENAME TABLE t_forum_topic TO forum_topic;
-RENAME TABLE t_forum_typetopic TO forum_topic_type;
-RENAME TABLE t_forum_topic_membre TO forum_topic_user;
-
-DROP TRIGGER IF EXISTS `tForumTopicAfterDelete`;
-DROP TRIGGER IF EXISTS `tForumTopicAfterInsert`;
-DROP TRIGGER IF EXISTS `tForumTopicAfterUpdate`;
-
-DROP TRIGGER IF EXISTS `tForumMessageAfterDelete`;
-DROP TRIGGER IF EXISTS `tForumMessageAfterInsert`;
-
-
--- ALTER TABLE
-ALTER TABLE `forum_category` CHANGE `idCategorie` `id` INT(13) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `forum_category` DROP `libCategorie_fr`;
-ALTER TABLE `forum_category` CHANGE `libCategorie_en` `libCategory` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
-ALTER TABLE `forum_category` ADD `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `position`, ADD `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `created_at`;
-
-
-ALTER TABLE `forum_forum` CHANGE `idForum` `id` INT(13) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `forum_forum` CHANGE `libForum_en` `libForum` VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
-ALTER TABLE `forum_forum` CHANGE `idCategorie` `idCategory` INT(13) NOT NULL DEFAULT '0';
-ALTER TABLE `forum_forum` CHANGE `statut` `status` ENUM('public','private') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'public';
-ALTER TABLE `forum_forum` CHANGE `idForumPere` `idForumFather` INT(13) NULL DEFAULT NULL;
-ALTER TABLE `forum_forum` ADD `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `idMessageMax`, ADD `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `created_at`;
-
-
-ALTER TABLE `forum_topic` CHANGE `idTopic` `id` INT(13) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `forum_topic` CHANGE `idMembre` `idUser` INT(13) NOT NULL DEFAULT '0';
-ALTER TABLE `forum_topic` ADD `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `idLangue`, ADD `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP AFTER `created_at`;
-ALTER TABLE `forum_topic` CHANGE `idLangue` `idLanguage` INT(11) NOT NULL DEFAULT '1';
-ALTER TABLE `forum_topic` ADD INDEX(`idLanguage`);
--- ALTER TABLE `forum_topic` ADD FOREIGN KEY (`idLanguage`) REFERENCES `forum_language`(`idLanguage`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
-ALTER TABLE forum_topic DROP FOREIGN KEY forum_topic_ibfk_1;
 UPDATE forum_topic t, vgr_player p
 SET t.idUser = p.normandie_user_id
-WHERE t.idUser = p.idPlayer;
+WHERE t.idUser = p.id;
 ALTER TABLE `forum_topic` ADD CONSTRAINT `forum_topic_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `forum_message` CHANGE `idMessage` `id` INT(13) NOT NULL AUTO_INCREMENT;
@@ -54,7 +13,7 @@ ALTER TABLE `forum_message` CHANGE `texte` `message` TEXT CHARACTER SET utf8 COL
 ALTER TABLE forum_message DROP FOREIGN KEY forum_message_ibfk_2;
 UPDATE forum_message m, vgr_player p
 SET m.idUser = p.normandie_user_id
-WHERE m.idUser = p.idPlayer;
+WHERE m.idUser = p.id;
 ALTER TABLE `forum_message` ADD CONSTRAINT `forum_message_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
@@ -81,23 +40,30 @@ ALTER TABLE `forum_topic_user` CHANGE `idMembre` `idUser` INT(13) NOT NULL DEFAU
 ALTER TABLE `forum_topic_user` CHANGE `estLu` `boolRead` TINYINT(4) NOT NULL DEFAULT '0';
 ALTER TABLE `forum_topic_user` CHANGE `estNotif` `boolNotif` TINYINT(4) NOT NULL DEFAULT '0';
 
+
 ALTER TABLE forum_topic_user DROP FOREIGN KEY forum_topic_user_ibfk_1;
 TRUNCATE table forum_topic_user;
 ALTER TABLE `forum_topic_user` ADD CONSTRAINT `forum_topic_user_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-INSERT INTO forum_topic_user (idUser,idTopic) SELECT id,idTopic FROM forum_topic,member;
+ALTER TABLE forum_topic_user DROP PRIMARY KEY;
+ALTER TABLE `forum_topic_user` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+ALTER TABLE `forum_topic_user` ADD UNIQUE( `idUser`, `idTopic`);
+
+
+CREATE TABLE `forum_forum_user` (
+  `id` int(11) NOT NULL,
+  `idForum` int(11) NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `boolRead` tinyint(4)	NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ALTER  TABLE `forum_forum_user` ADD PRIMARY KEY (`id`);
+ALTER  TABLE `forum_forum_user` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `forum_forum_user` ADD CONSTRAINT `forum_forum_user_ibfk_1` FOREIGN KEY (`idForum`) REFERENCES `forum_forum`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `forum_forum_user` ADD CONSTRAINT `forum_forum_user_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 -- MAJ nbMessage
 UPDATE forum_topic t
 SET t.nbMessage = (SELECT COUNT(id) FROM forum_message WHERE idTopic = t.id);
-
--- MAJ idMesageMax
-UPDATE forum_forum
-SET idMessageMax = null;
-UPDATE forum_topic
-SET idMessageMax = 0;
-
-UPDATE forum_topic t
-SET t.idMessageMax = (SELECT MAX(id) FROM forum_message WHERE idTopic = t.id);
 
 
 ALTER TABLE `forum_forum` ADD `role` VARCHAR(50) NULL AFTER `status`;
@@ -107,5 +73,8 @@ UPDATE `forum_forum` SET role = 'ROLE_FORUM_ADMINISTRATION' WHERE id = 16;
 DROP TABLE t_groupeutilisateur_membre;
 DROP TABLE t_forum_groupeutilisateur;
 DROP TABLE t_groupeutilisateur;
+
+
+
 
 

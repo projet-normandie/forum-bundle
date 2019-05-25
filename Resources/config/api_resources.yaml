@@ -50,6 +50,9 @@ resources:
     ProjetNormandie\ForumBundle\Entity\TopicType:
         itemOperations:
             get: ~
+    ProjetNormandie\ForumBundle\Entity\TopicUser:
+        itemOperations:
+            get: ~
     ProjetNormandie\ForumBundle\Entity\Language:
         itemOperations:
             get: ~
