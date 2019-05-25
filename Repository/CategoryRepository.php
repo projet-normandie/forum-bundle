@@ -30,6 +30,8 @@ class CategoryRepository extends EntityRepository
 
         if ($user !== null) {
             $queryBuilder
+                ->join('f.forumUser', 'fu', 'WITH', 'fu.user = :user')
+                ->addSelect('fu')
                 ->where(
                     $queryBuilder->expr()->orX(
                         'f.status = :status1',
@@ -38,12 +40,14 @@ class CategoryRepository extends EntityRepository
                 )
                 ->setParameter('status1', Forum::STATUS_PUBLIC)
                 ->setParameter('status2', Forum::STATUS_PRIVATE)
+                ->setParameter('user', $user)
                 ->setParameter('roles', $user->getRoles());
         } else {
             $queryBuilder->where('f.status = :status')
                 ->setParameter('status', Forum::STATUS_PUBLIC);
         }
 
+        //echo $queryBuilder->getDQL(), "\n"; exit;
         $queryBuilder->orderBy('c.position', 'ASC')
             ->addOrderBy('f.position', 'ASC');
 

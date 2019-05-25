@@ -1,0 +1,12 @@
+ProjetNormandie\ForumBundle\Entity\ForumUser:
+  attributes:
+    id:
+      groups:
+        - 'forum_read'
+    user:
+      groups: []
+    forum:
+      groups: []
+    boolRead:
+      groups:
+        - 'forum_read'

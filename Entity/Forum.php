@@ -99,11 +99,17 @@ class Forum
     private $lastMessage;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\ForumUser", mappedBy="forum")
+     */
+    private $forumUser;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->topics = new ArrayCollection();
+        $this->forumUser = new ArrayCollection();
     }
 
     /**
@@ -310,6 +316,14 @@ class Forum
     public function getLastMessage()
     {
         return $this->lastMessage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumUser()
+    {
+        return $this->forumUser;
     }
 
 

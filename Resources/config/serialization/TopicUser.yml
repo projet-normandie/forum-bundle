@@ -1,0 +1,12 @@
+ProjetNormandie\ForumBundle\Entity\TopicUser:
+  attributes:
+    id:
+      groups: []
+    user:
+      groups: []
+    topic:
+      groups: []
+    boolRead:
+      groups: []
+    boolNotif:
+      groups: []
