@@ -13,7 +13,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  *
  * @ORM\Table(name="forum_topic")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
- * @ApiResource(attributes={"order"={"lastMessage.id": "DESC"}})
+ * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
  *
  */
 class Topic
@@ -108,6 +108,11 @@ class Topic
     private $lastMessage;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicUser", mappedBy="topic")
+     */
+    private $topicUser;
+
+    /**
      * @return string
      */
     public function __toString()
@@ -121,6 +126,7 @@ class Topic
     public function __construct()
     {
         $this->messages = new ArrayCollection();
+        $this->topicUser = new ArrayCollection();
     }
 
     /**
@@ -309,5 +315,13 @@ class Topic
     public function getLastMessage()
     {
         return $this->lastMessage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopicUser()
+    {
+        return $this->topicUser;
     }
 }

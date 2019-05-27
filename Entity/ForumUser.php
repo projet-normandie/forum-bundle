@@ -33,7 +33,7 @@ class ForumUser
     private $user;
 
     /**
-     * @var Topic
+     * @var Forum
      *
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="forumUser")
      * @ORM\JoinColumns({

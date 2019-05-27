@@ -35,7 +35,7 @@ class TopicUser
     /**
      * @var Topic
      *
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic")
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="topicUser")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id")
      * })

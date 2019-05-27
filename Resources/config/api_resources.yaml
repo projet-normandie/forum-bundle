@@ -4,7 +4,7 @@ resources:
             get: ~
             home:
                 method: 'GET'
-                normalization_context: {'groups': [category_read, forum_read, message_read, user_read]}
+                normalization_context: {'groups': [category_read, forum_read, forum_user_read, message_read, user_read]}
                 path: '/categorie/home'
                 controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::home'
         itemOperations:
@@ -29,7 +29,7 @@ resources:
 #                - 'lastMessage.id'
         collectionOperations:
             get:
-                normalization_context: {'groups': [topic_read, message_read, user_read]}
+                normalization_context: {'groups': [topic_read, topic_user_read, message_read, user_read]}
                 access_control: 'object.getForum().getStatus() == "public" or is_granted(object.getForum().getRole())'
             api_forums_topics_get_subresource:
                 method: 'GET'

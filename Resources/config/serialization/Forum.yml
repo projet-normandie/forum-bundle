@@ -21,7 +21,7 @@ ProjetNormandie\ForumBundle\Entity\Forum:
         - 'forum_read'
     forumUser:
       groups:
-        - 'forum_read'
+        - 'forum_user_read'
     createdAt:
       groups: []
     updatedAt:
