@@ -13,6 +13,7 @@ ProjetNormandie\ForumBundle\Entity\Topic:
         - 'topic_post'
     type:
       groups:
+        - 'topic_read'
         - 'topic_post'
     nbMessage:
       groups:
@@ -21,6 +22,9 @@ ProjetNormandie\ForumBundle\Entity\Topic:
       groups:
         - 'topic_read'
         - 'topic_post'
+    topicUser:
+      groups:
+        - 'topic_user_read'
     language:
       groups:
         - 'topic_post'

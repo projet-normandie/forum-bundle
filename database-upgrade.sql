@@ -75,6 +75,7 @@ DROP TABLE t_forum_groupeutilisateur;
 DROP TABLE t_groupeutilisateur;
 
 
-
+ALTER TABLE `forum_topic_type` DROP `image1`;
+ALTER TABLE `forum_topic_type` DROP `image2`;
 
 
