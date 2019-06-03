@@ -114,13 +114,15 @@ BEGIN
                     AND idForum = @idForum;
         ELSE
             SELECT COUNT(forum_topic.id) INTO @nbTopicNotRead
-               FROM forum_topic_user, forum_topic
-               WHERE forum_topic_user.idTopic = forum_topic.id
-               AND idForum = @idForum;
+                FROM forum_topic_user, forum_topic
+                WHERE forum_topic_user.idTopic = forum_topic.id
+                AND idForum = @idForum
+                AND forum_topic_user.idUser = NEW.idUser
+                AND boolRead = 0;
 
             IF (@nbTopicNotRead = 0) THEN
                 UPDATE forum_forum_user
-                SET boolRead = 0
+                SET boolRead = 1
                 WHERE idUser = NEW.idUser
                 AND idForum = @idForum;
             END IF;
