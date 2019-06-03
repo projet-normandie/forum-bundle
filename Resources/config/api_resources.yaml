@@ -51,6 +51,19 @@ resources:
         itemOperations:
             get: ~
     ProjetNormandie\ForumBundle\Entity\TopicUser:
+        collectionOperations:
+            read:
+                method: 'GET'
+                access_control: 'is_granted("ROLE_USER")'
+                path: '/topic_users/set-read'
+                swagger_context:
+                    description: 'Set read topic for current user'
+                    parameters:
+                        - name: idForum
+                          in: query
+                          required: false
+                          type: integer
+                controller: 'ProjetNormandie\ForumBundle\Controller\TopicUserController::setRead'
         itemOperations:
             get: ~
     ProjetNormandie\ForumBundle\Entity\Language:
