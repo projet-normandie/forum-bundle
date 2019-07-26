@@ -2,38 +2,38 @@ ProjetNormandie\ForumBundle\Entity\Topic:
   attributes:
     id:
       groups:
-        - 'topic_read'
+        - 'forum_topic_read'
     forum:
       groups:
-        - 'forum_read'
-        - 'topic_post'
+        - 'forum_forum_read'
+        - 'forum_topic_post'
     libTopic:
       groups:
-        - 'topic_read'
-        - 'topic_post'
+        - 'forum_topic_read'
+        - 'forum_topic_post'
     type:
       groups:
-        - 'topic_read'
-        - 'topic_post'
+        - 'forum_topic_read'
+        - 'forum_topic_post'
     nbMessage:
       groups:
-        - 'topic_read'
+        - 'forum_topic_read'
     user:
       groups:
-        - 'topic_read'
-        - 'topic_post'
+        - 'forum_topic_read'
+        - 'forum_topic_post'
     topicUser:
       groups:
-        - 'topic_user_read'
+        - 'forum_topic_user_read'
     language:
       groups:
-        - 'topic_post'
+        - 'forum_topic_post'
     lastMessage:
       groups:
-        - 'topic_read'
+        - 'forum_topic_read'
     messages:
       groups:
-        - 'topic_post'
+        - 'forum_topic_post'
     createdAt:
       groups: []
     updatedAt:

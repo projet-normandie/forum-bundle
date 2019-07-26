@@ -2,22 +2,22 @@ ProjetNormandie\ForumBundle\Entity\Message:
   attributes:
     id:
       groups:
-        - 'message_read'
-        - 'message_put'
+        - 'forum_message_read'
+        - 'forum_message_put'
     user:
       groups:
-        - 'message_read'
-        - 'topic_post'
+        - 'forum_message_read'
+        - 'forum_topic_post'
     topic:
       groups: []
     message:
       groups:
-        - 'message_read'
-        - 'message_put'
-        - 'topic_post'
+        - 'forum_message_read'
+        - 'forum_message_put'
+        - 'forum_topic_post'
     createdAt:
       groups:
-        - 'message_read'
+        - 'forum_message_read'
     updatedAt:
       groups:
-        - 'message_read'
+        - 'forum_message_read'
