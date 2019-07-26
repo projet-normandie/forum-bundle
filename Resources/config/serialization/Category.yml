@@ -2,13 +2,13 @@ ProjetNormandie\ForumBundle\Entity\Category:
   attributes:
     id:
       groups:
-        - 'category_read'
+        - 'forum_category_read'
     libCategory:
       groups:
-        - 'category_read'
+        - 'forum_category_read'
     forums:
       groups:
-        - 'forum_read'
+        - 'forum_forum_read'
     position:
       groups: []
     createdAt:

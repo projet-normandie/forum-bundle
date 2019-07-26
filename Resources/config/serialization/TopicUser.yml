@@ -2,14 +2,14 @@ ProjetNormandie\ForumBundle\Entity\TopicUser:
   attributes:
     id:
       groups:
-        - 'topic_user_read'
+        - 'forum_topic_user_read'
     user:
       groups: []
     topic:
       groups: []
     boolRead:
       groups:
-        - 'topic_user_read'
+        - 'forum_topic_user_read'
     boolNotif:
       groups:
-        - 'topic_user_read'
+        - 'forum_topic_user_read'

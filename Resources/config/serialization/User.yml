@@ -2,8 +2,8 @@ App\Entity\User:
   attributes:
     id:
       groups:
-        - 'message_read'
+        - 'forum_message_read'
     username:
       groups:
-        - 'message_read'
+        - 'forum_message_read'
 
