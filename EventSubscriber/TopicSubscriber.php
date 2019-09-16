@@ -3,7 +3,6 @@ namespace ProjetNormandie\ForumBundle\EventSubscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use ProjetNormandie\ForumBundle\Entity\Topic;
-use VideoGamesRecords\CoreBundle\Entity\PlayerChart;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelEvents;

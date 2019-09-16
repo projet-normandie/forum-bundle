@@ -34,7 +34,7 @@ resources:
             get:
                 normalization_context: {'groups': [forum_topic_read, forum_topic_user_read, forum_message_read, forum_user_read]}
                 access_control: 'object.getForum().getStatus() == "public" or is_granted(object.getForum().getRole())'
-            api_forums_topics_get_subresource:
+            api_forum_forums_topics_get_subresource:
                 method: 'GET'
                 normalization_context: {'groups': [forum_topic_read, forum_message_read, forum_user_read]}
             post:
@@ -85,7 +85,7 @@ resources:
             get:
                 normalization_context: {'groups': [forum_message_read]}
             post:
-            api_topics_messages_get_subresource:
+            api_forum_topics_messages_get_subresource:
                 method: 'GET'
                 normalization_context: {'groups': [forum_message_read]}
         itemOperations:
