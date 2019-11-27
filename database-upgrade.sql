@@ -42,7 +42,7 @@ ALTER TABLE forum_topic DROP FOREIGN KEY forum_topic_ibfk_1;
 UPDATE forum_topic t, vgr_player p
 SET t.idUser = p.normandie_user_id
 WHERE t.idUser = p.id;
-ALTER TABLE `forum_topic` ADD CONSTRAINT `forum_topic_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `forum_topic` ADD CONSTRAINT `forum_topic_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `forum_message` CHANGE `idMessage` `id` INT(13) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `forum_message` CHANGE `idMembre` `idUser` INT(13) NOT NULL DEFAULT '0';
@@ -54,7 +54,7 @@ ALTER TABLE forum_message DROP FOREIGN KEY forum_message_ibfk_2;
 UPDATE forum_message m, vgr_player p
 SET m.idUser = p.normandie_user_id
 WHERE m.idUser = p.id;
-ALTER TABLE `forum_message` ADD CONSTRAINT `forum_message_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `forum_message` ADD CONSTRAINT `forum_message_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 
 CREATE TABLE `forum_language` (
@@ -83,7 +83,7 @@ ALTER TABLE `forum_topic_user` CHANGE `estNotif` `boolNotif` TINYINT(4) NOT NULL
 
 ALTER TABLE forum_topic_user DROP FOREIGN KEY forum_topic_user_ibfk_1;
 TRUNCATE table forum_topic_user;
-ALTER TABLE `forum_topic_user` ADD CONSTRAINT `forum_topic_user_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `forum_topic_user` ADD CONSTRAINT `forum_topic_user_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `user`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE forum_topic_user DROP PRIMARY KEY;
 ALTER TABLE `forum_topic_user` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
 ALTER TABLE `forum_topic_user` ADD UNIQUE( `idUser`, `idTopic`);
@@ -99,7 +99,7 @@ ALTER  TABLE `forum_forum_user` ADD PRIMARY KEY (`id`);
 ALTER  TABLE `forum_forum_user` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `forum_forum_user` ADD CONSTRAINT `forum_forum_user_ibfk_1` FOREIGN KEY (`idForum`) REFERENCES `forum_forum`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
-ALTER TABLE `forum_forum_user` ADD CONSTRAINT `forum_forum_user_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `member`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `forum_forum_user` ADD CONSTRAINT `forum_forum_user_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `user`(`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
 -- MAJ nbMessage
 UPDATE forum_topic t
