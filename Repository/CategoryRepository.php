@@ -3,7 +3,9 @@
 namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\UserInterface;
 
 /**
  * Specific repository that serves the Category entity.
@@ -13,11 +15,11 @@ class CategoryRepository extends EntityRepository
     /**
      * Finds category with forum
      *
+     * @param \ProjetNormandie\ForumBundle\Entity\UserInterface $user
      *
-     * @param User $user
      * @return \Doctrine\ORM\Query
      */
-    public function getHome($user)
+    public function getHome(UserInterface $user = null): Query
     {
         $queryBuilder = $this->createQueryBuilder('c')
             ->join('c.forums', 'f')
@@ -28,7 +30,7 @@ class CategoryRepository extends EntityRepository
             ->addSelect('u');
 
 
-        if ($user !== null) {
+        if ($user instanceof UserInterface) {
             $queryBuilder
                 ->join('f.forumUser', 'fu', 'WITH', 'fu.user = :user')
                 ->addSelect('fu')

@@ -21,21 +21,16 @@
     }
   ],
   "require": {
-    "php": ">=5.5.9",
+    "php": ">=7.2",
+    "doctrine/orm": "^2.5",
+    "doctrine/doctrine-bundle": "~1.6",
     "knplabs/doctrine-behaviors": "~1.4",
+    "projet-normandie/common-bundle": "*",
     "symfony/form": "~3.0",
     "symfony/framework-bundle": "~3.0",
     "symfony/security-bundle": "~3.0",
     "symfony/twig-bundle": "~3.0",
-    "symfony/validator": "~3.0",
-    "sensio/framework-extra-bundle": "^3.0.2",
-    "doctrine/orm": "^2.5",
-    "doctrine/doctrine-bundle": "~1.6"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "~4.0",
-    "roave/security-advisories": "dev-master",
-    "squizlabs/php_codesniffer": "~2.8"
+    "symfony/validator": "~3.0"
   },
   "suggest": {
     "doctrine/doctrine-fixtures-bundle": "To be able to load fixtures",
