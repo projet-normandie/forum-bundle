@@ -1,0 +1,27 @@
+cache:
+  untracked: true
+  key: "$CI_BUILD_REF_NAME"
+  paths:
+    - /vendor
+
+stages:
+  - build
+  - qa
+
+build:7.2:
+  stage: build
+  image: jakzal/phpqa:php7.2-alpine
+  script:
+    - composer install
+
+lint:7.2:
+  stage: qa
+  image: jakzal/phpqa:php7.2-alpine
+  script:
+    - phplint . --exclude=vendor
+
+phpunit:7.2:
+  stage: qa
+  image: jakzal/phpqa:php7.2-alpine
+  script:
+    - phpunit

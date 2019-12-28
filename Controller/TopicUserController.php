@@ -4,24 +4,19 @@ namespace ProjetNormandie\ForumBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Forum;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use FOS\UserBundle\Model\UserManagerInterface;
 
 /**
  * Class TopicUserController
  */
 class TopicUserController extends Controller
 {
-
     private $em;
-    private $userManager;
 
-    public function __construct(UserManagerInterface $userManager, EntityManagerInterface $registry)
+    public function __construct(EntityManagerInterface $registry)
     {
-        $this->userManager = $userManager;
         $this->em = $registry;
     }
 
