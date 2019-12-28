@@ -1,0 +1,28 @@
+ProjetNormandie\ForumBundle\Entity\Forum:
+  attributes:
+    id:
+      groups:
+        - 'forum_forum_read'
+    libForum:
+      groups:
+        - 'forum_forum_read'
+    category:
+      groups: []
+    position:
+      groups: []
+    nbTopic:
+      groups:
+        - 'forum_forum_read'
+    nbMessage:
+      groups:
+        - 'forum_forum_read'
+    lastMessage:
+      groups:
+        - 'forum_forum_read'
+    forumUser:
+      groups:
+        - 'forum_user_read'
+    createdAt:
+      groups: []
+    updatedAt:
+      groups: []

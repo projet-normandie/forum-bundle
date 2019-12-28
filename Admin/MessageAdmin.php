@@ -30,7 +30,7 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('idMessage', 'text', ['label' => 'idTopic', 'attr' => ['readonly' => true]])
+        $formMapper->add('id', 'text', ['label' => 'id', 'attr' => ['readonly' => true]])
             ->add('message', 'textarea', ['label' => 'Message', 'attr' => ['rows' => 20]]);
     }
 
@@ -51,7 +51,7 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('idMessage')
+        $listMapper->addIdentifier('id')
             ->add('message', null, ['label' => 'Message'])
             ->add('user')
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
@@ -63,7 +63,7 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('idMessage')
+        $showMapper->add('id')
             ->add('user')
             ->add('message');
     }

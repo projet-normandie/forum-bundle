@@ -1,0 +1,40 @@
+ProjetNormandie\ForumBundle\Entity\Topic:
+  attributes:
+    id:
+      groups:
+        - 'forum_topic_read'
+    forum:
+      groups:
+        - 'forum_forum_read'
+        - 'forum_topic_post'
+    libTopic:
+      groups:
+        - 'forum_topic_read'
+        - 'forum_topic_post'
+    type:
+      groups:
+        - 'forum_topic_read'
+        - 'forum_topic_post'
+    nbMessage:
+      groups:
+        - 'forum_topic_read'
+    user:
+      groups:
+        - 'forum_topic_read'
+        - 'forum_topic_post'
+    topicUser:
+      groups:
+        - 'forum_topic_user_read'
+    language:
+      groups:
+        - 'forum_topic_post'
+    lastMessage:
+      groups:
+        - 'forum_topic_read'
+    messages:
+      groups:
+        - 'forum_topic_post'
+    createdAt:
+      groups: []
+    updatedAt:
+      groups: []

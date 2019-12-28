@@ -19,14 +19,16 @@ class Message
     /**
      * @var integer
      *
-     * @ORM\Column(name="idMessage", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idMessage;
+    private $id;
 
     /**
      * @var string
+     * @Assert\NotNull
+     * @Assert\NotBlank
      * @ORM\Column(name="message", type="text", nullable=true)
      */
     private $message;
@@ -37,7 +39,7 @@ class Message
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="messages")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="idTopic")
+     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id")
      * })
      */
     private $topic;
@@ -58,29 +60,29 @@ class Message
      */
     public function __toString()
     {
-        return \sprintf('[%s]', $this->getIdMessage());
+        return \sprintf('[%s]', $this->getId());
     }
 
     /**
-     * Set idMessage
+     * Set id
      *
-     * @param integer $idMessage
+     * @param integer $id
      * @return $this
      */
-    public function setIdMessage($idMessage)
+    public function setId($id)
     {
-        $this->idMessage = $idMessage;
+        $this->id = $id;
         return $this;
     }
 
     /**
-     * Get idMessage
+     * Get id
      *
      * @return integer
      */
-    public function getIdMessage()
+    public function getId()
     {
-        return $this->idMessage;
+        return $this->id;
     }
 
     /**
@@ -123,6 +125,17 @@ class Message
     public function getTopic()
     {
         return $this->topic;
+    }
+
+    /**
+     * Set user
+     * @param UserInterface $user
+     * @return Message
+     */
+    public function setUser($user = null)
+    {
+        $this->user = $user;
+        return $this;
     }
 
     /**

@@ -1,0 +1,9 @@
+ProjetNormandie\ForumBundle\Entity\TopicType:
+  attributes:
+    idType:
+      groups: []
+    libType:
+      groups:
+        - 'forum_topic_read'
+    topic:
+      position: []

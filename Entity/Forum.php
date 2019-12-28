@@ -23,11 +23,11 @@ class Forum
     /**
      * @var integer
      *
-     * @ORM\Column(name="idForum", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idForum;
+    private $id;
 
     /**
      * @var string
@@ -52,6 +52,13 @@ class Forum
     private $status = self::STATUS_PUBLIC;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="role", type="string", nullable=true)
+     */
+    private $role = null;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="nbMessage", type="integer", nullable=false, options={"default":0})
@@ -71,7 +78,7 @@ class Forum
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Category", inversedBy="forums")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idCategory", referencedColumnName="idCategory")
+     *   @ORM\JoinColumn(name="idCategory", referencedColumnName="id")
      * })
      */
     private $category;
@@ -82,12 +89,19 @@ class Forum
     private $topics;
 
     /**
-     * @return string
+     * @var Message
+     *
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id")
+     * })
      */
-    public function __toString()
-    {
-        return \sprintf('%s [%s]', $this->getLibForum(), $this->getIdForum());
-    }
+    private $lastMessage;
+
+    /**
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\ForumUser", mappedBy="forum")
+     */
+    private $forumUser;
 
     /**
      * Constructor
@@ -95,28 +109,37 @@ class Forum
     public function __construct()
     {
         $this->topics = new ArrayCollection();
+        $this->forumUser = new ArrayCollection();
     }
 
     /**
-     * Set idForum
+     * @return string
+     */
+    public function __toString()
+    {
+        return \sprintf('%s [%s]', $this->getLibForum(), $this->getId());
+    }
+
+    /**
+     * Set id
      *
-     * @param integer $idForum
+     * @param integer $id
      * @return Forum
      */
-    public function setIdForum($idForum)
+    public function setId($id)
     {
-        $this->idForum = $idForum;
+        $this->id = $id;
         return $this;
     }
 
     /**
-     * Get idForum
+     * Get id
      *
      * @return integer
      */
-    public function getIdForum()
+    public function getId()
     {
-        return $this->idForum;
+        return $this->id;
     }
 
     /**
@@ -186,6 +209,30 @@ class Forum
     public function getStatus()
     {
         return $this->status;
+    }
+
+
+    /**
+     * Set role
+     *
+     * @param string $role
+     * @return $this
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 
     /**
@@ -261,6 +308,24 @@ class Forum
     {
         return $this->topics;
     }
+
+    /**
+     * Get lastMessage
+     * @return Message
+     */
+    public function getLastMessage()
+    {
+        return $this->lastMessage;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getForumUser()
+    {
+        return $this->forumUser;
+    }
+
 
     /**
      * @return array

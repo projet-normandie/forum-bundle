@@ -1,0 +1,23 @@
+ProjetNormandie\ForumBundle\Entity\Message:
+  attributes:
+    id:
+      groups:
+        - 'forum_message_read'
+        - 'forum_message_put'
+    user:
+      groups:
+        - 'forum_message_read'
+        - 'forum_topic_post'
+    topic:
+      groups: []
+    message:
+      groups:
+        - 'forum_message_read'
+        - 'forum_message_put'
+        - 'forum_topic_post'
+    createdAt:
+      groups:
+        - 'forum_message_read'
+    updatedAt:
+      groups:
+        - 'forum_message_read'
