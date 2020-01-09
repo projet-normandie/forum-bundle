@@ -1,9 +1,9 @@
-App\Entity\User:
+ProjetNormandie\UserBundle\Entity\User:
   attributes:
     id:
       groups:
-        - 'forum_message_read'
+        - 'user.read'
     username:
       groups:
-        - 'forum_message_read'
+        - 'user.read'
 
