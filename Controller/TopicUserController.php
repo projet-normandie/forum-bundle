@@ -35,6 +35,6 @@ class TopicUserController extends Controller
                 $this->em->getReference(Forum::class, $idForum)
             );
         }
-        return new JsonResponse(['data' => true]);
+        return new JsonResponse(['sucess' => true]);
     }
 }

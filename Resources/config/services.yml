@@ -19,4 +19,8 @@ services:
         decorates: 'api_platform.serializer.context_builder'
         arguments: [ '@ProjetNormandie\ForumBundle\Serializer\TopicContextBuilder.inner' ]
         autoconfigure: false
+    ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder:
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder.inner' ]
+        autoconfigure: false
 
