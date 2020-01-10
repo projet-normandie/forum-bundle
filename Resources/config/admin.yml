@@ -2,7 +2,7 @@ services:
     sonata.admin.forum.category:
         class: ProjetNormandie\ForumBundle\Admin\CategoryAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Category" }
+            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Category" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Category
@@ -10,7 +10,7 @@ services:
     sonata.admin.forum.forum:
         class: ProjetNormandie\ForumBundle\Admin\ForumAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Forum" }
+            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Forum" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Forum
@@ -18,7 +18,7 @@ services:
     sonata.admin.forum.topic:
         class: ProjetNormandie\ForumBundle\Admin\TopicAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Topic" }
+            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Topic" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Topic
@@ -26,7 +26,7 @@ services:
     sonata.admin.forum.message:
         class: ProjetNormandie\ForumBundle\Admin\MessageAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "Message" }
+            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Message" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Message
@@ -34,7 +34,7 @@ services:
     sonata.admin.forum.topicUser:
         class: ProjetNormandie\ForumBundle\Admin\TopicUserAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "ForumBundle", label: "TopicUser" }
+            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "TopicUser" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\TopicUser

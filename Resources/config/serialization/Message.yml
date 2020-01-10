@@ -2,25 +2,25 @@ ProjetNormandie\ForumBundle\Entity\Message:
   attributes:
     id:
       groups:
-        - 'forum_message_read'
-        - 'forum_message_put'
+        - 'forum.message.read'
+        - 'forum.message.put'
         - 'message.last'
     user:
       groups:
-        - 'forum_message_read'
-        - 'forum_topic_post'
+        - 'forum.message.read'
+        - 'forum.topic.post'
         - 'message.last'
     topic:
       groups: []
     message:
       groups:
-        - 'forum_message_read'
-        - 'forum_message_put'
-        - 'forum_topic_post'
+        - 'forum.message.read'
+        - 'forum.message.put'
+        - 'forum.topic.post'
     createdAt:
       groups:
-        - 'forum_message_read'
+        - 'forum.message.read'
         - 'message.last'
     updatedAt:
       groups:
-        - 'forum_message_read'
+        - 'forum.message.read'

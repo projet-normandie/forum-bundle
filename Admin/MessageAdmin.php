@@ -64,7 +64,8 @@ class MessageAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper->add('id')
+            ->add('topic')
             ->add('user')
-            ->add('message');
+            ->add('message', null, ['label' => 'Message', 'safe' => true]);
     }
 }

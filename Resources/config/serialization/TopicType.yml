@@ -4,6 +4,6 @@ ProjetNormandie\ForumBundle\Entity\TopicType:
       groups: []
     libType:
       groups:
-        - 'forum_topic_read'
+        - 'forum.topic.read'
     topic:
       position: []

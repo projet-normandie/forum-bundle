@@ -13,7 +13,7 @@ resources:
             get: ~
         itemOperations:
             get:
-                normalization_context: {'groups': [forum_forum_read]}
+                normalization_context: {'groups': [forum.forum.read]}
                 access_control: 'object.getStatus() == "public" or is_granted(object.getRole())'
         properties:
             topics:
@@ -28,18 +28,19 @@ resources:
 #            order:
 #                - 'lastMessage.id'
         collectionOperations:
-            get:
-                normalization_context: {'groups': [forum_topic_read, forum_topic_user_read, forum_message_read, forum_user_read]}
-                access_control: 'object.getForum().getStatus() == "public" or is_granted(object.getForum().getRole())'
+#            get:
+#                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, user.read]}
+#                access_control: 'object.getForum().getStatus() == "public" or is_granted(object.getForum().getRole())'
             api_forum_forums_topics_get_subresource:
                 method: 'GET'
-                normalization_context: {'groups': [forum_topic_read, forum_message_read, forum_user_read]}
+                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, user.read]}
             post:
                 access_control: 'is_granted("ROLE_USER")'
-                denormalization_context: {'groups': [forum_topic_post]}
+                denormalization_context: {'groups': [forum.topic.post]}
+                normalization_context: {'groups': [forum.topic.read]}
         itemOperations:
             get:
-                normalization_context: {'groups': [forum_topic_read, forum_forum_read]}
+                normalization_context: {'groups': [forum.topic.read, forum.forum.read]}
             put:
                 access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
         properties:
@@ -69,10 +70,6 @@ resources:
                 controller: 'ProjetNormandie\ForumBundle\Controller\TopicUserController::setRead'
         itemOperations:
             get: ~
-    ProjetNormandie\ForumBundle\Entity\Language:
-        shortName: 'ForumLanguage'
-        itemOperations:
-            get: ~
     ProjetNormandie\ForumBundle\Entity\Message:
         shortName: 'ForumMessage'
         attributes:
@@ -80,17 +77,17 @@ resources:
             filters: ['forum_message.order_filter']
         collectionOperations:
             get:
-                normalization_context: {'groups': [forum_message_read]}
+                normalization_context: {'groups': [forum.message.read, user.read]}
             post:
             api_forum_topics_messages_get_subresource:
                 method: 'GET'
-                normalization_context: {'groups': [forum_message_read]}
+                normalization_context: {'groups': [forum.message.read, user.read]}
         itemOperations:
             get:
                 method: 'GET'
-                normalization_context: {'groups': [forum_message_read]}
+                normalization_context: {'groups': [forum.message.read]}
             put:
                 access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
-                denormalization_context: {'groups': [forum_message_put]}
+                denormalization_context: {'groups': [forum.message.put]}
 
 
