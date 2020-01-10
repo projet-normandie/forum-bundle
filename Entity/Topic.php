@@ -82,17 +82,6 @@ class Topic
     private $type;
 
     /**
-     * @var Language
-     *
-     * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Language")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idLanguage", referencedColumnName="idLanguage")
-     * })
-     */
-    private $language;
-
-    /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", mappedBy="topic", cascade={"persist"})
      */
     private $messages;
@@ -256,26 +245,6 @@ class Topic
     public function getType()
     {
         return $this->type;
-    }
-
-    /**
-     * Set language
-     * @param Language $language
-     * @return $this
-     */
-    public function setLanguage(Language $language = null)
-    {
-        $this->language = $language;
-        return $this;
-    }
-
-    /**
-     * Get language
-     * @return Language
-     */
-    public function getLanguage()
-    {
-        return $this->language;
     }
 
     /**

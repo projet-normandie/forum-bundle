@@ -23,7 +23,7 @@ final class TopicContextBuilder implements SerializerContextBuilderInterface
         $resourceClass = $context['resource_class'] ?? null;
 
         if ($resourceClass === Topic::class && isset($context['groups']) && $this->authorizationChecker->isGranted('ROLE_USER') && true === $normalization) {
-            $context['groups'][] = 'topic_user_read';
+            $context['groups'][] = 'forum.topic.user.read';
         }
 
         return $context;

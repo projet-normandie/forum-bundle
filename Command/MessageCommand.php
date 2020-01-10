@@ -14,7 +14,7 @@ class MessageCommand extends DefaultCommand
     protected function configure()
     {
         $this
-            ->setName('pj-forum:message')
+            ->setName('pn-forum:message')
             ->setDescription('Command for a message forum')
             ->addArgument(
                 'function',
@@ -57,15 +57,16 @@ class MessageCommand extends DefaultCommand
      */
     private function migrate(OutputInterface $output)
     {
+        $em = $this->getContainer()->get('doctrine')->getManager();
+
         /** @var \ProjetNormandie\ForumBundle\Repository\MessageRepository $messageRepository */
         $messageRepository = $this->getContainer()->get('doctrine')->getRepository('ProjetNormandieForumBundle:Message');
 
         $bbcodeFiler = new BbcodeFilter();
-        $message = $messageRepository->find(1);
-
-
-        var_dump($bbcodeFiler->filter($message->getMessage()));
-
-        $output->writeln(sprintf('%d chart(s) updated', $message->getId()));
+        $messages = $messageRepository->findAll();
+        foreach($messages as $message) {
+            $message->setMessage($bbcodeFiler->filter($message->getMessage()));
+        }
+        $em->flush();
     }
 }

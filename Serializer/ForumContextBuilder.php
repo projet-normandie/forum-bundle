@@ -20,11 +20,9 @@ final class ForumContextBuilder implements SerializerContextBuilderInterface
     public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
     {
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
-        $resourceClass = $context['resource_class'] ?? null;
-        if ($resourceClass === Category::class && isset($context['groups']) && $this->authorizationChecker->isGranted('ROLE_USER') && true === $normalization) {
+        if (($context['request_uri'] == '/api/categorie/home') && isset($context['groups']) && $this->authorizationChecker->isGranted('ROLE_USER') && true === $normalization) {
             $context['groups'][] = 'forum.user.read';
         }
-
         return $context;
     }
 }
