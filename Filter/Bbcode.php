@@ -5,7 +5,7 @@ class Bbcode
 {
     protected $_config = array(
         'url_limit' => 200,
-        'smiley_path' => "https://www.video-games-records.com/smiley/images/",
+        'smiley_path' => "https://picture.video-games-records.com/smiley/images/",
         'smiley_ext' => ".png"
     );
 
