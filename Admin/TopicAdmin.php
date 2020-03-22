@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -43,7 +44,7 @@ class TopicAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('libTopic')
-            ->add('forum', 'doctrine_orm_model_autocomplete', [], null, [
+            ->add('forum', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libForum',
             ]);
     }

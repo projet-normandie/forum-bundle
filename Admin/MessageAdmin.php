@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -40,7 +41,7 @@ class MessageAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('topic', 'doctrine_orm_model_autocomplete', [], null, [
+            ->add('topic', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libTopic',
             ]);
     }
