@@ -59,7 +59,7 @@ class TopicUserAdmin extends AbstractAdmin
             ->addIdentifier('user')
             ->add('boolRead')
             ->add('boolNotif')
-            ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
+            ->add('_action', 'actions', ['actions' => ['edit' => []]]);
     }
 
     /**

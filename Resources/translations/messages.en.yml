@@ -1,0 +1,16 @@
+label:
+    id: 'id'
+    category: 'Category'
+    forum: 'Forum'
+    topic: 'Topic'
+    topics: 'Topics'
+    message: 'Message'
+    topicUser : 'Topic / User'
+    forumUser: 'Forum / User'
+    boolRead: 'Is read ?'
+    boolNotif: 'Is notfied ?'
+    position: 'Position'
+    status: 'Status'
+    type: 'Type'
+    user: 'User'
+
