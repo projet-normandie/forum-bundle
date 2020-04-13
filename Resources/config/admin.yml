@@ -2,7 +2,7 @@ services:
     sonata.admin.forum.category:
         class: ProjetNormandie\ForumBundle\Admin\CategoryAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Category" }
+            - { name: sonata.admin, manager_type: orm, group: "group.forums", label: "label.category" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Category
@@ -10,7 +10,7 @@ services:
     sonata.admin.forum.forum:
         class: ProjetNormandie\ForumBundle\Admin\ForumAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Forum" }
+            - { name: sonata.admin, manager_type: orm, group: "group.forums", label: "label.forum" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Forum
@@ -18,7 +18,7 @@ services:
     sonata.admin.forum.topic:
         class: ProjetNormandie\ForumBundle\Admin\TopicAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Topic" }
+            - { name: sonata.admin, manager_type: orm, group: "group.forums", label: "label.topic" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Topic
@@ -26,7 +26,7 @@ services:
     sonata.admin.forum.message:
         class: ProjetNormandie\ForumBundle\Admin\MessageAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "Message" }
+            - { name: sonata.admin, manager_type: orm, group: "group.forums", label: "label.message" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\Message
@@ -34,9 +34,18 @@ services:
     sonata.admin.forum.topicUser:
         class: ProjetNormandie\ForumBundle\Admin\TopicUserAdmin
         tags:
-            - { name: sonata.admin, manager_type: orm, group: "Forums", label: "TopicUser" }
+            - { name: sonata.admin, manager_type: orm, group: "group.forums", label: "label.topicUser" }
         arguments:
             - ~
             - ProjetNormandie\ForumBundle\Entity\TopicUser
             - ~
+    sonata.admin.forum.forumUser:
+        class: ProjetNormandie\ForumBundle\Admin\ForumUserAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "group.forums", label: "label.forumUser" }
+        arguments:
+            - ~
+            - ProjetNormandie\ForumBundle\Entity\ForumUser
+            - ~
+
 

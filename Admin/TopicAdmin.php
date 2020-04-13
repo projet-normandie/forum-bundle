@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -31,8 +32,8 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('id', 'text', ['label' => 'id', 'attr' => ['readonly' => true]])
-            ->add('libTopic', 'text', ['label' => 'libTopic'])
+        $formMapper->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
+            ->add('libTopic', TextType::class, ['label' => 'label.topic'])
             ->add('forum')
             ->add('type');
     }
@@ -43,7 +44,7 @@ class TopicAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('libTopic')
+            ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('forum', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libForum',
             ]);
@@ -55,12 +56,11 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('id')
-            ->add('language')
-            ->add('libTopic', null, ['label' => 'libTopic'])
-            ->add('type')
-            ->add('forum')
-            ->add('user')
+        $listMapper->addIdentifier('id', null, ['label' => 'label.id'])
+            ->add('libTopic', null, ['label' => 'label.topic'])
+            ->add('type', null, ['label' => 'label.type'])
+            ->add('forum', null, ['label' => 'label.forum'])
+            ->add('user', null, ['label' => 'label.user'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
 
@@ -70,11 +70,10 @@ class TopicAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('id')
-            ->add('language')
-            ->add('libTopic')
-            ->add('type')
-            ->add('forum')
-            ->add('user');
+        $showMapper->add('id', null, ['label' => 'label.id'])
+            ->add('libTopic', null, ['label' => 'label.topic'])
+            ->add('type', null, ['label' => 'label.type'])
+            ->add('forum', null, ['label' => 'label.forum'])
+            ->add('user', null, ['label' => 'label.user']);
     }
 }

@@ -9,15 +9,13 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Administration manager for the Forum Bundle.
  */
-class MessageAdmin extends AbstractAdmin
+class ForumUserAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_message';
+    protected $baseRouteName = 'pnforumbundle_admin_forumUser';
 
     /**
      * @inheritdoc
@@ -33,8 +31,9 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
-            ->add('message', TextareaType::class, ['label' => 'Message', 'attr' => ['rows' => 20]]);
+        $formMapper->add('forum')
+            ->add('user')
+            ->add('boolRead');
     }
 
     /**
@@ -43,8 +42,9 @@ class MessageAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('topic', ModelAutocompleteFilter::class, [], null, [
-                'property' => 'libTopic',
+            ->add('user')
+            ->add('forum', ModelAutocompleteFilter::class, [], null, [
+                'property' => 'libForum',
             ]);
     }
 
@@ -54,10 +54,10 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('id')
-            ->add('message', null, ['label' => 'Message'])
-            ->add('user')
-            ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
+        $listMapper->addIdentifier('forum')
+            ->addIdentifier('user')
+            ->add('boolRead')
+            ->add('_action', 'actions', ['actions' => ['edit' => []]]);
     }
 
     /**
@@ -66,9 +66,7 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('id')
-            ->add('topic')
-            ->add('user')
-            ->add('message', null, ['label' => 'Message', 'safe' => true]);
+        $showMapper->add('forum')
+            ->add('user');
     }
 }

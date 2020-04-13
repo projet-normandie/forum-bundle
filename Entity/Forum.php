@@ -192,7 +192,7 @@ class Forum
      * Set status
      *
      * @param string $status
-     * @return $this
+     * @return Forum
      */
     public function setStatus($status)
     {
@@ -216,7 +216,7 @@ class Forum
      * Set role
      *
      * @param string $role
-     * @return $this
+     * @return Forum
      */
     public function setRole($role)
     {
@@ -239,7 +239,7 @@ class Forum
      * Set nbMessage
      *
      * @param integer $nbMessage
-     * @return $this
+     * @return Forum
      */
     public function setNbMessage($nbMessage)
     {
@@ -262,7 +262,7 @@ class Forum
      * Set nbTopic
      *
      * @param integer $nbTopic
-     * @return $this
+     * @return Forum
      */
     public function setNbTopic($nbTopic)
     {

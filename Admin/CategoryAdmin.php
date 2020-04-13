@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -29,9 +30,9 @@ class CategoryAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('id', 'text', ['label' => 'id', 'attr' => ['readonly' => true]])
-            ->add('libCategory', 'text', ['label' => 'libCategory'])
-            ->add('position', 'text', ['label' => 'position', 'required' => false]);
+        $formMapper->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
+            ->add('libCategory', TextType::class, ['label' => 'label.category'])
+            ->add('position', TextType::class, ['label' => 'label.position', 'required' => false]);
     }
 
     /**
@@ -47,9 +48,9 @@ class CategoryAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('id')
-            ->add('libCategory', null, ['label' => 'libCategory'])
-            ->add('position', null, ['label' => 'position'])
+        $listMapper->addIdentifier('id', null, ['label' => 'label.id'])
+            ->add('libCategory', null, ['label' => 'label.category'])
+            ->add('position', null, ['label' => 'label.position'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
 
@@ -59,8 +60,8 @@ class CategoryAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('idCategory')
-            ->add('libCategory')
-            ->add('position');
+        $showMapper->add('id', null, ['label' => 'label.id'])
+            ->add('libCategory', null, ['label' => 'label.category'])
+            ->add('position', null, ['label' => 'label.position']);
     }
 }
