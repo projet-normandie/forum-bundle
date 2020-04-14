@@ -1,6 +1,6 @@
 <?php
 
-namespace VideoGamesRecords\CoreBundle\Command;
+namespace ProjetNormandie\ForumBundle\Command;
 
 use Doctrine\DBAL\Logging\DebugStack;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
