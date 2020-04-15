@@ -6,4 +6,10 @@ ProjetNormandie\UserBundle\Entity\User:
     username:
       groups:
         - 'user.read'
+    avatar:
+      groups:
+        - 'user.read'
+    nbForumMessage:
+      groups:
+        - 'user.read'
 

@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
  * Topic
@@ -17,9 +19,10 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
  * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
  *
  */
-class Topic implements TimestampableInterface
+class Topic implements TimestampableInterface, SluggableInterface
 {
     use TimestampableTrait;
+    use SluggableTrait;
 
     /**
      * @var integer
@@ -293,5 +296,15 @@ class Topic implements TimestampableInterface
     public function getTopicUser()
     {
         return $this->topicUser;
+    }
+
+    /**
+     * Returns an array of the fields used to generate the slug.
+     *
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['libTopic'];
     }
 }

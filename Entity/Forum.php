@@ -7,6 +7,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
  * Forum
@@ -14,9 +16,10 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
  * @ORM\Table(name="forum_forum", indexes={@ORM\Index(name="idxPosition", columns={"position"})})
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
  */
-class Forum implements TimestampableInterface
+class Forum implements TimestampableInterface, SluggableInterface
 {
     use TimestampableTrait;
+    use SluggableTrait;
 
     const STATUS_PRIVATE = 'private';
     const STATUS_PUBLIC = 'public';
@@ -337,5 +340,15 @@ class Forum implements TimestampableInterface
             self::STATUS_PRIVATE => self::STATUS_PRIVATE,
             self::STATUS_PUBLIC => self::STATUS_PUBLIC,
         ];
+    }
+
+    /**
+     * Returns an array of the fields used to generate the slug.
+     *
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['libForum'];
     }
 }

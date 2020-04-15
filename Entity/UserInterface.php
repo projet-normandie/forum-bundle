@@ -19,4 +19,8 @@ interface UserInterface
      * @return string
      */
     public function getPseudo();
+    /**
+     * @return integer
+     */
+    public function getNbForumMessage();
 }

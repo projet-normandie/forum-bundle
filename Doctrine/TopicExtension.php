@@ -35,16 +35,15 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
+
         if (Topic::class !== $resourceClass || !$this->security->isGranted(
                 'ROLE_USER'
             ) || null === $user = $this->security->getUser()) {
             return;
         }
 
-        $alias = 'topicUser_a3';
-
-        $queryBuilder->andWhere(sprintf('%s.user = :current_user', $alias));
+        $queryBuilder->innerJoin('o.topicUser', 'tu');
+        $queryBuilder->andWhere('tu.user = :current_user');
         $queryBuilder->setParameter('current_user', $user);
     }
-
 }

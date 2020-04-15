@@ -25,24 +25,22 @@ resources:
                     collection: false
     ProjetNormandie\ForumBundle\Entity\Topic:
         shortName: 'ForumTopic'
+        subresourceOperations:
+            api_forum_forums_topics_get_subresource:
+                method: 'GET'
+                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, user.read]}
         attributes:
             pagination_items_per_page: 20
 #            order:
 #                - 'lastMessage.id'
         collectionOperations:
-#            get:
-#                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, user.read]}
-#                access_control: 'object.getForum().getStatus() == "public" or is_granted(object.getForum().getRole())'
-            api_forum_forums_topics_get_subresource:
-                method: 'GET'
-                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, user.read]}
             post:
                 access_control: 'is_granted("ROLE_USER")'
                 denormalization_context: {'groups': [forum.topic.post]}
                 normalization_context: {'groups': [forum.topic.read]}
         itemOperations:
             get:
-                normalization_context: {'groups': [forum.topic.read, forum.forum.read]}
+                normalization_context: {'groups': [forum.topic.read]}
             put:
                 access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
         properties:
@@ -50,7 +48,6 @@ resources:
                 subresource:
                     resourceClass: 'ProjetNormandie\ForumBundle\Entity\Message'
                     collection: true
-
     ProjetNormandie\ForumBundle\Entity\TopicType:
         shortName: 'ForumTopicType'
         itemOperations:
@@ -76,14 +73,14 @@ resources:
         shortName: 'ForumMessage'
         attributes:
             pagination_items_per_page: 20
-            filters: ['forum_message.order_filter']
+        subresourceOperations:
+            api_forum_topics_messages_get_subresource:
+                method: 'GET'
+                normalization_context: {'groups': [forum.message.read, user.read]}
         collectionOperations:
             get:
                 normalization_context: {'groups': [forum.message.read, user.read]}
             post:
-            api_forum_topics_messages_get_subresource:
-                method: 'GET'
-                normalization_context: {'groups': [forum.message.read, user.read]}
         itemOperations:
             get:
                 method: 'GET'

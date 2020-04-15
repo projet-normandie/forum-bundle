@@ -11,6 +11,9 @@ ProjetNormandie\ForumBundle\Entity\Topic:
       groups:
         - 'forum.topic.read'
         - 'forum.topic.post'
+    slug:
+      groups:
+        - 'forum.topic.read'
     type:
       groups:
         - 'forum.topic.read'
