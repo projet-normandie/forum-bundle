@@ -23,4 +23,8 @@ interface UserInterface
      * @return integer
      */
     public function getNbForumMessage();
+    /**
+     * @return mixed
+     */
+    public function getRelation();
 }

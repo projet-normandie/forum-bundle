@@ -12,4 +12,7 @@ ProjetNormandie\UserBundle\Entity\User:
     nbForumMessage:
       groups:
         - 'user.read'
+    relation:
+      groups:
+        - 'user.read'
 
