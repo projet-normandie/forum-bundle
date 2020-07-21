@@ -4,14 +4,14 @@ namespace ProjetNormandie\ForumBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Forum;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class TopicUserController
  */
-class TopicUserController extends Controller
+class TopicUserController extends AbstractController
 {
     private $em;
 

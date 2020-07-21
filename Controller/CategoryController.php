@@ -2,13 +2,13 @@
 
 namespace ProjetNormandie\ForumBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use ProjetNormandie\ForumBundle\Service\Forum as ForumService;
 
 /**
  * Class CategoryController
  */
-class CategoryController extends Controller
+class CategoryController extends AbstractController
 {
     private $forumService;
 
