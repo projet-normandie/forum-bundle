@@ -24,7 +24,6 @@ ProjetNormandie\ForumBundle\Entity\Topic:
     user:
       groups:
         - 'forum.topic.read'
-        - 'forum.topic.post'
     topicUser:
       groups:
         - 'forum.topic.user.read'

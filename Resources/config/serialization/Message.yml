@@ -8,15 +8,16 @@ ProjetNormandie\ForumBundle\Entity\Message:
     user:
       groups:
         - 'forum.message.read'
-        - 'forum.topic.post'
         - 'message.last'
     topic:
-      groups: []
+      groups:
+        - 'forum.message.post'
     message:
       groups:
         - 'forum.message.read'
         - 'forum.message.put'
         - 'forum.topic.post'
+        - 'forum.message.post'
     createdAt:
       groups:
         - 'forum.message.read'

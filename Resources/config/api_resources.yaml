@@ -81,6 +81,7 @@ resources:
             get:
                 normalization_context: {'groups': [forum.message.read, user.read]}
             post:
+                denormalization_context: {'groups': [forum.message.post]}
         itemOperations:
             get:
                 method: 'GET'
