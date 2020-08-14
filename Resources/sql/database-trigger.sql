@@ -9,7 +9,8 @@ BEGIN
 		idMessageMax = NEW.id
 	WHERE id = NEW.idTopic;
 
-	-- UPDATE t_membre SET nbForumMessage = nbForumMessage + 1 WHERE idMembre = NEW.idMembre;
+	-- nbForumMessage
+	UPDATE user SET nbForumMessage = nbForumMessage + 1 WHERE id = NEW.idUser;
 
 	UPDATE forum_topic_user SET boolRead = 0 WHERE idTopic = NEW.idTopic AND idUser != NEW.idUser;
 

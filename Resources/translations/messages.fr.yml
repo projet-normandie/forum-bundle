@@ -13,3 +13,10 @@ label:
     status: 'Status'
     type: 'Type'
     user: 'User'
+topic:
+    notif:
+        object: 'Nouvelle réponse sur : %s'
+        message: |
+            Message :
+            %s
+            <a href="/#/fr/%s">%s</a>

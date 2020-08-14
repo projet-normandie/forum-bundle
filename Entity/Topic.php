@@ -307,4 +307,18 @@ class Topic implements TimestampableInterface, SluggableInterface
     {
         return ['libTopic'];
     }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return sprintf(
+            '%s-forum-f%d/%s-topic-t%d/index',
+            $this->getForum()->getSlug(),
+            $this->getForum()->getId(),
+            $this->getSlug(),
+            $this->getId()
+        );
+    }
 }

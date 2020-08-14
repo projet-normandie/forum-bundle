@@ -16,4 +16,8 @@ services:
         decorates: 'api_platform.serializer.context_builder'
         arguments: [ '@ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder.inner' ]
         autoconfigure: false
+    ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener
+        tags:
+            - { name: doctrine.event_listener, event: 'postPersist', connection: default, entity: 'ProjetNormandie\MessageBundle\Message' }
 
