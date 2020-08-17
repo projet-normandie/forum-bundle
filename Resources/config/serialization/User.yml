@@ -9,6 +9,9 @@ ProjetNormandie\UserBundle\Entity\User:
     avatar:
       groups:
         - 'user.read'
+    slug:
+      groups:
+        - 'user.read'
     nbForumMessage:
       groups:
         - 'user.read'

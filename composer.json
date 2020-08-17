@@ -30,8 +30,7 @@
     "symfony/form": "~4.4",
     "symfony/security-bundle": "~4.4",
     "symfony/twig-bundle": "~4.4",
-    "knplabs/doctrine-behaviors": "~2.0",
-    "projet-normandie/message-bundle": "*"
+    "knplabs/doctrine-behaviors": "~2.0"
   },
   "suggest": {
     "doctrine/doctrine-fixtures-bundle": "To be able to load fixtures",

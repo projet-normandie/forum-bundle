@@ -3,6 +3,7 @@ ProjetNormandie\ForumBundle\Entity\TopicUser:
     id:
       groups:
         - 'forum.topic.user.read'
+        - 'forum.topic.user.put'
     user:
       groups: []
     topic:
@@ -13,3 +14,4 @@ ProjetNormandie\ForumBundle\Entity\TopicUser:
     boolNotif:
       groups:
         - 'forum.topic.user.read'
+        - 'forum.topic.user.put'

@@ -53,12 +53,12 @@ resources:
         itemOperations:
             get: ~
     ProjetNormandie\ForumBundle\Entity\TopicUser:
-        shortName: 'ForumTopicTuser'
+        shortName: 'ForumTopicUser'
         collectionOperations:
             read:
-                method: 'GET'
+                method: 'POST'
                 access_control: 'is_granted("ROLE_USER")'
-                path: '/topic_users/set-read'
+                path: '/forum_topic_users/set-read'
                 swagger_context:
                     description: 'Set read topic for current user'
                     parameters:
@@ -69,6 +69,10 @@ resources:
                 controller: 'ProjetNormandie\ForumBundle\Controller\TopicUserController::setRead'
         itemOperations:
             get: ~
+            put:
+                access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
+                denormalization_context: {'groups': [forum.topic.user.put]}
+                normalization_context: {'groups': [forum.message.user.read]}
     ProjetNormandie\ForumBundle\Entity\Message:
         shortName: 'ForumMessage'
         attributes:
