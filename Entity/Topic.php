@@ -80,7 +80,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicType")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idType", referencedColumnName="idType")
+     *   @ORM\JoinColumn(name="idType", referencedColumnName="id")
      * })
      */
     private $type;
@@ -110,7 +110,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibTopic(), $this->getId());
+        return sprintf('%s [%s]', $this->getLibTopic(), $this->getId());
     }
 
     /**
@@ -128,7 +128,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param integer $id
      * @return Topic
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -150,7 +150,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param string $libTopic
      * @return Topic
      */
-    public function setLibTopic($libTopic)
+    public function setLibTopic(string $libTopic)
     {
         $this->libTopic = $libTopic;
 
@@ -173,7 +173,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param integer $nbMessage
      * @return $this
      */
-    public function setNbMessage($nbMessage)
+    public function setNbMessage(int $nbMessage)
     {
         $this->nbMessage = $nbMessage;
 
@@ -192,8 +192,8 @@ class Topic implements TimestampableInterface, SluggableInterface
 
     /**
      * Set forum
-     * @param Forum $forum
-     * @return Topic
+     * @param Forum|null $forum
+     * @return $this
      */
     public function setForum(Forum $forum = null)
     {
@@ -210,11 +210,10 @@ class Topic implements TimestampableInterface, SluggableInterface
         return $this->forum;
     }
 
-
     /**
      * Set user
-     * @param UserInterface $user
-     * @return Topic
+     * @param null $user
+     * @return $this
      */
     public function setUser($user = null)
     {
@@ -233,7 +232,7 @@ class Topic implements TimestampableInterface, SluggableInterface
 
     /**
      * Set type
-     * @param TopicType $type
+     * @param TopicType|null $type
      * @return $this
      */
     public function setType(TopicType $type = null)
@@ -253,7 +252,7 @@ class Topic implements TimestampableInterface, SluggableInterface
 
     /**
      * Set messages
-     * @param array $messages
+     * @param array|null $messages
      * @return $this
      */
     public function setMessages(array $messages = null)

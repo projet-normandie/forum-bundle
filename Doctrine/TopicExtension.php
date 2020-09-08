@@ -18,27 +18,31 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
     }
 
     public function applyToCollection(
-        QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass,
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
         string $operationName = null
-    )
-    {
+    ) {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
     public function applyToItem(
-        QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass,
-        array $identifiers, string $operationName = null, array $context = []
-    )
-    {
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        string $operationName = null,
+        array $context = []
+    ) {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
 
-        if (Topic::class !== $resourceClass || !$this->security->isGranted(
-                'ROLE_USER'
-            ) || null === $user = $this->security->getUser()) {
+        if (Topic::class !== $resourceClass
+            || !$this->security->isGranted('ROLE_USER')
+            || null === $user = $this->security->getUser()) {
             return;
         }
 

@@ -2,14 +2,24 @@
 
 namespace ProjetNormandie\ForumBundle\Command;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use ProjetNormandie\ForumBundle\Repository\MessageRepository;
 use ProjetNormandie\ForumBundle\Filter\Bbcode as BbcodeFilter;
 
 class MessageCommand extends DefaultCommand
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+        parent::__construct($em);
+    }
+
     protected function configure()
     {
         $this
@@ -42,30 +52,28 @@ class MessageCommand extends DefaultCommand
 
         switch ($function) {
             case 'migrate':
-                $this->migrate($output);
+                $this->migrate();
                 break;
         }
         $this->end($output);
 
-        return true;
+        return 0;
     }
 
 
     /**
-     * @param OutputInterface $output
+     *
      */
-    private function migrate(OutputInterface $output)
+    private function migrate()
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
-
-        /** @var \ProjetNormandie\ForumBundle\Repository\MessageRepository $messageRepository */
-        $messageRepository = $this->getContainer()->get('doctrine')->getRepository('ProjetNormandieForumBundle:Message');
+        /** @var MessageRepository $messageRepository */
+        $messageRepository = $this->em->getRepository('ProjetNormandieForumBundle:Message');
 
         $bbcodeFiler = new BbcodeFilter();
         $messages = $messageRepository->findAll();
-        foreach($messages as $message) {
+        foreach ($messages as $message) {
             $message->setMessage($bbcodeFiler->filter($message->getMessage()));
         }
-        $em->flush();
+        $this->em->flush();
     }
 }

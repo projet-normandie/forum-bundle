@@ -13,7 +13,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 /**
  * Forum
  *
- * @ORM\Table(name="forum_forum", indexes={@ORM\Index(name="idxPosition", columns={"position"})})
+ * @ORM\Table(name="forum_forum")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
  */
 class Forum implements TimestampableInterface, SluggableInterface
@@ -121,7 +121,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibForum(), $this->getId());
+        return sprintf('%s [%s]', $this->getLibForum(), $this->getId());
     }
 
     /**
@@ -130,7 +130,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $id
      * @return Forum
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -152,7 +152,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param string $libForum
      * @return Forum
      */
-    public function setLibForum($libForum)
+    public function setLibForum(string $libForum)
     {
         $this->libForum = $libForum;
 
@@ -175,7 +175,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $position
      * @return Forum
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
@@ -198,7 +198,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param string $status
      * @return Forum
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
 
@@ -222,7 +222,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param string $role
      * @return Forum
      */
-    public function setRole($role)
+    public function setRole(string $role)
     {
         $this->role = $role;
 
@@ -245,7 +245,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $nbMessage
      * @return Forum
      */
-    public function setNbMessage($nbMessage)
+    public function setNbMessage(int $nbMessage)
     {
         $this->nbMessage = $nbMessage;
 
@@ -268,7 +268,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $nbTopic
      * @return Forum
      */
-    public function setNbTopic($nbTopic)
+    public function setNbTopic(int $nbTopic)
     {
         $this->nbTopic = $nbTopic;
 
@@ -287,8 +287,8 @@ class Forum implements TimestampableInterface, SluggableInterface
 
     /**
      * Set category
-     * @param Category $category
-     * @return Forum
+     * @param Category|null $category
+     * @return $this
      */
     public function setCategory(Category $category = null)
     {

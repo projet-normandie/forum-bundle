@@ -17,7 +17,7 @@ class CategoryRepository extends EntityRepository
      *
      * @param $user
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getHome($user = null): Query
     {

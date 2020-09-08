@@ -61,7 +61,7 @@ class TopicUser
      */
     public function __toString()
     {
-        return \sprintf('%s - %s', $this->getUser(), $this->getTopic());
+        return sprintf('%s - %s', $this->getUser(), $this->getTopic());
     }
 
 
@@ -71,7 +71,7 @@ class TopicUser
      * @param integer $id
      * @return TopicUser
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -111,8 +111,7 @@ class TopicUser
 
     /**
      * Set topic
-     *
-     * @param Topic $topic
+     * @param Topic|null $topic
      * @return $this
      */
     public function setTopic(Topic $topic = null)
@@ -137,7 +136,7 @@ class TopicUser
      * @param boolean $boolRead
      * @return $this
      */
-    public function setBoolRead($boolRead)
+    public function setBoolRead(bool $boolRead)
     {
         $this->boolRead = $boolRead;
 
@@ -160,7 +159,7 @@ class TopicUser
      * @param boolean $boolNotif
      * @return $this
      */
-    public function setBoolNotif($boolNotif)
+    public function setBoolNotif(bool $boolNotif)
     {
         $this->boolNotif = $boolNotif;
 

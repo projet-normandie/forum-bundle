@@ -3,14 +3,24 @@
 namespace ProjetNormandie\ForumBundle\Command;
 
 use Doctrine\DBAL\Logging\DebugStack;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class DefaultCommand extends ContainerAwareCommand
+abstract class DefaultCommand extends Command
 {
+    protected static $defaultName = 'pn-forum:default';
+
     private $sglLoggerEnabled = false;
     private $stack;
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+        parent::__construct();
+    }
 
     protected function init(InputInterface $input)
     {

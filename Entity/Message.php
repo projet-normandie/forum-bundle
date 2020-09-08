@@ -67,7 +67,7 @@ class Message implements TimestampableInterface
      */
     public function __toString()
     {
-        return \sprintf('[%s]', $this->getId());
+        return sprintf('[%s]', $this->getId());
     }
 
     /**
@@ -76,7 +76,7 @@ class Message implements TimestampableInterface
      * @param integer $id
      * @return $this
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -98,7 +98,7 @@ class Message implements TimestampableInterface
      * @param string $message
      * @return $this
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
         return $this;
@@ -116,7 +116,7 @@ class Message implements TimestampableInterface
 
     /**
      * Set topic
-     * @param Topic $topic
+     * @param Topic|null $topic
      * @return $this
      */
     public function setTopic(Topic $topic = null)
@@ -136,8 +136,8 @@ class Message implements TimestampableInterface
 
     /**
      * Set user
-     * @param UserInterface $user
-     * @return Message
+     * @param null $user
+     * @return $this
      */
     public function setUser($user = null)
     {

@@ -3,6 +3,7 @@
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\MessageBundle\Service\Messager;
@@ -28,7 +29,7 @@ class MessageListener
     /**
      * @param LifecycleEventArgs $event
      * @throws ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \OptimisticLockException
      */
     public function postPersist(LifecycleEventArgs $event)
     {
@@ -53,15 +54,26 @@ class MessageListener
                 $this->messager->send(
                     sprintf(
                         $this->translator->trans(
-                            'topic.notif.object', array(), null, $topicUser->getUser()
-                            ->getLocale()
-                        ), $topic->getLibTopic()
-                    ), sprintf(
+                            'topic.notif.object',
+                            array(),
+                            null,
+                            $topicUser->getUser()->getLocale()
+                        ),
+                        $topic->getLibTopic()
+                    ),
+                    sprintf(
                         $this->translator->trans(
-                            'topic.notif.message', array(), null, $topicUser->getUser()
-                            ->getLocale()
-                        ), $entity->getMessage(), $topic->getUrl(), $topic->getLibTopic()
-                    ), $em->getReference('ProjetNormandie\ForumBundle\Entity\UserInterface', 0), $topicUser->getUser(),
+                            'topic.notif.message',
+                            array(),
+                            null,
+                            $topicUser->getUser()->getLocale()
+                        ),
+                        $entity->getMessage(),
+                        $topic->getUrl(),
+                        $topic->getLibTopic()
+                    ),
+                    $em->getReference('ProjetNormandie\ForumBundle\Entity\UserInterface', 0),
+                    $topicUser->getUser(),
                     'FORUM_NOTIF'
                 );
             }

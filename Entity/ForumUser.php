@@ -49,15 +49,12 @@ class ForumUser
      */
     private $boolRead = false;
 
-
-    public function __construct() {}
-
     /**
      * @return string
      */
     public function __toString()
     {
-        return \sprintf('%s - %s', $this->getUser(), $this->getForum());
+        return sprintf('%s - %s', $this->getUser(), $this->getForum());
     }
 
     /**
@@ -66,7 +63,7 @@ class ForumUser
      * @param integer $id
      * @return ForumUser
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -106,8 +103,7 @@ class ForumUser
 
     /**
      * Set forum
-     *
-     * @param Forum $forum
+     * @param Forum|null $forum
      * @return $this
      */
     public function setForum(Forum $forum = null)
@@ -119,7 +115,7 @@ class ForumUser
     /**
      * Get forum
      *
-     * @return Topic
+     * @return Forum
      */
     public function getForum()
     {
@@ -132,7 +128,7 @@ class ForumUser
      * @param boolean $boolRead
      * @return $this
      */
-    public function setBoolRead($boolRead)
+    public function setBoolRead(bool $boolRead)
     {
         $this->boolRead = $boolRead;
 

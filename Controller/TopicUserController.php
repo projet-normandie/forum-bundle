@@ -7,6 +7,7 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\ORMException;
 
 /**
  * Class TopicUserController
@@ -22,7 +23,8 @@ class TopicUserController extends AbstractController
 
     /**
      * @param Request $request
-     * @return mixed
+     * @return JsonResponse
+     * @throws ORMException
      */
     public function setRead(Request $request)
     {

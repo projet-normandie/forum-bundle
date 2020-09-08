@@ -11,7 +11,7 @@ use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 /**
  * Category
  *
- * @ORM\Table(name="forum_category", indexes={@ORM\Index(name="idxPosition", columns={"position"})})
+ * @ORM\Table(name="forum_category")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\CategoryRepository")
  */
 class Category implements TimestampableInterface
@@ -53,7 +53,7 @@ class Category implements TimestampableInterface
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibCategory(), $this->getId());
+        return sprintf('%s [%s]', $this->getLibCategory(), $this->getId());
     }
 
     /**
@@ -70,7 +70,7 @@ class Category implements TimestampableInterface
      * @param integer $id
      * @return Category
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -92,7 +92,7 @@ class Category implements TimestampableInterface
      * @param string $libCategory
      * @return Category
      */
-    public function setLibCategory($libCategory)
+    public function setLibCategory(string $libCategory)
     {
         $this->libCategory = $libCategory;
 
@@ -115,7 +115,7 @@ class Category implements TimestampableInterface
      * @param integer $position
      * @return Category
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 

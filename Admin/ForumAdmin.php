@@ -20,7 +20,7 @@ class ForumAdmin extends AbstractAdmin
     protected $baseRouteName = 'pnforumbundle_admin_forum';
 
     /**
-     * @inheritdoc
+     * @param RouteCollection $collection
      */
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -28,7 +28,7 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * @param FormMapper $formMapper
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
@@ -47,7 +47,7 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
@@ -58,8 +58,7 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ListMapper $listMapper
      */
     protected function configureListFields(ListMapper $listMapper)
     {
@@ -72,8 +71,7 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ShowMapper $showMapper
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
