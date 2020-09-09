@@ -5,7 +5,6 @@ namespace ProjetNormandie\ForumBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use ProjetNormandie\ForumBundle\Entity\Forum;
-use ProjetNormandie\ForumBundle\Entity\UserInterface;
 
 /**
  * Specific repository that serves the Category entity.

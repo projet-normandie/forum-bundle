@@ -1,6 +1,6 @@
 ProjetNormandie\ForumBundle\Entity\TopicType:
   attributes:
-    idType:
+    id:
       groups: []
     libType:
       groups:

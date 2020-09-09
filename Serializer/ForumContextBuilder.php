@@ -4,7 +4,6 @@ namespace ProjetNormandie\ForumBundle\Serializer;
 use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use ProjetNormandie\ForumBundle\Entity\Category;
 
 final class ForumContextBuilder implements SerializerContextBuilderInterface
 {

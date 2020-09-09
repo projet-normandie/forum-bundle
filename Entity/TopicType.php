@@ -43,7 +43,7 @@ class TopicType
      */
     public function __toString()
     {
-        return sprintf('%s [%s]', $this->getLibType(), $this->getIdType());
+        return sprintf('%s [%s]', $this->getLibType(), $this->getId());
     }
 
 

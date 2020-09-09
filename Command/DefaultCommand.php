@@ -27,8 +27,7 @@ abstract class DefaultCommand extends Command
         if ($input->getOption('debug')) {
             $this->sglLoggerEnabled = true;
             // Start setup logger
-            $doctrine = $this->getContainer()->get('doctrine');
-            $doctrineConnection = $doctrine->getConnection();
+            $doctrineConnection = $this->em->getConnection();
             $this->stack = new DebugStack();
             $doctrineConnection->getConfiguration()->setSQLLogger($this->stack);
             // End setup logger

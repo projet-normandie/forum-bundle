@@ -3,7 +3,6 @@
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\ORM\ORMException;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\MessageBundle\Service\Messager;
@@ -29,7 +28,6 @@ class MessageListener
     /**
      * @param LifecycleEventArgs $event
      * @throws ORMException
-     * @throws \OptimisticLockException
      */
     public function postPersist(LifecycleEventArgs $event)
     {
