@@ -8,6 +8,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -17,7 +20,7 @@ class MessageAdmin extends AbstractAdmin
     protected $baseRouteName = 'pnforumbundle_admin_message';
 
     /**
-     * @inheritdoc
+     * @param RouteCollection $collection
      */
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -26,28 +29,27 @@ class MessageAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * @param FormMapper $formMapper
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('id', 'text', ['label' => 'id', 'attr' => ['readonly' => true]])
-            ->add('message', 'textarea', ['label' => 'Message', 'attr' => ['rows' => 20]]);
+        $formMapper->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
+            ->add('message', TextareaType::class, ['label' => 'Message', 'attr' => ['rows' => 20]]);
     }
 
     /**
-     * @inheritdoc
+     * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('topic', 'doctrine_orm_model_autocomplete', [], null, [
+            ->add('topic', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libTopic',
             ]);
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ListMapper $listMapper
      */
     protected function configureListFields(ListMapper $listMapper)
     {
@@ -58,13 +60,13 @@ class MessageAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ShowMapper $showMapper
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper->add('id')
+            ->add('topic')
             ->add('user')
-            ->add('message');
+            ->add('message', null, ['label' => 'Message', 'safe' => true]);
     }
 }

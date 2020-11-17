@@ -4,17 +4,24 @@ namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
- * Topic
+ * Message
  *
  * @ORM\Table(name="forum_message")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\MessageRepository")
+ * @ApiResource(attributes={"order"={"id": "ASC"}})
+ * @ApiFilter(OrderFilter::class, properties={"id": "ASC"}, arguments={"orderParameterName"="order"})
+ *
  */
-class Message
+class Message implements TimestampableInterface
 {
-    use Timestampable;
+    use TimestampableTrait;
 
     /**
      * @var integer
@@ -60,7 +67,7 @@ class Message
      */
     public function __toString()
     {
-        return \sprintf('[%s]', $this->getId());
+        return sprintf('[%s]', $this->getId());
     }
 
     /**
@@ -69,7 +76,7 @@ class Message
      * @param integer $id
      * @return $this
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -91,7 +98,7 @@ class Message
      * @param string $message
      * @return $this
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
         return $this;
@@ -109,7 +116,7 @@ class Message
 
     /**
      * Set topic
-     * @param Topic $topic
+     * @param Topic|null $topic
      * @return $this
      */
     public function setTopic(Topic $topic = null)
@@ -129,8 +136,8 @@ class Message
 
     /**
      * Set user
-     * @param UserInterface $user
-     * @return Message
+     * @param null $user
+     * @return $this
      */
     public function setUser($user = null)
     {

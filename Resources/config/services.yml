@@ -8,15 +8,16 @@ services:
     ProjetNormandie\ForumBundle\:
         resource: '../../*'
         exclude: '../../{Admin,DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-    forum_message.order_filter:
-        parent: 'api_platform.doctrine.orm.order_filter'
-        arguments: [ {id: ~ } ]
-        tags:  [  { name: 'api_platform.filter', id: 'forum_message.order_filter' }  ]
-        public: true
-        autowire: true
-        autoconfigure: false
     ProjetNormandie\ForumBundle\Serializer\TopicContextBuilder:
         decorates: 'api_platform.serializer.context_builder'
         arguments: [ '@ProjetNormandie\ForumBundle\Serializer\TopicContextBuilder.inner' ]
         autoconfigure: false
+    ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder:
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder.inner' ]
+        autoconfigure: false
+    ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener
+        tags:
+            - { name: doctrine.event_listener, event: 'postPersist', connection: default, entity: 'ProjetNormandie\MessageBundle\Message' }
 

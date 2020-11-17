@@ -4,14 +4,15 @@ namespace ProjetNormandie\ForumBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Forum;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Doctrine\ORM\ORMException;
 
 /**
  * Class TopicUserController
  */
-class TopicUserController extends Controller
+class TopicUserController extends AbstractController
 {
     private $em;
 
@@ -22,7 +23,8 @@ class TopicUserController extends Controller
 
     /**
      * @param Request $request
-     * @return mixed
+     * @return JsonResponse
+     * @throws ORMException
      */
     public function setRead(Request $request)
     {
@@ -35,6 +37,6 @@ class TopicUserController extends Controller
                 $this->em->getReference(Forum::class, $idForum)
             );
         }
-        return new JsonResponse(['data' => true]);
+        return new JsonResponse(['sucess' => true]);
     }
 }

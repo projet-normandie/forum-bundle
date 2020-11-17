@@ -7,6 +7,7 @@ cache:
 stages:
   - build
   - qa
+  - deploy-preprod
 
 build:7.2:
   stage: build
@@ -24,4 +25,28 @@ phpunit:7.2:
   stage: qa
   image: jakzal/phpqa:php7.2-alpine
   script:
-    - phpunit
+    - phpunit-8
+
+.base-deploy:
+  variables:
+    PROJECT_DIR: /home/deploy/projects/bundles/ProjetNormandie/ForumBundle/
+  script:
+    - apk update && apk upgrade
+    - apk add openssh bash rsync
+    - eval $(ssh-agent -s)
+    - mkdir ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - rsync -rav --quiet --delete --exclude 'vendor' -e "ssh -p ${PORT}" --rsync-path="mkdir -p ${PROJECT_DIR} && rsync" ${CI_PROJECT_DIR}/ deploy@${HOST}:${PROJECT_DIR}
+
+deploy-pp:
+  extends: .base-deploy
+  image: alpine:3
+  stage: deploy-preprod
+  environment:
+    name: testing
+    url: https://api.projet-normandie.fr/
+  only:
+    - develop

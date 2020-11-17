@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 
 /**
@@ -19,7 +20,7 @@ class ForumAdmin extends AbstractAdmin
     protected $baseRouteName = 'pnforumbundle_admin_forum';
 
     /**
-     * @inheritdoc
+     * @param RouteCollection $collection
      */
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -27,58 +28,56 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * @param FormMapper $formMapper
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('id', 'text', ['label' => 'id', 'attr' => ['readonly' => true]])
-            ->add('libForum', 'text', ['label' => 'libForum'])
+        $formMapper->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
+            ->add('libForum', TextType::class, ['label' => 'label.forum'])
             ->add('category')
             ->add(
                 'status',
                 ChoiceType::class,
                 [
-                    'label' => 'Status',
+                    'label' => 'label.status',
                     'choices' => Forum::getStatusChoices(),
                 ]
             )
-            ->add('position', 'text', ['label' => 'position', 'required' => true]);
+            ->add('position', TextType::class, ['label' => 'label.position', 'required' => true]);
     }
 
     /**
-     * @inheritdoc
+     * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('category')
-            ->add('libForum')
-            ->add('status');
+            ->add('category', null, ['label' => 'label.category'])
+            ->add('libForum', null, ['label' => 'label.forum'])
+            ->add('status', null, ['label' => 'label.status']);
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ListMapper $listMapper
      */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('id')
-            ->add('libForum', null, ['label' => 'libForum'])
-            ->add('category')
-            ->add('status')
-            ->add('position', null, ['label' => 'position'])
+            ->add('libForum', null, ['label' => 'label.forum'])
+            ->add('category', null, ['label' => 'label.category'])
+            ->add('status', null, ['label' => 'label.status'])
+            ->add('position', null, ['label' => 'label.position'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ShowMapper $showMapper
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper->add('id')
-            ->add('libForum')
-            ->add('position')
-            ->add('topics');
+            ->add('libForum', null, ['label' => 'label.forum'])
+            ->add('position', null, ['label' => 'label.position'])
+            ->add('topics', null, ['label' => 'label.topics']);
     }
 }

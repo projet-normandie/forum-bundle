@@ -2,11 +2,11 @@ ProjetNormandie\ForumBundle\Entity\ForumUser:
   attributes:
     id:
       groups:
-        - 'forum_user_read'
+        - 'forum.user.read'
     user:
       groups: []
     forum:
       groups: []
     boolRead:
       groups:
-        - 'forum_user_read'
+        - 'forum.user.read'

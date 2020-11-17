@@ -4,9 +4,8 @@ namespace ProjetNormandie\ForumBundle\Serializer;
 use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use ProjetNormandie\ForumBundle\Entity\Topic;
 
-final class TopicContextBuilder implements SerializerContextBuilderInterface
+final class ForumContextBuilder implements SerializerContextBuilderInterface
 {
     private $decorated;
     private $authorizationChecker;
@@ -22,14 +21,11 @@ final class TopicContextBuilder implements SerializerContextBuilderInterface
     public function createFromRequest(Request $request, bool $normalization, ?array $extractedAttributes = null): array
     {
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
-        $resourceClass = $context['resource_class'] ?? null;
-
-        if ($resourceClass === Topic::class
-            && isset($context['groups'])
-            && $this->authorizationChecker->isGranted('ROLE_USER') && true === $normalization) {
-            $context['groups'][] = 'forum.topic.user.read';
+        if (($context['request_uri'] == '/api/categorie/home')
+            && isset($context['groups']) && $this->authorizationChecker->isGranted('ROLE_USER')
+            && true === $normalization) {
+            $context['groups'][] = 'forum.user.read';
         }
-
         return $context;
     }
 }

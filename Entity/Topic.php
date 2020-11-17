@@ -4,9 +4,12 @@ namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
  * Topic
@@ -16,9 +19,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
  *
  */
-class Topic
+class Topic implements TimestampableInterface, SluggableInterface
 {
-    use Timestampable;
+    use TimestampableTrait;
+    use SluggableTrait;
 
     /**
      * @var integer
@@ -76,21 +80,10 @@ class Topic
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicType")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idType", referencedColumnName="idType")
+     *   @ORM\JoinColumn(name="idType", referencedColumnName="id")
      * })
      */
     private $type;
-
-    /**
-     * @var Language
-     *
-     * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Language")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idLanguage", referencedColumnName="idLanguage")
-     * })
-     */
-    private $language;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", mappedBy="topic", cascade={"persist"})
@@ -117,7 +110,7 @@ class Topic
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibTopic(), $this->getId());
+        return sprintf('%s [%s]', $this->getLibTopic(), $this->getId());
     }
 
     /**
@@ -135,7 +128,7 @@ class Topic
      * @param integer $id
      * @return Topic
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -157,7 +150,7 @@ class Topic
      * @param string $libTopic
      * @return Topic
      */
-    public function setLibTopic($libTopic)
+    public function setLibTopic(string $libTopic)
     {
         $this->libTopic = $libTopic;
 
@@ -180,7 +173,7 @@ class Topic
      * @param integer $nbMessage
      * @return $this
      */
-    public function setNbMessage($nbMessage)
+    public function setNbMessage(int $nbMessage)
     {
         $this->nbMessage = $nbMessage;
 
@@ -199,8 +192,8 @@ class Topic
 
     /**
      * Set forum
-     * @param Forum $forum
-     * @return Topic
+     * @param Forum|null $forum
+     * @return $this
      */
     public function setForum(Forum $forum = null)
     {
@@ -217,11 +210,10 @@ class Topic
         return $this->forum;
     }
 
-
     /**
      * Set user
-     * @param UserInterface $user
-     * @return Topic
+     * @param null $user
+     * @return $this
      */
     public function setUser($user = null)
     {
@@ -240,7 +232,7 @@ class Topic
 
     /**
      * Set type
-     * @param TopicType $type
+     * @param TopicType|null $type
      * @return $this
      */
     public function setType(TopicType $type = null)
@@ -259,28 +251,8 @@ class Topic
     }
 
     /**
-     * Set language
-     * @param Language $language
-     * @return $this
-     */
-    public function setLanguage(Language $language = null)
-    {
-        $this->language = $language;
-        return $this;
-    }
-
-    /**
-     * Get language
-     * @return Language
-     */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-
-    /**
      * Set messages
-     * @param array $messages
+     * @param array|null $messages
      * @return $this
      */
     public function setMessages(array $messages = null)
@@ -323,5 +295,29 @@ class Topic
     public function getTopicUser()
     {
         return $this->topicUser;
+    }
+
+    /**
+     * Returns an array of the fields used to generate the slug.
+     *
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['libTopic'];
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return sprintf(
+            '%s-forum-f%d/%s-topic-t%d/index',
+            $this->getForum()->getSlug(),
+            $this->getForum()->getId(),
+            $this->getSlug(),
+            $this->getId()
+        );
     }
 }

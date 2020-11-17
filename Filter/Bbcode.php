@@ -5,7 +5,7 @@ class Bbcode
 {
     protected $_config = array(
         'url_limit' => 200,
-        'smiley_path' => "web/images/smiley/",
+        'smiley_path' => "https://picture.video-games-records.com/smiley/",
         'smiley_ext' => ".png"
     );
 
@@ -136,8 +136,7 @@ class Bbcode
     {
         $data = array();
         foreach ($this->_smileys as $key => $smiley) {
-            //$data[] = "<img src=\"".$this->_config["smiley_path"].$smiley.$this->_config["smiley_ext"]."\" alt=\"$smiley\" />"; //Original code
-            $data[] = '<span class="_spriteForum-f f-smiley f-smiley-' . $smiley . '">&nbsp;</span>'; //Code adapted for CSS Sprite
+            $data[] = "<img src=\"".$this->_config["smiley_path"].$smiley.$this->_config["smiley_ext"]."\" alt=\"$smiley\" />"; //Original code
         }
         return $data;
     }

@@ -4,18 +4,22 @@ namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 
 /**
  * Forum
  *
- * @ORM\Table(name="forum_forum", indexes={@ORM\Index(name="idxPosition", columns={"position"})})
+ * @ORM\Table(name="forum_forum")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
  */
-class Forum
+class Forum implements TimestampableInterface, SluggableInterface
 {
-    use Timestampable;
+    use TimestampableTrait;
+    use SluggableTrait;
 
     const STATUS_PRIVATE = 'private';
     const STATUS_PUBLIC = 'public';
@@ -117,7 +121,7 @@ class Forum
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibForum(), $this->getId());
+        return sprintf('%s [%s]', $this->getLibForum(), $this->getId());
     }
 
     /**
@@ -126,7 +130,7 @@ class Forum
      * @param integer $id
      * @return Forum
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -148,7 +152,7 @@ class Forum
      * @param string $libForum
      * @return Forum
      */
-    public function setLibForum($libForum)
+    public function setLibForum(string $libForum)
     {
         $this->libForum = $libForum;
 
@@ -171,7 +175,7 @@ class Forum
      * @param integer $position
      * @return Forum
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
@@ -192,9 +196,9 @@ class Forum
      * Set status
      *
      * @param string $status
-     * @return $this
+     * @return Forum
      */
-    public function setStatus($status)
+    public function setStatus(string $status)
     {
         $this->status = $status;
 
@@ -216,9 +220,9 @@ class Forum
      * Set role
      *
      * @param string $role
-     * @return $this
+     * @return Forum
      */
-    public function setRole($role)
+    public function setRole(string $role)
     {
         $this->role = $role;
 
@@ -239,9 +243,9 @@ class Forum
      * Set nbMessage
      *
      * @param integer $nbMessage
-     * @return $this
+     * @return Forum
      */
-    public function setNbMessage($nbMessage)
+    public function setNbMessage(int $nbMessage)
     {
         $this->nbMessage = $nbMessage;
 
@@ -262,9 +266,9 @@ class Forum
      * Set nbTopic
      *
      * @param integer $nbTopic
-     * @return $this
+     * @return Forum
      */
-    public function setNbTopic($nbTopic)
+    public function setNbTopic(int $nbTopic)
     {
         $this->nbTopic = $nbTopic;
 
@@ -283,8 +287,8 @@ class Forum
 
     /**
      * Set category
-     * @param Category $category
-     * @return Forum
+     * @param Category|null $category
+     * @return $this
      */
     public function setCategory(Category $category = null)
     {
@@ -336,5 +340,15 @@ class Forum
             self::STATUS_PRIVATE => self::STATUS_PRIVATE,
             self::STATUS_PUBLIC => self::STATUS_PUBLIC,
         ];
+    }
+
+    /**
+     * Returns an array of the fields used to generate the slug.
+     *
+     * @return string[]
+     */
+    public function getSluggableFields(): array
+    {
+        return ['libForum'];
     }
 }

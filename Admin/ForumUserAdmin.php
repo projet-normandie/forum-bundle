@@ -13,9 +13,9 @@ use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 /**
  * Administration manager for the Forum Bundle.
  */
-class TopicUserAdmin extends AbstractAdmin
+class ForumUserAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_topicUser';
+    protected $baseRouteName = 'pnforumbundle_admin_forumUser';
 
     /**
      * @param RouteCollection $collection
@@ -31,10 +31,9 @@ class TopicUserAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('topic')
+        $formMapper->add('forum')
             ->add('user')
-            ->add('boolRead')
-            ->add('boolNotif');
+            ->add('boolRead');
     }
 
     /**
@@ -44,8 +43,8 @@ class TopicUserAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('user')
-            ->add('topic', ModelAutocompleteFilter::class, [], null, [
-                'property' => 'libTopic',
+            ->add('forum', ModelAutocompleteFilter::class, [], null, [
+                'property' => 'libForum',
             ]);
     }
 
@@ -54,10 +53,9 @@ class TopicUserAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('topic')
+        $listMapper->addIdentifier('forum')
             ->addIdentifier('user')
             ->add('boolRead')
-            ->add('boolNotif')
             ->add('_action', 'actions', ['actions' => ['edit' => []]]);
     }
 
@@ -66,7 +64,7 @@ class TopicUserAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('topic')
+        $showMapper->add('forum')
             ->add('user');
     }
 }

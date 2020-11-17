@@ -23,7 +23,9 @@ class TopicUserRepository extends EntityRepository
             ->setParameter('boolRead', 1)
             ->setParameter('user', $user);
         if ($forum !== null) {
-            $query->andWhere('tu.topic IN (SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)')
+            $query->andWhere(
+                'tu.topic IN (SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)'
+            )
                 ->setParameter('forum', $forum);
         }
         $query->getQuery()->execute();

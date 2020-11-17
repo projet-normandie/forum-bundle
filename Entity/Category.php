@@ -4,18 +4,19 @@ namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Doctrine\Common\Collections\ArrayCollection;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
 /**
  * Category
  *
- * @ORM\Table(name="forum_category", indexes={@ORM\Index(name="idxPosition", columns={"position"})})
+ * @ORM\Table(name="forum_category")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\CategoryRepository")
  */
-class Category
+class Category implements TimestampableInterface
 {
-    use Timestampable;
+    use TimestampableTrait;
 
     /**
      * @var integer
@@ -52,7 +53,7 @@ class Category
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibCategory(), $this->getId());
+        return sprintf('%s [%s]', $this->getLibCategory(), $this->getId());
     }
 
     /**
@@ -69,7 +70,7 @@ class Category
      * @param integer $id
      * @return Category
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
         return $this;
@@ -91,7 +92,7 @@ class Category
      * @param string $libCategory
      * @return Category
      */
-    public function setLibCategory($libCategory)
+    public function setLibCategory(string $libCategory)
     {
         $this->libCategory = $libCategory;
 
@@ -114,7 +115,7 @@ class Category
      * @param integer $position
      * @return Category
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 

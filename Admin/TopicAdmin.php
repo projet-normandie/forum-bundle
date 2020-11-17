@@ -8,6 +8,8 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -17,7 +19,7 @@ class TopicAdmin extends AbstractAdmin
     protected $baseRouteName = 'pnforumbundle_admin_topic';
 
     /**
-     * @inheritdoc
+     * @param RouteCollection $collection
      */
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -26,54 +28,50 @@ class TopicAdmin extends AbstractAdmin
     }
 
     /**
-     * @inheritdoc
+     * @param FormMapper $formMapper
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $formMapper->add('id', 'text', ['label' => 'id', 'attr' => ['readonly' => true]])
-            ->add('libTopic', 'text', ['label' => 'libTopic'])
+        $formMapper->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
+            ->add('libTopic', TextType::class, ['label' => 'label.topic'])
             ->add('forum')
             ->add('type');
     }
 
     /**
-     * @inheritdoc
+     * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('libTopic')
-            ->add('forum', 'doctrine_orm_model_autocomplete', [], null, [
+            ->add('libTopic', null, ['label' => 'label.topic'])
+            ->add('forum', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libForum',
             ]);
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ListMapper $listMapper
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('id')
-            ->add('language')
-            ->add('libTopic', null, ['label' => 'libTopic'])
-            ->add('type')
-            ->add('forum')
-            ->add('user')
+        $listMapper->addIdentifier('id', null, ['label' => 'label.id'])
+            ->add('libTopic', null, ['label' => 'label.topic'])
+            ->add('type', null, ['label' => 'label.type'])
+            ->add('forum', null, ['label' => 'label.forum'])
+            ->add('user', null, ['label' => 'label.user'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
 
     /**
-     * @inheritdoc
-     * @throws \RuntimeException When defining wrong or duplicate field names.
+     * @param ShowMapper $showMapper
      */
     protected function configureShowFields(ShowMapper $showMapper)
     {
-        $showMapper->add('id')
-            ->add('language')
-            ->add('libTopic')
-            ->add('type')
-            ->add('forum')
-            ->add('user');
+        $showMapper->add('id', null, ['label' => 'label.id'])
+            ->add('libTopic', null, ['label' => 'label.topic'])
+            ->add('type', null, ['label' => 'label.type'])
+            ->add('forum', null, ['label' => 'label.forum'])
+            ->add('user', null, ['label' => 'label.user']);
     }
 }

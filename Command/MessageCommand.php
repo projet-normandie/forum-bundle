@@ -2,19 +2,28 @@
 
 namespace ProjetNormandie\ForumBundle\Command;
 
-use ProjetNormandie\CommonBundle\Command\DefaultCommand;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use ProjetNormandie\ForumBundle\Repository\MessageRepository;
 use ProjetNormandie\ForumBundle\Filter\Bbcode as BbcodeFilter;
 
 class MessageCommand extends DefaultCommand
 {
+    private $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+        parent::__construct($em);
+    }
+
     protected function configure()
     {
         $this
-            ->setName('pj-forum:message')
+            ->setName('pn-forum:message')
             ->setDescription('Command for a message forum')
             ->addArgument(
                 'function',
@@ -43,29 +52,28 @@ class MessageCommand extends DefaultCommand
 
         switch ($function) {
             case 'migrate':
-                $this->migrate($output);
+                $this->migrate();
                 break;
         }
         $this->end($output);
 
-        return true;
+        return 0;
     }
 
 
     /**
-     * @param OutputInterface $output
+     *
      */
-    private function migrate(OutputInterface $output)
+    private function migrate()
     {
-        /** @var \ProjetNormandie\ForumBundle\Repository\MessageRepository $messageRepository */
-        $messageRepository = $this->getContainer()->get('doctrine')->getRepository('ProjetNormandieForumBundle:Message');
+        /** @var MessageRepository $messageRepository */
+        $messageRepository = $this->em->getRepository('ProjetNormandieForumBundle:Message');
 
         $bbcodeFiler = new BbcodeFilter();
-        $message = $messageRepository->find(1);
-
-
-        var_dump($bbcodeFiler->filter($message->getMessage()));
-
-        $output->writeln(sprintf('%d chart(s) updated', $message->getId()));
+        $messages = $messageRepository->findAll();
+        foreach ($messages as $message) {
+            $message->setMessage($bbcodeFiler->filter($message->getMessage()));
+        }
+        $this->em->flush();
     }
 }

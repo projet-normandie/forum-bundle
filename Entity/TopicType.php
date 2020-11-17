@@ -16,11 +16,11 @@ class TopicType
     /**
      * @var integer
      *
-     * @ORM\Column(name="idType", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $idType;
+    private $id;
 
     /**
      * @var string
@@ -43,19 +43,19 @@ class TopicType
      */
     public function __toString()
     {
-        return \sprintf('%s [%s]', $this->getLibType(), $this->getIdType());
+        return sprintf('%s [%s]', $this->getLibType(), $this->getId());
     }
 
 
     /**
-     * Set idType
+     * Set id
      *
-     * @param integer $idType
+     * @param integer $id
      * @return TopicType
      */
-    public function setIdType($idType)
+    public function setId(int $id)
     {
-        $this->idType = $idType;
+        $this->id = $id;
         return $this;
     }
 
@@ -64,9 +64,9 @@ class TopicType
      *
      * @return integer
      */
-    public function getIdType()
+    public function getId()
     {
-        return $this->idType;
+        return $this->id;
     }
 
     /**
@@ -75,7 +75,7 @@ class TopicType
      * @param string $libType
      * @return TopicType
      */
-    public function setLibType($libType)
+    public function setLibType(string $libType)
     {
         $this->libType = $libType;
 
@@ -98,7 +98,7 @@ class TopicType
      * @param integer $position
      * @return $this
      */
-    public function setPosition($position)
+    public function setPosition(int $position)
     {
         $this->position = $position;
 
