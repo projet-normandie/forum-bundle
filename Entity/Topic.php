@@ -5,11 +5,14 @@ namespace ProjetNormandie\ForumBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
-use ApiPlatform\Core\Annotation\ApiResource;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 
 /**
  * Topic
@@ -17,7 +20,12 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
  * @ORM\Table(name="forum_topic")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
  * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
- *
+ * @ApiFilter(
+ *     SearchFilter::class,
+ *     properties={
+ *          "libTopic": "partial"
+ *      }
+ * )
  */
 class Topic implements TimestampableInterface, SluggableInterface
 {

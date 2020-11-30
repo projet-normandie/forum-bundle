@@ -34,6 +34,8 @@ resources:
 #            order:
 #                - 'lastMessage.id'
         collectionOperations:
+            get:
+                normalization_context: { 'groups': [ forum.topic.read, forum.topic.lastMessage, message.last, user.read, forum.forum.read ] }
             post:
                 access_control: 'is_granted("ROLE_USER")'
                 denormalization_context: {'groups': [forum.topic.post]}
