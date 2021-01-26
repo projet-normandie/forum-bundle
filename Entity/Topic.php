@@ -19,6 +19,7 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  *
  * @ORM\Table(name="forum_topic")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
+ * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener"})
  * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
  * @ApiFilter(
  *     SearchFilter::class,
@@ -286,6 +287,16 @@ class Topic implements TimestampableInterface, SluggableInterface
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * @param Message|null $message
+     * @return $this
+     */
+    public function setLastMessage(Message $message = null)
+    {
+        $this->lastMessage = $message;
+        return $this;
     }
 
     /**

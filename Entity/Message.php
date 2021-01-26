@@ -15,6 +15,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *
  * @ORM\Table(name="forum_message")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\MessageRepository")
+ * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener"})
  * @ApiResource(attributes={"order"={"id": "ASC"}})
  * @ApiFilter(OrderFilter::class, properties={"id": "ASC"}, arguments={"orderParameterName"="order"})
  *

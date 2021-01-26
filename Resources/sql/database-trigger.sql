@@ -4,11 +4,6 @@ DROP TRIGGER IF EXISTS `forumMessageAfterInsert`//
 CREATE TRIGGER forumMessageAfterInsert AFTER INSERT ON forum_message
 FOR EACH ROW
 BEGIN
-	UPDATE forum_topic
-	SET nbMessage = (SELECT COUNT(id) FROM forum_message WHERE idTopic = NEW.idTopic),
-		idMessageMax = NEW.id
-	WHERE id = NEW.idTopic;
-
 	-- nbForumMessage
 	UPDATE user SET nbForumMessage = nbForumMessage + 1 WHERE id = NEW.idUser;
 
@@ -37,10 +32,6 @@ DROP TRIGGER IF EXISTS `forumTopicAfterInsert`//
 CREATE TRIGGER forumTopicAfterInsert AFTER INSERT ON forum_topic
 FOR EACH ROW
 BEGIN
-	UPDATE forum_forum
-	SET nbTopic = (SELECT COUNT(id) FROM forum_topic WHERE idForum = NEW.idForum)
-	WHERE id = NEW.idForum;
-
 	INSERT INTO forum_topic_user (idUser, idTopic, boolRead)
 	SELECT DISTINCT idUser, NEW.id, 1
 	FROM forum_forum_user;
