@@ -314,6 +314,16 @@ class Forum implements TimestampableInterface, SluggableInterface
     }
 
     /**
+     * @param Message|null $message
+     * @return $this
+     */
+    public function setLastMessage(Message $message = null)
+    {
+        $this->lastMessage = $message;
+        return $this;
+    }
+
+    /**
      * Get lastMessage
      * @return Message
      */

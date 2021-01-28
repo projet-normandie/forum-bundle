@@ -26,29 +26,36 @@ class MessageListener
     }
 
     /**
+     * @param Message            $message
      * @param LifecycleEventArgs $event
      * @throws ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function postPersist(LifecycleEventArgs $event)
+    public function postPersist(Message $message,  LifecycleEventArgs $event)
     {
-        $entity = $event->getObject();
-        if (!$entity instanceof Message) {
-            return;
-        }
+        $em = $event->getEntityManager();
 
-        $topic = $entity->getTopic();
+        // Update nbMessage & lastMessage
+        $topic = $message->getTopic();
+        $topic->setLastMessage($message);
+        $topic->setNbMessage($topic->getNbMessage() + 1);
+
+        $forum = $topic->getForum();
+        $forum->setLastMessage($message);
+        $forum->setNbMessage($forum->getNbMessage() + 1);
+
+        $em->flush();
 
         // Notify user
-        $em = $event->getEntityManager();
         $topicUsers = $em->getRepository('ProjetNormandieForumBundle:TopicUser')->findBy(
             array(
-                'topic' => $entity->getTopic(),
+                'topic' => $message->getTopic(),
                 'boolNotif' => 1
             )
         );
 
         foreach ($topicUsers as $topicUser) {
-            if ($topicUser->getUser()->getid() != $entity->getUser()->getId()) {
+            if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
                 $this->messager->send(
                     sprintf(
                         $this->translator->trans(
@@ -66,7 +73,7 @@ class MessageListener
                             null,
                             $topicUser->getUser()->getLocale()
                         ),
-                        $entity->getMessage(),
+                        $message->getMessage(),
                         $topic->getUrl(),
                         $topic->getLibTopic()
                     ),
