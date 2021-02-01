@@ -115,11 +115,6 @@ class Topic implements TimestampableInterface, SluggableInterface
      */
     private $topicUser;
 
-    /**
-     * Shortcut to topicUser.boolRead
-     * @var boolean
-     */
-    private $boolRead;
 
     /**
      * @return string
@@ -321,24 +316,6 @@ class Topic implements TimestampableInterface, SluggableInterface
     public function getTopicUser()
     {
         return $this->topicUser;
-    }
-
-    /**
-     * @param $boolRead
-     * @return $this
-     */
-    public function setBoolRead($boolRead)
-    {
-        $this->boolRead = $boolRead;
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getBoolRead()
-    {
-        return $this->boolRead;
     }
 
     /**

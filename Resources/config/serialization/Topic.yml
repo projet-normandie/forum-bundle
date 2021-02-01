@@ -24,9 +24,9 @@ ProjetNormandie\ForumBundle\Entity\Topic:
     user:
       groups:
         - 'forum.topic.read'
-    boolRead:
+    topicUser:
       groups:
-        - 'forum.topic.boolRead'
+        - 'forum.topic.user.read'
     lastMessage:
       groups:
         - 'forum.topic.lastMessage'

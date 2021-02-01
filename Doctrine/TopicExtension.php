@@ -2,7 +2,6 @@
 namespace ProjetNormandie\ForumBundle\Doctrine;
 
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Topic;
@@ -10,7 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Security\Core\Security;
 
-final class TopicExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
+final class TopicExtension implements QueryCollectionExtensionInterface
 {
     private $security;
     private $em;
@@ -27,21 +26,15 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
         string $resourceClass,
         string $operationName = null
     ) {
+
         $this->addSelect($queryBuilder, $resourceClass);
+        $this->addWhere($queryBuilder, $resourceClass);
     }
 
-    public function applyToItem(
-        QueryBuilder $queryBuilder,
-        QueryNameGeneratorInterface $queryNameGenerator,
-        string $resourceClass,
-        array $identifiers,
-        string $operationName = null,
-        array $context = []
-    ) {
-        $this->addSelect($queryBuilder, $resourceClass);
-    }
-
-
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string       $resourceClass
+     */
     private function addSelect(QueryBuilder $queryBuilder, string $resourceClass): void
     {
 
@@ -63,5 +56,25 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
             ->addSelect(sprintf('(%s) as %s', $subQueryBuilder->getQuery()->getDQL(), 'boolRead'))
             ->setParameter('current_user', $user);
 
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param string       $resourceClass
+     */
+    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
+    {
+
+        if (Topic::class !== $resourceClass || !$this->security->isGranted(
+                'ROLE_USER'
+            ) || null === $user = $this->security->getUser()) {
+            return;
+        }
+
+
+        $queryBuilder->innerJoin('o.topicUser', 'tu2', Join::WITH, 'tu2.user = :current_user2');
+        $queryBuilder->addSelect('tu2');
+        //$queryBuilder->andWhere('tu2.user = :current_user');
+        $queryBuilder->setParameter('current_user2', $user);
     }
 }
