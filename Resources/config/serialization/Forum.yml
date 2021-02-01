@@ -12,6 +12,9 @@ ProjetNormandie\ForumBundle\Entity\Forum:
     status:
       groups:
         - 'forum.forum.read'
+    role:
+      groups:
+        - 'forum.forum.read'
     category:
       groups: []
     position:
