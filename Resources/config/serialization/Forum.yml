@@ -9,6 +9,9 @@ ProjetNormandie\ForumBundle\Entity\Forum:
     slug:
       groups:
         - 'forum.forum.read'
+    status:
+      groups:
+        - 'forum.forum.read'
     category:
       groups: []
     position:
