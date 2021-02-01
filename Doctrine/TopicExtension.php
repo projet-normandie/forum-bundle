@@ -4,17 +4,21 @@ namespace ProjetNormandie\ForumBundle\Doctrine;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Security\Core\Security;
 
 final class TopicExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     private $security;
+    private $em;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, EntityManagerInterface $em)
     {
         $this->security = $security;
+        $this->em = $em;
     }
 
     public function applyToCollection(
@@ -23,7 +27,7 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
         string $resourceClass,
         string $operationName = null
     ) {
-        $this->addWhere($queryBuilder, $resourceClass);
+        $this->addSelect($queryBuilder, $resourceClass);
     }
 
     public function applyToItem(
@@ -34,10 +38,11 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
         string $operationName = null,
         array $context = []
     ) {
-        $this->addWhere($queryBuilder, $resourceClass);
+        $this->addSelect($queryBuilder, $resourceClass);
     }
 
-    private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
+
+    private function addSelect(QueryBuilder $queryBuilder, string $resourceClass): void
     {
 
         if (Topic::class !== $resourceClass
@@ -46,8 +51,17 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
             return;
         }
 
-        $queryBuilder->innerJoin('o.topicUser', 'tu');
-        $queryBuilder->andWhere('tu.user = :current_user');
-        $queryBuilder->setParameter('current_user', $user);
+        $subQueryBuilder = $this->em->createQueryBuilder()
+            ->select('tu.boolRead')
+            ->from('ProjetNormandieForumBundle:TopicUser', 'tu')
+            ->where('tu.user = :current_user')
+            ->andWhere('tu.topic = o')
+            ->setParameter('current_user', $user);
+
+
+        $queryBuilder
+            ->addSelect(sprintf('(%s) as %s', $subQueryBuilder->getQuery()->getDQL(), 'boolRead'))
+            ->setParameter('current_user', $user);
+
     }
 }

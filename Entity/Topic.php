@@ -24,7 +24,8 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
- *          "libTopic": "partial"
+ *          "libTopic": "partial",
+ *          "forum": "exact",
  *      }
  * )
  */
@@ -113,6 +114,12 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicUser", mappedBy="topic")
      */
     private $topicUser;
+
+    /**
+     * Shortcut to topicUser.boolRead
+     * @var boolean
+     */
+    private $boolRead;
 
     /**
      * @return string
@@ -317,6 +324,24 @@ class Topic implements TimestampableInterface, SluggableInterface
     }
 
     /**
+     * @param $boolRead
+     * @return $this
+     */
+    public function setBoolRead($boolRead)
+    {
+        $this->boolRead = $boolRead;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getBoolRead()
+    {
+        return $this->boolRead;
+    }
+
+    /**
      * Returns an array of the fields used to generate the slug.
      *
      * @return string[]
@@ -339,4 +364,5 @@ class Topic implements TimestampableInterface, SluggableInterface
             $this->getId()
         );
     }
+
 }
