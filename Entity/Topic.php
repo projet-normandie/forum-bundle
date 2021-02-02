@@ -12,6 +12,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 
 /**
@@ -21,6 +22,7 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
  * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener"})
  * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
+ * @ApiFilter(BooleanFilter::class, properties={"boolArchive"})
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
@@ -332,7 +334,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      */
     public function setBoolArchive(bool $boolArchive)
     {
-        $this->booArchive = $boolArchive;
+        $this->boolArchive = $boolArchive;
 
         return $this;
     }

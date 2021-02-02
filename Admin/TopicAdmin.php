@@ -34,6 +34,7 @@ class TopicAdmin extends AbstractAdmin
     {
         $formMapper->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
             ->add('libTopic', TextType::class, ['label' => 'label.topic'])
+            ->add('boolArchive')
             ->add('forum')
             ->add('type');
     }
@@ -47,7 +48,8 @@ class TopicAdmin extends AbstractAdmin
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('forum', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libForum',
-            ]);
+            ])
+            ->add('boolArchive');
     }
 
     /**
@@ -58,6 +60,7 @@ class TopicAdmin extends AbstractAdmin
         $listMapper->addIdentifier('id', null, ['label' => 'label.id'])
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('type', null, ['label' => 'label.type'])
+            ->add('boolArchive', null, ['label' => 'label.boolArchive'])
             ->add('forum', null, ['label' => 'label.forum'])
             ->add('user', null, ['label' => 'label.user'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
@@ -71,6 +74,7 @@ class TopicAdmin extends AbstractAdmin
         $showMapper->add('id', null, ['label' => 'label.id'])
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('type', null, ['label' => 'label.type'])
+            ->add('boolArchive', null, ['label' => 'label.boolArchive'])
             ->add('forum', null, ['label' => 'label.forum'])
             ->add('user', null, ['label' => 'label.user']);
     }

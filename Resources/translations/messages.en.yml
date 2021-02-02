@@ -8,6 +8,7 @@ label:
     topicUser : 'Topic / User'
     forumUser: 'Forum / User'
     boolRead: 'Is read ?'
+    boolArchive: 'Is archived ?'
     boolNotif: 'Is notfied ?'
     position: 'Position'
     status: 'Status'
