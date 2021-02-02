@@ -111,9 +111,23 @@ class Topic implements TimestampableInterface, SluggableInterface
     private $lastMessage;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="boolArchive", type="boolean", nullable=false, options={"default":0})
+     */
+    private $boolArchive = false;
+
+    /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicUser", mappedBy="topic")
      */
     private $topicUser;
+
+
+    /**
+     * Shortcut to topicUser[0]
+     * @var TopicUser
+     */
+    private $topicUser1;
 
 
     /**
@@ -311,11 +325,42 @@ class Topic implements TimestampableInterface, SluggableInterface
     }
 
     /**
+     * Set boolArchive
+     *
+     * @param boolean $boolArchive
+     * @return $this
+     */
+    public function setBoolArchive(bool $boolArchive)
+    {
+        $this->booArchive = $boolArchive;
+
+        return $this;
+    }
+
+    /**
+     * Get boolArchive
+     *
+     * @return boolean
+     */
+    public function getBoolArchive()
+    {
+        return $this->boolArchive;
+    }
+
+    /**
      * @return mixed
      */
     public function getTopicUser()
     {
         return $this->topicUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopicUser1()
+    {
+        return $this->topicUser[0];
     }
 
     /**

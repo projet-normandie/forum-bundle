@@ -24,7 +24,7 @@ ProjetNormandie\ForumBundle\Entity\Topic:
     user:
       groups:
         - 'forum.topic.read'
-    topicUser:
+    topicUser1:
       groups:
         - 'forum.topic.user.read'
     lastMessage:
