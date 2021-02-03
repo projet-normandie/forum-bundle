@@ -12,6 +12,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 
 /**
@@ -21,10 +22,12 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
  * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener"})
  * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
+ * @ApiFilter(BooleanFilter::class, properties={"boolArchive"})
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
- *          "libTopic": "partial"
+ *          "libTopic": "partial",
+ *          "forum": "exact",
  *      }
  * )
  */
@@ -110,9 +113,24 @@ class Topic implements TimestampableInterface, SluggableInterface
     private $lastMessage;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="boolArchive", type="boolean", nullable=false, options={"default":0})
+     */
+    private $boolArchive = false;
+
+    /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicUser", mappedBy="topic")
      */
     private $topicUser;
+
+
+    /**
+     * Shortcut to topicUser[0]
+     * @var TopicUser
+     */
+    private $topicUser1;
+
 
     /**
      * @return string
@@ -309,11 +327,42 @@ class Topic implements TimestampableInterface, SluggableInterface
     }
 
     /**
+     * Set boolArchive
+     *
+     * @param boolean $boolArchive
+     * @return $this
+     */
+    public function setBoolArchive(bool $boolArchive)
+    {
+        $this->boolArchive = $boolArchive;
+
+        return $this;
+    }
+
+    /**
+     * Get boolArchive
+     *
+     * @return boolean
+     */
+    public function getBoolArchive()
+    {
+        return $this->boolArchive;
+    }
+
+    /**
      * @return mixed
      */
     public function getTopicUser()
     {
         return $this->topicUser;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTopicUser1()
+    {
+        return $this->topicUser[0];
     }
 
     /**
@@ -339,4 +388,5 @@ class Topic implements TimestampableInterface, SluggableInterface
             $this->getId()
         );
     }
+
 }
