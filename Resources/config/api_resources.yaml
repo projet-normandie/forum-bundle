@@ -6,7 +6,7 @@ resources:
         collectionOperations:
             home:
                 method: 'GET'
-                normalization_context: {'groups': [forum.category.read, forum.forum.read, forum.lastMessage, message.last, user.read]}
+                normalization_context: {'groups': [forum.category.read, forum.forum.read, forum.lastMessage, message.last, forum.user.read]}
                 path: '/categorie/home'
                 controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::home'
     ProjetNormandie\ForumBundle\Entity\Forum:
@@ -28,14 +28,14 @@ resources:
         subresourceOperations:
             api_forum_forums_topics_get_subresource:
                 method: 'GET'
-                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, user.read]}
+                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, forum.user.read]}
         attributes:
             pagination_items_per_page: 20
 #            order:
 #                - 'lastMessage.id'
         collectionOperations:
             get:
-                normalization_context: { 'groups': [ forum.topic.read, forum.topic.lastMessage, message.last, user.read, forum.forum.read ] }
+                normalization_context: { 'groups': [ forum.topic.read, forum.topic.lastMessage, message.last, forum.user.read, forum.forum.read ] }
             post:
                 access_control: 'is_granted("ROLE_USER")'
                 denormalization_context: {'groups': [forum.topic.post]}
@@ -79,13 +79,9 @@ resources:
         shortName: 'ForumMessage'
         attributes:
             pagination_items_per_page: 20
-        subresourceOperations:
-            api_forum_topics_messages_get_subresource:
-                method: 'GET'
-                normalization_context: {'groups': [forum.message.read, user.read]}
         collectionOperations:
             get:
-                normalization_context: {'groups': [forum.message.read, user.read]}
+                normalization_context: {'groups': [forum.message.read, forum.user.read, forum.user.status, user.status.read]}
             post:
                 denormalization_context: {'groups': [forum.message.post]}
         itemOperations:
