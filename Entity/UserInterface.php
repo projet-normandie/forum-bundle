@@ -18,6 +18,10 @@ interface UserInterface
     /**
      * @return string
      */
+    public function getStatus();
+    /**
+     * @return string
+     */
     public function getPseudo();
     /**
      * @return integer

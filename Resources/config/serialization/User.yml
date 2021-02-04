@@ -2,17 +2,20 @@ ProjetNormandie\UserBundle\Entity\User:
   attributes:
     id:
       groups:
-        - 'user.read'
+        - 'forum.user.read'
     username:
       groups:
-        - 'user.read'
+        - 'forum.user.read'
     avatar:
       groups:
-        - 'user.read'
+        - 'forum.user.read'
     slug:
       groups:
-        - 'user.read'
+        - 'forum.user.read'
+    status:
+      groups:
+        - 'forum.user.status'
     nbForumMessage:
       groups:
-        - 'user.read'
+        - 'forum.user.read'
 
