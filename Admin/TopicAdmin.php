@@ -60,7 +60,14 @@ class TopicAdmin extends AbstractAdmin
         $listMapper->addIdentifier('id', null, ['label' => 'label.id'])
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('type', null, ['label' => 'label.type'])
-            ->add('boolArchive', null, ['label' => 'label.boolArchive'])
+            ->add(
+                'boolArchive',
+                null,
+                [
+                    'label' => 'label.boolArchive',
+                    'editable' => true,
+                ]
+            )
             ->add('forum', null, ['label' => 'label.forum'])
             ->add('user', null, ['label' => 'label.user'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
