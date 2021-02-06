@@ -29,7 +29,7 @@ phpunit:7.2:
 
 .base-deploy:
   variables:
-    PROJECT_DIR: /home/deploy/projects/bundles/ProjetNormandie/ForumBundle/
+    PROJECT_DIR: $DIRECTORY_PN_BUNDLES/ForumBundle/
   script:
     - apk update && apk upgrade
     - apk add openssh bash rsync
