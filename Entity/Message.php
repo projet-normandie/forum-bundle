@@ -23,6 +23,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *     SearchFilter::class,
  *     properties={
  *          "topic": "exact",
+ *          "user": "exact",
  *      }
  * )
  *
