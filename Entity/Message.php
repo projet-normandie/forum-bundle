@@ -10,6 +10,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 
 /**
  * Message
@@ -26,7 +27,23 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
  *          "user": "exact",
  *      }
  * )
- *
+ * @ApiFilter(
+ *     GroupFilter::class,
+ *     arguments={
+ *          "parameterName": "groups",
+ *          "overrideDefaultGroups": true,
+ *          "whitelist": {
+ *              "forum.message.read",
+ *              "forum.message.topic",
+ *              "forum.topic.read",
+ *              "forum.topic.forum",
+ *              "forum.forum.read",
+ *              "forum.user.read",
+ *              "forum.user.status",
+ *              "user.status.read"
+ *          }
+ *     }
+ * )
  */
 class Message implements TimestampableInterface
 {
