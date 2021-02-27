@@ -6,6 +6,7 @@ ProjetNormandie\ForumBundle\Entity\Topic:
     forum:
       groups:
         - 'forum.topic.read'
+        - 'forum.topic.forum'
         - 'forum.topic.post'
     libTopic:
       groups:

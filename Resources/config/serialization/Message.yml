@@ -12,6 +12,7 @@ ProjetNormandie\ForumBundle\Entity\Message:
     topic:
       groups:
         - 'forum.message.post'
+        - 'forum.message.topic'
     message:
       groups:
         - 'forum.message.read'
