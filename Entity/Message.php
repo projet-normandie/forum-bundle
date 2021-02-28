@@ -25,6 +25,7 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  *     properties={
  *          "topic": "exact",
  *          "user": "exact",
+ *          "topic.forum.status": "exact",
  *      }
  * )
  * @ApiFilter(
