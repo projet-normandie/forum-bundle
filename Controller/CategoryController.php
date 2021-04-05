@@ -3,18 +3,18 @@
 namespace ProjetNormandie\ForumBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use ProjetNormandie\ForumBundle\Service\Forum as ForumService;
+use ProjetNormandie\ForumBundle\Service\ForumManager;
 
 /**
  * Class CategoryController
  */
 class CategoryController extends AbstractController
 {
-    private $forumService;
+    private $forumManager;
 
-    public function __construct(ForumService $forumService)
+    public function __construct(ForumManager $forumManager)
     {
-        $this->forumService = $forumService;
+        $this->forumManager = $forumManager;
     }
 
     /**
@@ -23,7 +23,7 @@ class CategoryController extends AbstractController
     public function home()
     {
         if ($this->getUser() !== null) {
-            $this->forumService->initUser($this->getUser());
+            $this->forumManager->initUser($this->getUser());
         }
 
         return $this->getDoctrine()->getRepository('ProjetNormandieForumBundle:Category')

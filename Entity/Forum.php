@@ -79,7 +79,6 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * @var Category
      *
-     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Category", inversedBy="forums")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idCategory", referencedColumnName="id")
