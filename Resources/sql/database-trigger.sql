@@ -123,5 +123,17 @@ BEGIN
 END //
 delimiter ;
 
+-- Forum
+delimiter //
+DROP TRIGGER IF EXISTS `forumForumAfterInsert`//
+CREATE TRIGGER forumForumAfterInsert AFTER INSERT ON forum_forum
+    FOR EACH ROW
+BEGIN
+    INSERT INTO forum_forum_user (idUser, idForum, boolRead)
+    SELECT DISTINCT idUser, NEW.id, 1
+    FROM forum_forum_user;
+END //
+delimiter ;
+
 
 
