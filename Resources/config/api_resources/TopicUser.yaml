@@ -1,0 +1,5 @@
+resources:
+    ProjetNormandie\ForumBundle\Entity\TopicUser:
+        shortName: 'ForumTopicUser'
+        itemOperations:
+            get: ~

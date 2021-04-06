@@ -1,0 +1,11 @@
+resources:
+    ProjetNormandie\ForumBundle\Entity\Category:
+        shortName: 'ForumCategory'
+        itemOperations:
+            get: ~
+        collectionOperations:
+            home:
+                method: 'GET'
+                normalization_context: {'groups': [forum.category.read, forum.forum.read, forum.lastMessage, message.last, forum.user.read]}
+                path: '/categorie/home'
+                controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::home'
