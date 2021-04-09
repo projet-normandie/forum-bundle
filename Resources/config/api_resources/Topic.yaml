@@ -1,0 +1,28 @@
+resources:
+    ProjetNormandie\ForumBundle\Entity\Topic:
+        shortName: 'ForumTopic'
+        subresourceOperations:
+            api_forum_forums_topics_get_subresource:
+                method: 'GET'
+                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, forum.user.read]}
+        attributes:
+            pagination_items_per_page: 20
+        #            order:
+        #                - 'lastMessage.id'
+        collectionOperations:
+            get:
+                normalization_context: { 'groups': [ forum.topic.read, forum.topic.lastMessage, message.last, forum.user.read, forum.forum.read ] }
+            post:
+                access_control: 'is_granted("ROLE_USER")'
+                denormalization_context: {'groups': [forum.topic.post]}
+                normalization_context: {'groups': [forum.topic.read]}
+        itemOperations:
+            get:
+                normalization_context: {'groups': [forum.topic.read]}
+            put:
+                access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
+        properties:
+            messages:
+                subresource:
+                    resourceClass: 'ProjetNormandie\ForumBundle\Entity\Message'
+                    collection: true

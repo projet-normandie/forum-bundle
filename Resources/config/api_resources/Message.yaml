@@ -1,0 +1,19 @@
+resources:
+    ProjetNormandie\ForumBundle\Entity\Message:
+        shortName: 'ForumMessage'
+        attributes:
+            pagination_items_per_page: 20
+        collectionOperations:
+            get:
+                normalization_context: {'groups': [forum.message.read, forum.user.read, forum.user.status, user.status.read]}
+            post:
+                denormalization_context: {'groups': [forum.message.post]}
+        itemOperations:
+            get:
+                method: 'GET'
+                normalization_context: {'groups': [forum.message.read]}
+            put:
+                access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
+                denormalization_context: {'groups': [forum.message.put]}
+
+

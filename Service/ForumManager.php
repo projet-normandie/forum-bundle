@@ -5,8 +5,9 @@ namespace ProjetNormandie\ForumBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\ForumUser;
 use ProjetNormandie\ForumBundle\Entity\TopicUser;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 
-class Forum
+class ForumManager
 {
     private $em;
 
@@ -46,5 +47,16 @@ class Forum
             }
             $this->em->flush();
         }
+    }
+
+    /**
+     * @param $libForum
+     * @return Forum
+     */
+    public function getForum($libForum): Forum
+    {
+        $forum = new Forum();
+        $forum->setLibForum($libForum);
+        return $forum;
     }
 }

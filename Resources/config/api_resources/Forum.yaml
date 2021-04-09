@@ -1,0 +1,15 @@
+resources:
+    ProjetNormandie\ForumBundle\Entity\Forum:
+        shortName: 'ForumForum'
+        collectionOperations:
+            get: ~
+        itemOperations:
+            get:
+                normalization_context: {'groups': [forum.forum.read]}
+                access_control: 'object.getStatus() == "public" or is_granted(object.getRole())'
+        properties:
+            topics:
+                subresource:
+                    resourceClass: 'ProjetNormandie\ForumBundle\Entity\Topic'
+                    maxDepth: 1
+                    collection: false
