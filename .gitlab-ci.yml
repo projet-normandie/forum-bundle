@@ -30,16 +30,19 @@ phpunit:7.2:
 .base-deploy:
   variables:
     PROJECT_DIR: $DIRECTORY_PN_BUNDLES/ForumBundle/
-  script:
+  before_script:
     - apk update && apk upgrade
     - apk add openssh bash rsync
-    - eval $(ssh-agent -s)
     - mkdir ~/.ssh
-    - chmod 700 ~/.ssh
-    - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - rsync -rav --quiet --delete --exclude 'vendor' -e "ssh -p ${PORT}" --rsync-path="mkdir -p ${PROJECT_DIR} && rsync" ${CI_PROJECT_DIR}/ deploy@${HOST}:${PROJECT_DIR}
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_ed25519
+    - chmod 700 ~/.ssh/id_ed25519
+    - eval $(ssh-agent -s)
+    - ssh-add ~/.ssh/id_ed25519
+    - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
+    - ssh-keyscan gitlab.com | sort -u - ~/.ssh/known_hosts -o ~/.ssh/known_hosts
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - rsync -rav --quiet --delete --exclude 'vendor' -e "ssh -p ${SSH_PORT}" --rsync-path="mkdir -p ${PROJECT_DIR} && rsync" ${CI_PROJECT_DIR}/ deploy@${SSH_HOST}:${PROJECT_DIR}
 
 deploy-pp:
   extends: .base-deploy
