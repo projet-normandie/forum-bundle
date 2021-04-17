@@ -19,7 +19,7 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\MessageRepository")
  * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener"})
  * @ApiResource(attributes={"order"={"id": "ASC"}})
- * @ApiFilter(OrderFilter::class, properties={"id": "ASC"}, arguments={"orderParameterName"="order"})
+ * @ApiFilter(OrderFilter::class, properties={"id": "ASC", "createdAt": "DESC"}, arguments={"orderParameterName"="order"})
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
