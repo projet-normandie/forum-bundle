@@ -2,6 +2,7 @@ label:
     id: 'id'
     category: 'Category'
     forum: 'Forum'
+    forumFr: 'Forum [FR]'
     topic: 'Topic'
     topics: 'Topics'
     message: 'Message'

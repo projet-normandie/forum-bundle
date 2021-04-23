@@ -36,10 +36,18 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * @var string
      *
-     * @Assert\Length(max="50")
+     * @Assert\Length(max="255")
      * @ORM\Column(name="libForum", type="string", length=50, nullable=false)
      */
     private $libForum;
+
+    /**
+     * @var string
+     *
+     * @Assert\Length(max="255")
+     * @ORM\Column(name="libForumFr", type="string", length=50, nullable=false)
+     */
+    private $libForumFr;
 
     /**
      * @var integer
@@ -166,6 +174,29 @@ class Forum implements TimestampableInterface, SluggableInterface
     public function getLibForum()
     {
         return $this->libForum;
+    }
+
+     /**
+     * Set libForumFr
+     *
+     * @param string $libForumFr
+     * @return Forum
+     */
+    public function setLibForumFr(string $libForumFr)
+    {
+        $this->libForumFr = $libForumFr;
+
+        return $this;
+    }
+
+    /**
+     * Get libForumFr
+     *
+     * @return string
+     */
+    public function getLibForumFr()
+    {
+        return $this->libForumFr;
     }
 
     /**
