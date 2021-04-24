@@ -50,13 +50,16 @@ class ForumManager
     }
 
     /**
-     * @param $libForum
+     * @param array $params
      * @return Forum
      */
-    public function getForum($libForum): Forum
+    public function getForum($params = array()): Forum
     {
         $forum = new Forum();
-        $forum->setLibForum($libForum);
+        $forum->setLibForum($params['libForum']);
+        if (isset($params['libForumFr'])) {
+            $forum->setLibForumFr($params['libForumFr']);
+        }
         return $forum;
     }
 }

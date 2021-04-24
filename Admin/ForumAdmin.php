@@ -34,6 +34,7 @@ class ForumAdmin extends AbstractAdmin
     {
         $formMapper->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
             ->add('libForum', TextType::class, ['label' => 'label.forum'])
+            ->add('libForumFr', TextType::class, ['label' => 'label.forumFr'])
             ->add('category')
             ->add(
                 'status',
@@ -77,6 +78,7 @@ class ForumAdmin extends AbstractAdmin
     {
         $showMapper->add('id')
             ->add('libForum', null, ['label' => 'label.forum'])
+            ->add('libForumFr', null, ['label' => 'label.forumFr'])
             ->add('position', null, ['label' => 'label.position'])
             ->add('topics', null, ['label' => 'label.topics']);
     }
