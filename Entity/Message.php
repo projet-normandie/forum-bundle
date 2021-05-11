@@ -67,6 +67,14 @@ class Message implements TimestampableInterface
      */
     private $message;
 
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position = 1;
+
     /**
      * @var Topic
      *
@@ -179,5 +187,26 @@ class Message implements TimestampableInterface
     public function getUser()
     {
         return $this->user;
+    }
+
+     /**
+     * Set position
+     * @param integer $position
+     * @return $this
+     */
+    public function setPosition(int $position)
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return integer
+     */
+    public function getPosition()
+    {
+        return $this->position;
     }
 }
