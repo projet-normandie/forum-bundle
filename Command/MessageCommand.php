@@ -2,22 +2,21 @@
 
 namespace ProjetNormandie\ForumBundle\Command;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use ProjetNormandie\ForumBundle\Repository\MessageRepository;
-use ProjetNormandie\ForumBundle\Filter\Bbcode as BbcodeFilter;
+use ProjetNormandie\ForumBundle\Service\MessageService;
 
-class MessageCommand extends DefaultCommand
+class MessageCommand extends Command
 {
-    private $em;
+    private $messageService;
 
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(MessageService $messageService)
     {
-        $this->em = $em;
-        parent::__construct($em);
+        $this->messageService = $messageService;
+        parent::__construct();
     }
 
     protected function configure()
@@ -40,40 +39,20 @@ class MessageCommand extends DefaultCommand
 
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
-     *
-     * @return bool|int|null
+     * @return int
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->init($input);
         $function = $input->getArgument('function');
 
         switch ($function) {
-            case 'migrate':
-                $this->migrate();
+            case 'maj-position':
+                $this->messageService->majPosition();
                 break;
         }
-        $this->end($output);
 
         return 0;
-    }
-
-
-    /**
-     *
-     */
-    private function migrate()
-    {
-        /** @var MessageRepository $messageRepository */
-        $messageRepository = $this->em->getRepository('ProjetNormandieForumBundle:Message');
-
-        $bbcodeFiler = new BbcodeFilter();
-        $messages = $messageRepository->findAll();
-        foreach ($messages as $message) {
-            $message->setMessage($bbcodeFiler->filter($message->getMessage()));
-        }
-        $this->em->flush();
     }
 }

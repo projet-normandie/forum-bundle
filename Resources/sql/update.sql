@@ -14,3 +14,7 @@ SET f.nbTopic = (SELECT COUNT(id) FROM forum_topic WHERE idForum = f.id);
 
 UPDATE forum_forum f
 SET f.nbMessage = (SELECT SUM(nbMessage) FROM forum_topic WHERE idForum = f.id);
+
+UPDATE forum_forum f
+SET f.slug = get_slug(f.libForum)
+WHERE f.slug is NULL;

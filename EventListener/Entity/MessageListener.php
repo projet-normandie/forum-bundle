@@ -2,9 +2,11 @@
 
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
+use ProjetNormandie\ForumBundle\Service\MessageService;
 use ProjetNormandie\MessageBundle\Service\Messager;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -13,23 +15,36 @@ class MessageListener
 
     private $messager;
     private $translator;
+    private $messageService;
 
     /**
      * MessageListener constructor.
-     * @param Messager $messager
-     * @param TranslatorInterface     $translator
+     * @param Messager            $messager
+     * @param TranslatorInterface $translator
+     * @param MessageService      $messageService
      */
-    public function __construct(Messager $messager, TranslatorInterface $translator)
+    public function __construct(Messager $messager, TranslatorInterface $translator, MessageService $messageService)
     {
         $this->messager = $messager;
         $this->translator = $translator;
+        $this->messageService = $messageService;
+    }
+
+
+    /**
+     * @param Message       $message
+     * @param LifecycleEventArgs $event
+     */
+    public function prePersist(Message $message, LifecycleEventArgs $event)
+    {
+        $message->setPosition($message->getTopic()->getNbMessage() + 1);
     }
 
     /**
      * @param Message            $message
      * @param LifecycleEventArgs $event
      * @throws ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws OptimisticLockException
      */
     public function postPersist(Message $message,  LifecycleEventArgs $event)
     {
@@ -83,5 +98,15 @@ class MessageListener
                 );
             }
         }
+    }
+
+    /**
+     * @param Message            $message
+     * @param LifecycleEventArgs $event
+     */
+    public function postRemove(Message $message,  LifecycleEventArgs $event)
+    {
+        // MAJ position
+        $this->messageService->majPositionFromTopic($message->getTopic());
     }
 }
