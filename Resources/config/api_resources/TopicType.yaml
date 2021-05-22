@@ -3,24 +3,3 @@ resources:
         shortName: 'ForumTopicType'
         itemOperations:
             get: ~
-    ProjetNormandie\ForumBundle\Entity\TopicUser:
-        shortName: 'ForumTopicUser'
-        collectionOperations:
-            read:
-                method: 'POST'
-                access_control: 'is_granted("ROLE_USER")'
-                path: '/forum_topic_users/set-read'
-                swagger_context:
-                    description: 'Set read topic for current user'
-                    parameters:
-                        - name: idForum
-                          in: query
-                          required: false
-                          type: integer
-                controller: 'ProjetNormandie\ForumBundle\Controller\TopicUserController::setRead'
-        itemOperations:
-            get: ~
-            put:
-                access_control: 'is_granted("ROLE_USER") and object.getUser() == user'
-                denormalization_context: {'groups': [forum.topic.user.put]}
-                normalization_context: {'groups': [forum.message.user.read]}
