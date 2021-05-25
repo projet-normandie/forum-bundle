@@ -21,4 +21,4 @@ topic:
         message: |
             Message :
             %s
-            <a href="/#/en/%s">%s</a>
+            <a href="/en/%s">%s</a>
