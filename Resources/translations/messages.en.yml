@@ -21,7 +21,6 @@ topic:
             new : 'New answer on : %s'
             edit: 'Edit answer on : %s'
         message: |
-            <p><i>From</i> : <b>%s</b></p>
             <p><i>Message</i> : </p>
             %s
             <p><a href="%s">%s</a></p>

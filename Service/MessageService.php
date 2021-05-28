@@ -89,12 +89,11 @@ class MessageService
                             null,
                             $topicUser->getUser()->getLocale()
                         ),
-                        $message->getUser()->getUsername(),
                         $message->getMessage(),
                         $url,
                         $message->getTopic()->getLibTopic()
                     ),
-                    $this->em->getReference('ProjetNormandie\ForumBundle\Entity\UserInterface', 0),
+                    $message->getUser(),
                     $topicUser->getUser(),
                     'FORUM_NOTIF'
                 );
