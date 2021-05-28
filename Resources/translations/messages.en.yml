@@ -17,8 +17,11 @@ label:
     user: 'User'
 topic:
     notif:
-        object: 'New answer on : %s'
+        object:
+            new : 'New answer on : %s'
+            edit: 'Edit answer on : %s'
         message: |
-            Message :
+            <p><i>From</i> : <b>%s</b></p>
+            <p><i>Message</i> : </p>
             %s
-            <a href="/en/%s">%s</a>
+            <p><a href="%s">%s</a></p>
