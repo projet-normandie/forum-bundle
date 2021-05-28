@@ -223,6 +223,6 @@ class Message implements TimestampableInterface
      */
     public function getUrl(): string
     {
-        return $this->getTopic()->getUrl() . '?page=' . $this->getPage();
+        return $this->getTopic()->getUrl() . '?page=' . $this->getPage() . '#' . $this->getId();
     }
 }
