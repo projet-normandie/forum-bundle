@@ -2,6 +2,7 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -9,6 +10,17 @@ use Doctrine\ORM\EntityRepository;
  */
 class TopicUserRepository extends EntityRepository
 {
+
+    /**
+     * @param $user
+     * @throws Exception
+     */
+    public function init($user)
+    {
+        $query ="INSERT INTO forum_topic_user (idTopic, idUser)
+                 SELECT id, :idUser FROM forum_topic";
+        $this->_em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
+    }
 
     /**
      * @param      $user

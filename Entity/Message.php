@@ -209,4 +209,20 @@ class Message implements TimestampableInterface
     {
         return $this->position;
     }
+
+    /**
+     * @return false|float|int
+     */
+    public function getPage()
+    {
+        return floor(($this->getPosition() -1) / 20) + 1;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->getTopic()->getUrl() . '?page=' . $this->getPage() . '#' . $this->getId();
+    }
 }

@@ -18,4 +18,7 @@ ProjetNormandie\UserBundle\Entity\User:
     nbForumMessage:
       groups:
         - 'forum.user.read'
+    isOnline:
+      groups:
+        - 'forum.user.read'
 

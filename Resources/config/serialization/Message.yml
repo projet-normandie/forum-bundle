@@ -22,6 +22,9 @@ ProjetNormandie\ForumBundle\Entity\Message:
     position:
       groups:
         - 'forum.message.read'
+    page:
+      groups:
+        - 'forum.message.read'
     createdAt:
       groups:
         - 'forum.message.read'

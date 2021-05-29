@@ -7,10 +7,10 @@ namespace ProjetNormandie\ForumBundle\Entity;
  */
 interface UserInterface
 {
-    /**
-     * @return int
-     */
+    /** @return int  */
     public function getId();
+    /** @return string */
+    public function getLocale();
     /**
      * @return string
      */
@@ -27,8 +27,4 @@ interface UserInterface
      * @return integer
      */
     public function getNbForumMessage();
-    /**
-     * @return mixed
-     */
-    public function getRelation();
 }
