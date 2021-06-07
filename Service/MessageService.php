@@ -71,7 +71,7 @@ class MessageService
         foreach ($topicUsers as $topicUser) {
             $recipient = $topicUser->getUser();
             $url = '/' . $recipient->getLocale() . '/' . $message->getUrl();
-            //if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
+            if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
                 $this->messager->send(
                     sprintf(
                         $this->translator->trans(
@@ -97,7 +97,7 @@ class MessageService
                     $topicUser->getUser(),
                     'FORUM_NOTIF'
                 );
-            //}
+            }
         }
     }
 }
