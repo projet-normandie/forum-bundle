@@ -3,6 +3,7 @@
 namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 
 class ForumService
 {
@@ -19,6 +20,7 @@ class ForumService
 
     /**
      * @param $forum
+     * @throws ORMException
      */
     public function majParent($forum)
     {
@@ -26,8 +28,11 @@ class ForumService
             $forum = $this->em->getRepository('ProjetNormandieForumBundle:Forum')
                 ->findOneBy(['id' => $forum]);
         }
-        $child = $this->em->getRepository('ProjetNormandieForumBundle:Forum')->findOneBy(['parent' => $forum], ['lastMessage' => 'DESC']);
-        $forum->setLastMessage($child->getLastMessage());
+
+        $data = $this->em->getRepository('ProjetNormandieForumBundle:Forum')->getParentData($forum);
+        $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
+        $forum->setNbTopic($data['nbTopic']);
+        $forum->setNbMessage($data['nbMessage']);
         $this->em->flush();
     }
 }

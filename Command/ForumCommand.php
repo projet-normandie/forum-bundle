@@ -2,6 +2,7 @@
 
 namespace ProjetNormandie\ForumBundle\Command;
 
+use Doctrine\ORM\ORMException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,6 +43,7 @@ class ForumCommand extends Command
      * @param InputInterface  $input
      * @param OutputInterface $output
      * @return int
+     * @throws ORMException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

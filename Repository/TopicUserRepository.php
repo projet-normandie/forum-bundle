@@ -42,4 +42,21 @@ class TopicUserRepository extends EntityRepository
         }
         $query->getQuery()->execute();
     }
+
+     /**
+     * @param $topic
+     */
+    public function setNotRead($topic)
+    {
+         $qb = $this->_em->createQueryBuilder();
+         $query = $qb->update('ProjetNormandie\ForumBundle\Entity\TopicUser', 'tu')
+            ->set('tu.boolRead', ':boolRead')
+            ->where('tu.user != :user')
+            ->andWhere('tu.topic = :topic')
+            ->setParameter('boolRead', 0)
+            ->setParameter('topic', $topic)
+            ->setParameter('user', $topic->getLastMessage()->getUser());
+
+        $query->getQuery()->execute();
+    }
 }

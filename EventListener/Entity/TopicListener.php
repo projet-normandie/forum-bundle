@@ -2,19 +2,24 @@
 
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
-use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Service\TopicService;
 
 class TopicListener
 {
 
-    /**
-     * TopicListener constructor.
-     */
-    public function __construct()
-    {
+    private $majTopicUser = false;
 
+    private $topicService;
+
+    /**
+     * @param TopicService      $topicService
+     */
+    public function __construct(TopicService $topicService)
+    {
+        $this->topicService = $topicService;
     }
 
     /**
@@ -23,8 +28,6 @@ class TopicListener
      */
     public function postPersist(Topic $topic, LifecycleEventArgs $event)
     {
-        $em = $event->getEntityManager();
-
         // Update nbTopic
         $forum = $topic->getForum();
         $forum->setNbTopic($forum->getNbTopic() + 1);
@@ -33,6 +36,33 @@ class TopicListener
         $parent = $forum->getParent();
         if ($parent) {
             $parent->setNbTopic($parent->getNbTopic() + 1);
+        }
+    }
+
+    /**
+     * @param Topic        $topic
+     * @param PreUpdateEventArgs $event
+     */
+    public function preUpdate(Topic $topic, PreUpdateEventArgs $event)
+    {
+        $changeSet = $event->getEntityChangeSet();
+
+        $this->majTopicUser = false;
+        if ($changeSet['nbMessage'][0] < $changeSet['nbMessage'][1]) {
+            $this->majTopicUser = true;
+        }
+    }
+
+
+     /**
+     * @param Topic            $topic
+     * @param LifecycleEventArgs $event
+      */
+    public function postUpdate(Topic $topic, LifecycleEventArgs $event)
+    {
+        // Topic not read
+        if ($this->majTopicUser) {
+            $this->topicService->setNotRead($topic);
         }
     }
 }

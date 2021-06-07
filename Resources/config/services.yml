@@ -20,4 +20,8 @@ services:
         class: ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener
         tags:
             - { name: doctrine.orm.entity_listener }
+    ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
 

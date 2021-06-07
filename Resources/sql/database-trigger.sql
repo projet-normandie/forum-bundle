@@ -7,8 +7,6 @@ BEGIN
 	-- nbForumMessage
 	UPDATE user SET nbForumMessage = nbForumMessage + 1 WHERE id = NEW.idUser;
 
-	UPDATE forum_topic_user SET boolRead = 0 WHERE idTopic = NEW.idTopic AND idUser != NEW.idUser;
-
 END //
 delimiter ;
 
