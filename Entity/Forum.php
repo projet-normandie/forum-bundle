@@ -9,12 +9,28 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 
 /**
  * Forum
  *
  * @ORM\Table(name="forum_forum")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
+ * @ApiFilter(
+ *     SearchFilter::class,
+ *     properties={
+ *          "parent": "exact",
+ *     }
+ * )
+ * @ApiFilter(
+ *     OrderFilter::class,
+ *     properties={
+ *          "lastMessage":"DESC",
+ *     },
+ *     arguments={"orderParameterName"="order"}
+ * )
  */
 class Forum implements TimestampableInterface, SluggableInterface
 {
@@ -100,6 +116,24 @@ class Forum implements TimestampableInterface, SluggableInterface
     private $topics;
 
     /**
+     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", mappedBy="parent")
+     */
+    private $children;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="children")
+     * @ORM\JoinColumn(name="idParent", referencedColumnName="id")
+     */
+    private $parent;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isParent", type="boolean", nullable=false, options={"default":false})
+     */
+    private $isParent = false;
+
+    /**
      * @var Message
      *
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message")
@@ -121,6 +155,7 @@ class Forum implements TimestampableInterface, SluggableInterface
     {
         $this->topics = new ArrayCollection();
         $this->forumUser = new ArrayCollection();
+        $this->children = new ArrayCollection();
     }
 
     /**
@@ -335,6 +370,27 @@ class Forum implements TimestampableInterface, SluggableInterface
         return $this->category;
     }
 
+
+    /**
+     * Set parent
+     * @param Forum|null $forum
+     * @return $this
+     */
+    public function setParent(Forum $forum = null)
+    {
+        $this->parent = $forum;
+        return $this;
+    }
+
+    /**
+     * Get parent
+     * @return Forum
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
     /**
      * @return mixed
      */
@@ -368,6 +424,29 @@ class Forum implements TimestampableInterface, SluggableInterface
     public function getForumUser()
     {
         return $this->forumUser;
+    }
+
+     /**
+     * Set isParent
+     *
+     * @param boolean $isParent
+     * @return $this
+     */
+    public function setIsParent(bool $isParent)
+    {
+        $this->isParent= $isParent;
+
+        return $this;
+    }
+
+    /**
+     * Get isParent
+     *
+     * @return boolean
+     */
+    public function getIsParent()
+    {
+        return $this->isParent;
     }
 
 

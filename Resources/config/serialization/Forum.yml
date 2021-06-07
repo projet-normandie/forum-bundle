@@ -25,6 +25,9 @@ ProjetNormandie\ForumBundle\Entity\Forum:
     nbMessage:
       groups:
         - 'forum.forum.read'
+    isParent:
+      groups:
+        - 'forum.forum.read'
     lastMessage:
       groups:
         - 'forum.lastMessage'

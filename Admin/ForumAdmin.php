@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use ProjetNormandie\ForumBundle\Entity\Forum;
@@ -36,6 +37,9 @@ class ForumAdmin extends AbstractAdmin
             ->add('libForum', TextType::class, ['label' => 'label.forum'])
             ->add('libForumFr', TextType::class, ['label' => 'label.forumFr'])
             ->add('category')
+            ->add('isParent', CheckboxType::class, [
+                'required' => false,
+            ])
             ->add(
                 'status',
                 ChoiceType::class,
@@ -66,6 +70,8 @@ class ForumAdmin extends AbstractAdmin
         $listMapper->addIdentifier('id')
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('category', null, ['label' => 'label.category'])
+            ->add('isParent', null, ['label' => 'label.isParent'])
+            ->add('parent', null, ['label' => 'label.parent'])
             ->add('status', null, ['label' => 'label.status'])
             ->add('position', null, ['label' => 'label.position'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);

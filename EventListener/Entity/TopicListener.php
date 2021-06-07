@@ -20,8 +20,6 @@ class TopicListener
     /**
      * @param Topic              $topic
      * @param LifecycleEventArgs $event
-     * @throws ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postPersist(Topic $topic, LifecycleEventArgs $event)
     {
@@ -30,6 +28,11 @@ class TopicListener
         // Update nbTopic
         $forum = $topic->getForum();
         $forum->setNbTopic($forum->getNbTopic() + 1);
-        //$em->flush();
+
+        // Parent
+        $parent = $forum->getParent();
+        if ($parent) {
+            $parent->setNbTopic($parent->getNbTopic() + 1);
+        }
     }
 }
