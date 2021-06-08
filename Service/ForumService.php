@@ -35,4 +35,18 @@ class ForumService
         $forum->setNbMessage($data['nbMessage']);
         $this->em->flush();
     }
+
+
+     /**
+     * @param $forum
+     * @throws ORMException
+     */
+    public function maj($forum)
+    {
+        $data = $this->em->getRepository('ProjetNormandieForumBundle:Topic')->getForumData($forum);
+        $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
+        $forum->setNbTopic($data['nbTopic']);
+        $forum->setNbMessage($data['nbMessage']);
+        $this->em->flush();
+    }
 }

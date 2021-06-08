@@ -86,6 +86,8 @@ class ForumAdmin extends AbstractAdmin
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('libForumFr', null, ['label' => 'label.forumFr'])
             ->add('position', null, ['label' => 'label.position'])
-            ->add('topics', null, ['label' => 'label.topics']);
+            ->add('nbTopic', null, ['label' => 'label.nbTopic'])
+            ->add('nbMessage', null, ['label' => 'label.nbMessage'])
+            ->add('lastMessage', null, ['label' => 'label.lastMessage']);
     }
 }
