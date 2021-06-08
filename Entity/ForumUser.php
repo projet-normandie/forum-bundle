@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(readOnly=true)
  * @ORM\Table(name="forum_forum_user")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumUserRepository")
+ * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\ForumUserListener"})
  */
 class ForumUser
 {

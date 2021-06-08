@@ -18,6 +18,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  *
  * @ORM\Table(name="forum_forum")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
+ * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\ForumListener"})
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={

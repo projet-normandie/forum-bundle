@@ -23,7 +23,14 @@ class TopicService
      */
     public function setNotRead($topic)
     {
-         $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->setNotRead($topic);
+        // Topic
+        $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->setNotRead($topic);
+        // Forum
+        $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum());
+        // Forum Parent
+        if ($topic->getParent() != null) {
+            $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum()->getParent());
+        }
     }
 
     /**

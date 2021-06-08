@@ -43,7 +43,7 @@ class TopicUserRepository extends EntityRepository
         $query->getQuery()->execute();
     }
 
-     /**
+    /**
      * @param $topic
      */
     public function setNotRead($topic)
@@ -58,5 +58,24 @@ class TopicUserRepository extends EntityRepository
             ->setParameter('user', $topic->getLastMessage()->getUser());
 
         $query->getQuery()->execute();
+    }
+
+    /**
+     * @param $forum
+     * @param $user
+     * @return mixed
+     */
+    public function getNbTopicNotRead($forum, $user)
+    {
+         $query = $this->createQueryBuilder('tu')
+             ->select('COUNT(tu.id) as nb')
+             ->join('tu.topic')
+             ->where('tu.forum = :forum')
+             ->andWhere('tu.user = :user')
+             ->andWhere('tu.boolRead = 0')
+             ->setParameter('forum', $forum)
+             ->setParameter('user', $user);
+
+        return $query->getQuery()->getResult()[0]['nb'];
     }
 }
