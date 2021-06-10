@@ -4,11 +4,10 @@ ProjetNormandie\ForumBundle\Entity\Message:
       groups:
         - 'forum.message.read'
         - 'forum.message.put'
-        - 'message.last'
     user:
       groups:
         - 'forum.message.read'
-        - 'message.last'
+        - 'forum.message.last'
     topic:
       groups:
         - 'forum.message.post'
@@ -28,7 +27,7 @@ ProjetNormandie\ForumBundle\Entity\Message:
     createdAt:
       groups:
         - 'forum.message.read'
-        - 'message.last'
+        - 'forum.message.last'
     updatedAt:
       groups:
         - 'forum.message.read'

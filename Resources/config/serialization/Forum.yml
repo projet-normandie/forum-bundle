@@ -28,6 +28,9 @@ ProjetNormandie\ForumBundle\Entity\Forum:
     isParent:
       groups:
         - 'forum.forum.read'
+    forumUser1:
+      groups:
+        - 'forum.forum.forumUser1'
     lastMessage:
       groups:
         - 'forum.lastMessage'

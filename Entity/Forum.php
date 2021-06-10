@@ -12,6 +12,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 
 /**
  * Forum
@@ -28,9 +29,23 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={
- *          "lastMessage":"DESC",
+ *          "lastMessage.id":"DESC",
  *     },
  *     arguments={"orderParameterName"="order"}
+ * )
+ * @ApiFilter(
+ *     GroupFilter::class,
+ *     arguments={
+ *          "parameterName": "groups",
+ *          "overrideDefaultGroups": true,
+ *          "whitelist": {
+ *              "forum.forum.read",
+ *              "forum.lastMessage",
+ *              "forum.message.last",
+ *              "forum.forum.forumUser1",
+ *              "forum.forumUser.read"
+ *          }
+ *     }
  * )
  */
 class Forum implements TimestampableInterface, SluggableInterface
@@ -448,6 +463,14 @@ class Forum implements TimestampableInterface, SluggableInterface
     public function getIsParent()
     {
         return $this->isParent;
+    }
+
+     /**
+     * @return mixed
+     */
+    public function getForumUser1()
+    {
+        return $this->forumUser[0];
     }
 
 
