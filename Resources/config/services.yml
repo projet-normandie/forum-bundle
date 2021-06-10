@@ -28,5 +28,13 @@ services:
         class: ProjetNormandie\ForumBundle\EventListener\Entity\ForumListener
         tags:
             - { name: doctrine.orm.entity_listener }
+    ProjetNormandie\ForumBundle\EventListener\Entity\TopicUserListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\TopicUserListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
+    ProjetNormandie\ForumBundle\EventListener\Entity\ForumUserListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\ForumUserListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
 
 

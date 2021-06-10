@@ -43,7 +43,7 @@ class TopicService
         // Forum
         $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum());
         // Forum Parent
-        if ($topic->getParent() != null) {
+        if ($topic->getForum()->getParent() != null) {
             $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum()->getParent());
         }
     }

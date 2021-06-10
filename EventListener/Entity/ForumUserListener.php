@@ -4,8 +4,7 @@ namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use ProjetNormandie\ForumBundle\Entity\TopicUser;
-use ProjetNormandie\ForumBundle\Service\ForumUserService;
+use ProjetNormandie\ForumBundle\Service\ForumService;
 
 class ForumUserListener
 {
