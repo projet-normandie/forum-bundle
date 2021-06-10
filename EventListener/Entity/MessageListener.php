@@ -70,6 +70,6 @@ class MessageListener
         // MAJ topic
         $this->topicService->maj($message->getTopic());
         // MAJ position
-        $this->messageService->majPositionFromTopic($message->getTopic());
+        $this->topicService->majPositions($message->getTopic());
     }
 }

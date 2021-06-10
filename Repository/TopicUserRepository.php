@@ -4,6 +4,8 @@ namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * Specific repository that serves the Forum entity.
@@ -64,11 +66,13 @@ class TopicUserRepository extends EntityRepository
      * @param $forum
      * @param $user
      * @return mixed
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
-    public function getNbTopicNotRead($forum, $user)
+    public function countNotRead($forum, $user)
     {
          $query = $this->createQueryBuilder('tu')
-             ->select('COUNT(tu.id) as nb')
+             ->select('COUNT(tu.id)')
              ->join('tu.topic')
              ->where('tu.forum = :forum')
              ->andWhere('tu.user = :user')
@@ -76,6 +80,6 @@ class TopicUserRepository extends EntityRepository
              ->setParameter('forum', $forum)
              ->setParameter('user', $user);
 
-        return $query->getQuery()->getResult()[0]['nb'];
+        return $query->getQuery()->getSingleScalarResult();
     }
 }

@@ -4,6 +4,8 @@ namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use VideoGamesRecords\CoreBundle\Entity\Chart;
 
 /**
@@ -39,22 +41,23 @@ class ForumUserRepository extends EntityRepository
         $query->getQuery()->execute();
     }
 
-      /**
+    /**
      * @param $parent
      * @param $user
      * @return mixed
+     * @throws NonUniqueResultException
+     * @throws NoResultException
      */
-    public function getNbForumNotRead($parent, $user)
+    public function countSubForumNotRead($parent, $user)
     {
          $query = $this->createQueryBuilder('fu')
-             ->select('COUNT(fu.id) as nb')
+             ->select('COUNT(fu.id)')
              ->join('fu.forum')
              ->where('fu.parent = :parent')
              ->andWhere('fu.user = :user')
              ->andWhere('fu.boolRead = 0')
              ->setParameter('parent', $parent)
              ->setParameter('user', $user);
-
-        return $query->getQuery()->getResult()[0]['nb'];
+        return $query->getQuery()->getSingleScalarResult();
     }
 }

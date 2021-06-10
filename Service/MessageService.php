@@ -40,20 +40,6 @@ class MessageService
     }
 
     /**
-     * @param Topic $topic
-     */
-    public function majPositionFromTopic(Topic $topic)
-    {
-        $list = $this->em->getRepository('ProjetNormandieForumBundle:Message')->findBy(['topic' => $topic], ['id' => 'ASC']);
-        $i = 1;
-        foreach ($list as $message) {
-            $message->setPosition($i);
-            $i++;
-        }
-        $this->em->flush();
-    }
-
-    /**
      * @param Message $message
      * @param string  $type
      * @throws ORMException

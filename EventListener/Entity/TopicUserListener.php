@@ -5,24 +5,21 @@ namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ProjetNormandie\ForumBundle\Entity\TopicUser;
-use ProjetNormandie\ForumBundle\Service\ForumUserService;
+use ProjetNormandie\ForumBundle\Service\ForumService;
 
 class TopicUserListener
 {
     private $maj = false;
 
-    private $forumUserService;
-    private $topicUserService;
+    private $forumService;
 
     /**
      * TopicUserListener constructor.
-     * @param ForumUserService $forumUserService
-     * @param TopicUserService $topicUserService
+     * @param ForumService $forumService
      */
-    public function __construct(ForumUserService $forumUserService, TopicUserService $topicUserService)
+    public function __construct(ForumService $forumService)
     {
-        $this->forumUserService = $forumUserService;
-        $this->topicUserService = $topicUserService;
+        $this->forumService = $forumService;
     }
 
     /**
@@ -34,7 +31,7 @@ class TopicUserListener
         $changeSet = $event->getEntityChangeSet();
 
         if (array_key_exists('boolRead', $changeSet)) {
-            if ($changeSet['boolRead'][0] != $changeSet['boolRead'][1]) {
+            if (($changeSet['boolRead'][0] != $changeSet['boolRead'][1]) && ($changeSet['boolRead'][1] == true)) {
                 $this->maj = true;
             }
         }
@@ -53,12 +50,12 @@ class TopicUserListener
 
             // IF topic not read => forum is not read
             if ($topicUser->getBoolRead() == false) {
-                $this->forumUserService->setNotRead($forum, $user);
+                $this->forumService->setNotRead($forum, $user);
             } else {
                 // Count topic read from forum
-                $nb = $this->topicUserService->getNbTopicNotRead($forum, $user);
+                $nb = $this->forumService->countTopicNotRead($forum, $user);
                 if ($nb == 0) {
-                    $this->forumUserService->setRead($forum, $user);
+                    $this->forumService->setRead($forum, $user);
                 }
             }
         }

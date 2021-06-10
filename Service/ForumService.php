@@ -4,6 +4,7 @@ namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 
 class ForumService
 {
@@ -37,16 +38,64 @@ class ForumService
     }
 
 
-     /**
-     * @param $forum
+    /**
+     * @param Forum $forum
      * @throws ORMException
      */
-    public function maj($forum)
+    public function maj(Forum $forum)
     {
         $data = $this->em->getRepository('ProjetNormandieForumBundle:Topic')->getForumData($forum);
         $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
         $forum->setNbTopic($data['nbTopic']);
         $forum->setNbMessage($data['nbMessage']);
         $this->em->flush();
+    }
+
+    /**
+     * @param Forum $forum
+     * @param       $user
+     */
+    public function setRead(Forum $forum, $user)
+    {
+        $forumUser = $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')
+                ->findOneBy(['forum' => $forum, 'user' => $user]);
+        $forumUser->setBoolRead(true);
+        $this->em->flush();
+    }
+
+    /**
+     * @param Forum $forum
+     * @param       $user
+     */
+    public function setNotRead(Forum $forum, $user)
+    {
+        $forumUser = $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')
+                ->findOneBy(['forum' => $forum, 'user' => $user]);
+        $forumUser->setBoolRead(false);
+        $this->em->flush();
+    }
+
+
+    /**
+     * @param Forum $forum
+     * @param       $user
+     * @return int
+     */
+    public function countTopicNotRead(Forum $forum, $user): int
+    {
+        return $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')
+                ->countNotRead($forum,$user);
+    }
+
+
+    /**
+     * @param Forum $parent
+     * @param       $user
+     * @return int
+     */
+    public function countSubForumNotRead(Forum $parent, $user): int
+    {
+        return $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')
+                ->countSubForumNotRead($parent, $user);
     }
 }

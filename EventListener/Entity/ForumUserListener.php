@@ -11,15 +11,15 @@ class ForumUserListener
 {
     private $maj = false;
 
-    private $forumUserService;
+    private $forumService;
 
     /**
-     * TopicUserListener constructor.
-     * @param ForumUserService $forumUserService
+     * ForumListener constructor.
+     * @param ForumService $forumService
      */
-    public function __construct(ForumUserService $forumUserService,)
+    public function __construct(ForumService $forumService)
     {
-        $this->forumUserService = $forumUserService;
+        $this->forumService = $forumService;
     }
 
     /**
@@ -31,7 +31,7 @@ class ForumUserListener
         $changeSet = $event->getEntityChangeSet();
 
         if (array_key_exists('boolRead', $changeSet)) {
-            if ($changeSet['boolRead'][0] != $changeSet['boolRead'][1]) {
+            if (($changeSet['boolRead'][0] != $changeSet['boolRead'][1]) && ($changeSet['boolRead'][1] == true)) {
                 $this->maj = true;
             }
         }
@@ -45,7 +45,13 @@ class ForumUserListener
     public function postUpdate(ForumUser $forumUser, LifecycleEventArgs $event)
     {
         if ($this->maj && $forumUser->getForum()->getParent() != null) {
-
+            $parent = $forumUser->getForum()->getParent();
+            $user = $forumUser->getUser();
+            // Count subForum read from forum
+            $nb = $this->forumService->countSubForumNotRead($parent, $user);
+            if ($nb == 0) {
+                $this->forumService->setRead($parent, $user);
+            }
         }
     }
 }
