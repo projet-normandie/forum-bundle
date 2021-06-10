@@ -37,6 +37,7 @@ final class TopicSubscriber implements EventSubscriberInterface
         $topic = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
+
         if (($topic instanceof Topic) && in_array($method, array(Request::METHOD_GET))) {
             $token = $this->tokenStorage->getToken();
             if ($token->getUser() != 'anon.') {

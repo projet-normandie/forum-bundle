@@ -35,7 +35,6 @@ final class TopicExtension implements QueryCollectionExtensionInterface
      */
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-
         if (Topic::class !== $resourceClass || !$this->security->isGranted(
                 'ROLE_USER'
             ) || null === $user = $this->security->getUser()) {

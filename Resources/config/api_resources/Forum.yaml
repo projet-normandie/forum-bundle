@@ -3,6 +3,13 @@ resources:
         shortName: 'ForumForum'
         collectionOperations:
             get: ~
+            read-all:
+                method: 'POST'
+                access_control: 'is_granted("ROLE_USER")'
+                path: '/forum_forums/read-all'
+                swagger_context:
+                    description: 'Real all forums'
+                controller: 'ProjetNormandie\ForumBundle\Controller\ForumController::readAll'
         itemOperations:
             get:
                 normalization_context: {'groups': [forum.forum.read]}

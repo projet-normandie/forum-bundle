@@ -24,6 +24,19 @@ class TopicUserRepository extends EntityRepository
         $this->_em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
     }
 
+
+    /**
+     * @param $user
+     * @throws Exception
+     */
+    public function readAll($user)
+    {
+        $this->_em->getConnection()->executeStatement(
+            "UPDATE forum_topic_user SET boolRead = 1 WHERE idUser=:idUser",
+            ['idUser' => $user->getId()]
+        );
+    }
+
     /**
      * @param      $user
      * @param null $forum
@@ -73,8 +86,8 @@ class TopicUserRepository extends EntityRepository
     {
          $query = $this->createQueryBuilder('tu')
              ->select('COUNT(tu.id)')
-             ->join('tu.topic')
-             ->where('tu.forum = :forum')
+             ->join('tu.topic', 't')
+             ->where('t.forum = :forum')
              ->andWhere('tu.user = :user')
              ->andWhere('tu.boolRead = 0')
              ->setParameter('forum', $forum)

@@ -25,6 +25,18 @@ class ForumUserRepository extends EntityRepository
     }
 
     /**
+     * @param $user
+     * @throws Exception
+     */
+    public function readAll($user)
+    {
+        $this->_em->getConnection()->executeStatement(
+            "UPDATE forum_forum_user SET boolRead = 1 WHERE idUser = :idUser",
+            ['idUser' => $user->getId()]
+        );
+    }
+
+    /**
      * @param $forum
      */
     public function setNotRead($forum)

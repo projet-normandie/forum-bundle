@@ -19,6 +19,16 @@ class ForumService
         $this->em = $em;
     }
 
+
+    /**
+     * @param $user
+     */
+    public function readAll($user)
+    {
+        $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->readAll($user);
+        $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->readAll($user);
+    }
+
     /**
      * @param $forum
      * @throws ORMException
@@ -51,6 +61,7 @@ class ForumService
         $this->em->flush();
     }
 
+
     /**
      * @param Forum $forum
      * @param       $user
@@ -62,6 +73,7 @@ class ForumService
         $forumUser->setBoolRead(true);
         $this->em->flush();
     }
+
 
     /**
      * @param Forum $forum
