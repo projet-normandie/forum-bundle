@@ -64,8 +64,8 @@ class ForumUserRepository extends EntityRepository
     {
          $query = $this->createQueryBuilder('fu')
              ->select('COUNT(fu.id)')
-             ->join('fu.forum')
-             ->where('fu.parent = :parent')
+             ->join('fu.forum', 'f')
+             ->where('f.parent = :parent')
              ->andWhere('fu.user = :user')
              ->andWhere('fu.boolRead = 0')
              ->setParameter('parent', $parent)
