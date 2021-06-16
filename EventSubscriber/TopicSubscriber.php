@@ -47,8 +47,10 @@ final class TopicSubscriber implements EventSubscriberInterface
                         'topic' => $topic,
                     )
                 );
-                $userTopic->setBoolRead(1);
-                $this->em->flush();
+                if ($userTopic) {
+                    $userTopic->setBoolRead(1);
+                    $this->em->flush();
+                }
             }
         }
     }
