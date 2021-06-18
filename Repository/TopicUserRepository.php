@@ -4,6 +4,8 @@ namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 
 /**
  * Specific repository that serves the Forum entity.
@@ -20,6 +22,19 @@ class TopicUserRepository extends EntityRepository
         $query ="INSERT INTO forum_topic_user (idTopic, idUser)
                  SELECT id, :idUser FROM forum_topic";
         $this->_em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
+    }
+
+
+    /**
+     * @param $user
+     * @throws Exception
+     */
+    public function readAll($user)
+    {
+        $this->_em->getConnection()->executeStatement(
+            "UPDATE forum_topic_user SET boolRead = 1 WHERE idUser=:idUser",
+            ['idUser' => $user->getId()]
+        );
     }
 
     /**
@@ -41,5 +56,43 @@ class TopicUserRepository extends EntityRepository
                 ->setParameter('forum', $forum);
         }
         $query->getQuery()->execute();
+    }
+
+    /**
+     * @param $topic
+     */
+    public function setNotRead($topic)
+    {
+         $qb = $this->_em->createQueryBuilder();
+         $query = $qb->update('ProjetNormandie\ForumBundle\Entity\TopicUser', 'tu')
+            ->set('tu.boolRead', ':boolRead')
+            ->where('tu.user != :user')
+            ->andWhere('tu.topic = :topic')
+            ->setParameter('boolRead', 0)
+            ->setParameter('topic', $topic)
+            ->setParameter('user', $topic->getLastMessage()->getUser());
+
+        $query->getQuery()->execute();
+    }
+
+    /**
+     * @param $forum
+     * @param $user
+     * @return mixed
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function countNotRead($forum, $user)
+    {
+         $query = $this->createQueryBuilder('tu')
+             ->select('COUNT(tu.id)')
+             ->join('tu.topic', 't')
+             ->where('t.forum = :forum')
+             ->andWhere('tu.user = :user')
+             ->andWhere('tu.boolRead = 0')
+             ->setParameter('forum', $forum)
+             ->setParameter('user', $user);
+
+        return $query->getQuery()->getSingleScalarResult();
     }
 }

@@ -40,20 +40,6 @@ class MessageService
     }
 
     /**
-     * @param Topic $topic
-     */
-    public function majPositionFromTopic(Topic $topic)
-    {
-        $list = $this->em->getRepository('ProjetNormandieForumBundle:Message')->findBy(['topic' => $topic], ['id' => 'ASC']);
-        $i = 1;
-        foreach ($list as $message) {
-            $message->setPosition($i);
-            $i++;
-        }
-        $this->em->flush();
-    }
-
-    /**
      * @param Message $message
      * @param string  $type
      * @throws ORMException
@@ -71,7 +57,7 @@ class MessageService
         foreach ($topicUsers as $topicUser) {
             $recipient = $topicUser->getUser();
             $url = '/' . $recipient->getLocale() . '/' . $message->getUrl();
-            //if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
+            if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
                 $this->messager->send(
                     sprintf(
                         $this->translator->trans(
@@ -97,7 +83,7 @@ class MessageService
                     $topicUser->getUser(),
                     'FORUM_NOTIF'
                 );
-            //}
+            }
         }
     }
 }

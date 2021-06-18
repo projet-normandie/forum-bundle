@@ -4,14 +4,14 @@ resources:
         subresourceOperations:
             api_forum_forums_topics_get_subresource:
                 method: 'GET'
-                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, message.last, forum.user.read]}
+                normalization_context: {'groups': [forum.topic.read, forum.topic.lastMessage, forum.message.last, forum.user.read]}
         attributes:
             pagination_items_per_page: 20
         #            order:
         #                - 'lastMessage.id'
         collectionOperations:
             get:
-                normalization_context: { 'groups': [ forum.topic.read, forum.topic.lastMessage, message.last, forum.user.read, forum.forum.read ] }
+                normalization_context: { 'groups': [ forum.topic.read, forum.topic.lastMessage, forum.message.last, forum.user.read, forum.forum.read ] }
             post:
                 access_control: 'is_granted("ROLE_USER")'
                 denormalization_context: {'groups': [forum.topic.post]}

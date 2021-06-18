@@ -4,6 +4,7 @@ namespace ProjetNormandie\ForumBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Service\TopicService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,11 +15,11 @@ use Doctrine\ORM\ORMException;
  */
 class TopicUserController extends AbstractController
 {
-    private $em;
+    private $topicService;
 
-    public function __construct(EntityManagerInterface $registry)
+    public function __construct(TopicService $topicService)
     {
-        $this->em = $registry;
+        $this->topicService = $topicService;
     }
 
     /**
@@ -37,6 +38,15 @@ class TopicUserController extends AbstractController
                 $this->em->getReference(Forum::class, $idForum)
             );
         }
+        return new JsonResponse(['sucess' => true]);
+    }
+
+    /**
+     * @return JsonResponse
+     */
+    public function readAll()
+    {
+        $this->topicService->readAll($this->getUser());
         return new JsonResponse(['sucess' => true]);
     }
 }

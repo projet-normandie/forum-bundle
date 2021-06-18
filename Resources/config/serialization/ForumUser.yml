@@ -3,6 +3,7 @@ ProjetNormandie\ForumBundle\Entity\ForumUser:
     id:
       groups:
         - 'forum.user.read'
+        - 'forum.forumUser.read'
     user:
       groups: []
     forum:
@@ -10,3 +11,4 @@ ProjetNormandie\ForumBundle\Entity\ForumUser:
     boolRead:
       groups:
         - 'forum.user.read'
+        - 'forum.forumUser.read'

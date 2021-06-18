@@ -82,6 +82,8 @@ class TopicAdmin extends AbstractAdmin
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('type', null, ['label' => 'label.type'])
             ->add('boolArchive', null, ['label' => 'label.boolArchive'])
+            ->add('nbMessage', null, ['label' => 'label.nbMessage'])
+            ->add('lastMessage', null, ['label' => 'label.lastMessage'])
             ->add('forum', null, ['label' => 'label.forum'])
             ->add('user', null, ['label' => 'label.user']);
     }

@@ -7,18 +7,22 @@ use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\ForumBundle\Service\MessageService;
+use ProjetNormandie\ForumBundle\Service\TopicService;
 
 class MessageListener
 {
     private $messageService;
+    private $topicService;
 
     /**
      * MessageListener constructor.
      * @param MessageService      $messageService
+     * @param TopicService        $topicService
      */
-    public function __construct(MessageService $messageService)
+    public function __construct(MessageService $messageService, TopicService $topicService)
     {
         $this->messageService = $messageService;
+        $this->topicService = $topicService;
     }
 
 
@@ -39,19 +43,8 @@ class MessageListener
      */
     public function postPersist(Message $message,  LifecycleEventArgs $event)
     {
-        $em = $event->getEntityManager();
-
-        // Update nbMessage & lastMessage
-        $topic = $message->getTopic();
-        $topic->setLastMessage($message);
-        $topic->setNbMessage($topic->getNbMessage() + 1);
-
-        $forum = $topic->getForum();
-        $forum->setLastMessage($message);
-        $forum->setNbMessage($forum->getNbMessage() + 1);
-
-        $em->flush();
-
+        // MAJ topic
+        $this->topicService->maj($message->getTopic());
         // Notify
         $this->messageService->notify($message, 'new');
     }
@@ -70,10 +63,13 @@ class MessageListener
     /**
      * @param Message            $message
      * @param LifecycleEventArgs $event
+     * @throws ORMException
      */
     public function postRemove(Message $message,  LifecycleEventArgs $event)
     {
+        // MAJ topic
+        $this->topicService->maj($message->getTopic());
         // MAJ position
-        $this->messageService->majPositionFromTopic($message->getTopic());
+        $this->topicService->majPositions($message->getTopic());
     }
 }

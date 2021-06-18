@@ -4,12 +4,12 @@ namespace ProjetNormandie\ForumBundle\Doctrine;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Security\Core\Security;
 
-final class TopicExtension implements QueryCollectionExtensionInterface
+final class ForumExtension implements QueryCollectionExtensionInterface
 {
     private $security;
     private $em;
@@ -35,14 +35,13 @@ final class TopicExtension implements QueryCollectionExtensionInterface
      */
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (Topic::class !== $resourceClass || !$this->security->isGranted(
+        if (Forum::class !== $resourceClass || !$this->security->isGranted(
                 'ROLE_USER'
             ) || null === $user = $this->security->getUser()) {
             return;
         }
-
-        $queryBuilder->innerJoin('o.topicUser', 'tu', Join::WITH, 'tu.user = :current_user');
-        $queryBuilder->addSelect('tu');
+        $queryBuilder->innerJoin('o.forumUser', 'fu', Join::WITH, 'fu.user = :current_user');
+        $queryBuilder->addSelect('fu');
         $queryBuilder->setParameter('current_user', $user);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace ProjetNormandie\ForumBundle\Admin;
 
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -10,8 +11,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-
 /**
  * Administration manager for the Forum Bundle.
  */
@@ -34,7 +33,14 @@ class MessageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
-            ->add('message', TextareaType::class, ['label' => 'Message', 'attr' => ['rows' => 20]]);
+            ->add('message', CKEditorType::class, [
+                    'label' => 'Message',
+                    'required' => true,
+                    'config' => array(
+                        'height' => '400',
+                        'toolbar' => 'standard'
+                    ),
+                ]);
     }
 
     /**

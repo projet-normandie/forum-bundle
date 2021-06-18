@@ -3,15 +3,18 @@ ProjetNormandie\UserBundle\Entity\User:
     id:
       groups:
         - 'forum.user.read'
+        - 'forum.message.last'
     username:
       groups:
         - 'forum.user.read'
+        - 'forum.message.last'
     avatar:
       groups:
         - 'forum.user.read'
     slug:
       groups:
         - 'forum.user.read'
+        - 'forum.message.last'
     status:
       groups:
         - 'forum.user.status'
