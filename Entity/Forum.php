@@ -12,6 +12,7 @@ use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 
 /**
@@ -26,6 +27,7 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  *          "parent": "exact",
  *     }
  * )
+ * @ApiFilter(DateFilter::class, properties={"lastMessage.createdAt": DateFilter::EXCLUDE_NULL})
  * @ApiFilter(
  *     OrderFilter::class,
  *     properties={
