@@ -30,6 +30,16 @@ class ForumService
     }
 
     /**
+     * @param $user
+     * @param $forum
+     */
+    public function read($user, $forum)
+    {
+        $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->readForum($user, $forum);
+        $this->setRead($forum, $user);
+    }
+
+    /**
      * @param $forum
      * @throws ORMException
      */
