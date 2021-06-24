@@ -5,6 +5,7 @@ namespace ProjetNormandie\ForumBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
 use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Filter\Bbcode;
 
 class TopicService
 {
@@ -20,6 +21,19 @@ class TopicService
     }
 
     /**
+     * @param $topic
+     * @return Topic
+     */
+    private function getTopic($topic): Topic
+    {
+        if (!$topic instanceof Topic) {
+            $topic = $this->em->getRepository('ProjetNormandieForumBundle:Topic')
+                ->findOneBy(['id' => $topic]);
+        }
+        return $topic;
+    }
+
+    /**
      * @param Topic $topic
      */
     public function majPositions(Topic $topic)
@@ -29,6 +43,20 @@ class TopicService
         foreach ($list as $message) {
             $message->setPosition($i);
             $i++;
+        }
+        $this->em->flush();
+    }
+
+
+     /**
+     * @param $topic
+     */
+    public function migrateBbcode($topic)
+    {
+        $topic = $this->getTopic($topic);
+        $filter = new Bbcode();
+        foreach ($topic->getMessages() as $message) {
+            $message->setMessage($filter->filter($message->getMessage()));
         }
         $this->em->flush();
     }
