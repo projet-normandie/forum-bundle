@@ -7,6 +7,7 @@ resources:
             get:
                 normalization_context: {'groups': [forum.message.read, forum.user.read, forum.user.status, user.status.read]}
             post:
+                access_control: 'is_granted("ROLE_USER")'
                 denormalization_context: {'groups': [forum.message.post]}
         itemOperations:
             get:
