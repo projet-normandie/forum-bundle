@@ -38,24 +38,19 @@ class TopicUserRepository extends EntityRepository
     }
 
     /**
-     * @param      $user
-     * @param null $forum
+     * @param $user
+     * @param $forum
+     * @throws Exception
      */
-    public function read($user, $forum = null)
+    public function readForum($user, $forum)
     {
-        $qb = $this->_em->createQueryBuilder();
-        $query = $qb->update('ProjetNormandie\ForumBundle\Entity\TopicUser', 'tu')
-            ->set('tu.boolRead', ':boolRead')
-            ->where('tu.user = :user')
-            ->setParameter('boolRead', 1)
-            ->setParameter('user', $user);
-        if ($forum !== null) {
-            $query->andWhere(
-                'tu.topic IN (SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)'
-            )
-                ->setParameter('forum', $forum);
-        }
-        $query->getQuery()->execute();
+        $this->_em->getConnection()->executeStatement(
+            "UPDATE forum_topic_user 
+                SET boolRead = 1 
+                WHERE idUser=:idUser
+                AND idTopic IN (SELECT id FROM forum_topic WHERE idForum=:idForum)",
+            ['idUser' => $user->getId(), 'idForum' => $forum->getId()]
+        );
     }
 
     /**

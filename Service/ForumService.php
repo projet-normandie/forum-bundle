@@ -9,16 +9,31 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
 class ForumService
 {
     private $em;
+    private $topicService;
 
     /**
-     * MessageService constructor.
+     * ForumService constructor.
      * @param EntityManagerInterface $em
+     * @param TopicService           $topicService
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, TopicService $topicService)
     {
         $this->em = $em;
+        $this->topicService = $topicService;
     }
 
+    /**
+     * @param $forum
+     * @return Forum
+     */
+    private function getForum($forum): Forum
+    {
+        if (!$forum instanceof Forum) {
+            $forum = $this->em->getRepository('ProjetNormandieForumBundle:Forum')
+                ->findOneBy(['id' => $forum]);
+        }
+        return $forum;
+    }
 
     /**
      * @param $user
@@ -30,16 +45,22 @@ class ForumService
     }
 
     /**
+     * @param $user
+     * @param $forum
+     */
+    public function read($user, $forum)
+    {
+        $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->readForum($user, $forum);
+        $this->setRead($forum, $user);
+    }
+
+    /**
      * @param $forum
      * @throws ORMException
      */
     public function majParent($forum)
     {
-        if (!$forum instanceof Forum) {
-            $forum = $this->em->getRepository('ProjetNormandieForumBundle:Forum')
-                ->findOneBy(['id' => $forum]);
-        }
-
+        $forum = $this->getForum($forum);
         $data = $this->em->getRepository('ProjetNormandieForumBundle:Forum')->getParentData($forum);
         $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
         $forum->setNbTopic($data['nbTopic']);
@@ -59,6 +80,45 @@ class ForumService
         $forum->setNbTopic($data['nbTopic']);
         $forum->setNbMessage($data['nbMessage']);
         $this->em->flush();
+    }
+
+    /**
+     * @param $forum
+     */
+    public function majPosition($forum)
+    {
+        $forum = $this->getForum($forum);
+        if ($forum->getIsParent() == true) {
+            foreach ($forum->getChildrens() as $child) {
+                foreach ($child->getTopics() as $topic) {
+                    $this->topicService->majPositions($topic);
+                }
+            }
+        } else {
+            foreach ($forum->getTopics() as $topic) {
+                $this->topicService->majPositions($topic);
+            }
+        }
+    }
+
+
+    /**
+     * @param $forum
+     */
+    public function migrateBbcode($forum)
+    {
+        $forum = $this->getForum($forum);
+        if ($forum->getIsParent() == true) {
+            foreach ($forum->getChildrens() as $child) {
+                foreach ($child->getTopics() as $topic) {
+                    $this->topicService->migrateBbcode($topic);
+                }
+            }
+        } else {
+            foreach ($forum->getTopics() as $topic) {
+                $this->topicService->migrateBbcode($topic);
+            }
+        }
     }
 
 

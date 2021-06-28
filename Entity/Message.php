@@ -218,7 +218,7 @@ class Message implements TimestampableInterface
     }
 
     /**
-     * @return false|float|int
+     * @return int
      */
     public function getPage()
     {

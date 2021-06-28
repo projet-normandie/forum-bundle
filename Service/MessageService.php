@@ -28,16 +28,6 @@ class MessageService
         $this->messager = $messager;
     }
 
-    /**
-     *
-     */
-    public function majPosition()
-    {
-        $list = $this->em->getRepository('ProjetNormandieForumBundle:Topic')->findAll();
-        foreach ($list as $topic) {
-            $this->majPositionFromTopic($topic);
-        }
-    }
 
     /**
      * @param Message $message

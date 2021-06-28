@@ -417,6 +417,14 @@ class Forum implements TimestampableInterface, SluggableInterface
         return $this->topics;
     }
 
+     /**
+     * @return mixed
+     */
+    public function getChildrens()
+    {
+        return $this->children;
+    }
+
     /**
      * @param Message|null $message
      * @return $this
