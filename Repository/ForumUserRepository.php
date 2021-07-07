@@ -38,8 +38,9 @@ class ForumUserRepository extends EntityRepository
 
     /**
      * @param $forum
+     * @param $user
      */
-    public function setNotRead($forum)
+    public function setNotRead($forum, $user)
     {
          $qb = $this->_em->createQueryBuilder();
          $query = $qb->update('ProjetNormandie\ForumBundle\Entity\ForumUser', 'fu')
@@ -48,7 +49,7 @@ class ForumUserRepository extends EntityRepository
             ->andWhere('fu.forum = :forum')
             ->setParameter('boolRead', 0)
             ->setParameter('forum', $forum)
-            ->setParameter('user', $forum->getLastMessage()->getUser());
+            ->setParameter('user', $user);
 
         $query->getQuery()->execute();
     }
