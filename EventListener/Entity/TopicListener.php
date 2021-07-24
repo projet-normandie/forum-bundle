@@ -11,10 +11,7 @@ use ProjetNormandie\ForumBundle\Service\ForumService;
 
 class TopicListener
 {
-    private $majTopicUser = false;
-
-    private $forums = array();
-
+    private $changeSet = array();
     private $topicService;
     private $forumService;
 
@@ -52,25 +49,7 @@ class TopicListener
      */
     public function preUpdate(Topic $topic, PreUpdateEventArgs $event)
     {
-        $changeSet = $event->getEntityChangeSet();
-
-        $this->majTopicUser = false;
-
-        if (array_key_exists('nbMessage', $changeSet)) {
-            if ($changeSet['nbMessage'][0] < $changeSet['nbMessage'][1]) {
-                $this->majTopicUser = true;
-            }
-
-            if ($changeSet['nbMessage'][0] != $changeSet['nbMessage'][1]) {
-                $this->forums[] = $topic->getForum();
-            }
-        }
-        if (array_key_exists('forum', $changeSet)) {
-            if ($changeSet['forum'][0] != $changeSet['forum'][1]) {
-                $this->forums[] = $changeSet['forum'][0];
-                $this->forums[] = $changeSet['forum'][1];
-            }
-        }
+        $this->changeSet = $event->getEntityChangeSet();
     }
 
 
@@ -82,13 +61,21 @@ class TopicListener
     public function postUpdate(Topic $topic, LifecycleEventArgs $event)
     {
         // Topic not read
-        if ($this->majTopicUser) {
-            $this->topicService->setNotRead($topic);
+        if (array_key_exists('nbMessage', $this->changeSet) && array_key_exists('lastMessage', $this->changeSet)) {
+            if ($this->changeSet['nbMessage'][0] < $this->changeSet['nbMessage'][1]) {
+                $lastMessage = $this->changeSet['lastMessage'][1];
+                $this->topicService->setNotRead($topic, $lastMessage->getUser());
+            }
+            if ($this->changeSet['nbMessage'][0] != $this->changeSet['nbMessage'][1]) {
+                $this->forumService->maj($topic->getForum());
+            }
         }
 
-        // MAJ Forum
-        foreach ($this->forums as $forum) {
-            $this->forumService->maj($forum);
+        if (array_key_exists('forum', $this->changeSet)) {
+            if ($this->changeSet['forum'][0] != $this->changeSet['forum'][1]) {
+                $this->forumService->maj($this->changeSet['forum'][0]);
+                $this->forumService->maj($this->changeSet['forum'][1]);
+            }
         }
     }
 

@@ -63,16 +63,18 @@ class TopicService
 
     /**
      * @param Topic $topic
+     * @param       $user
      */
-    public function setNotRead(Topic $topic)
+    public function setNotRead(Topic $topic, $user)
     {
+        //
         // Topic
-        $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->setNotRead($topic);
+        $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->setNotRead($topic, $user);
         // Forum
-        $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum());
+        $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum(), $user);
         // Forum Parent
         if ($topic->getForum()->getParent() != null) {
-            $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum()->getParent());
+            $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->setNotRead($topic->getForum()->getParent(), $user);
         }
     }
 

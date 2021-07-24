@@ -31,9 +31,7 @@ class TopicUserListener
         $changeSet = $event->getEntityChangeSet();
 
         if (array_key_exists('boolRead', $changeSet)) {
-            if (($changeSet['boolRead'][0] != $changeSet['boolRead'][1]) && ($changeSet['boolRead'][1] == true)) {
-                $this->maj = true;
-            }
+            $this->maj = true;
         }
     }
 
