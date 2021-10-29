@@ -11,19 +11,19 @@ stages:
 
 build:7.2:
   stage: build
-  image: jakzal/phpqa:php7.2-alpine
+  image: jakzal/phpqa:php7.4-alpine
   script:
     - composer install
 
 lint:7.2:
   stage: qa
-  image: jakzal/phpqa:php7.2-alpine
+  image: jakzal/phpqa:php7.4-alpine
   script:
     - phplint . --exclude=vendor
 
 phpunit:7.2:
   stage: qa
-  image: jakzal/phpqa:php7.2-alpine
+  image: jakzal/phpqa:php7.4-alpine
   script:
     - phpunit-8
 
