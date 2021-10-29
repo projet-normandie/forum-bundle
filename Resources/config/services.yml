@@ -36,5 +36,10 @@ services:
         class: ProjetNormandie\ForumBundle\EventListener\Entity\ForumUserListener
         tags:
             - { name: doctrine.orm.entity_listener }
-
+    ProjetNormandie\ForumBundle\DataProvider\ForumCollectionDataProvider:
+        arguments:
+            $collectionExtensions: !tagged api_platform.doctrine.orm.query_extension.collection
+    ProjetNormandie\ForumBundle\DataProvider\ForumItemDataProvider:
+        arguments:
+            $itemExtensions: !tagged api_platform.doctrine.orm.query_extension.item
 
