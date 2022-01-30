@@ -8,8 +8,8 @@ use ProjetNormandie\ForumBundle\Entity\Topic;
 
 final class TopicContextBuilder implements SerializerContextBuilderInterface
 {
-    private $decorated;
-    private $authorizationChecker;
+    private SerializerContextBuilderInterface $decorated;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(
         SerializerContextBuilderInterface $decorated,
@@ -27,7 +27,8 @@ final class TopicContextBuilder implements SerializerContextBuilderInterface
         if ($resourceClass === Topic::class
             && isset($context['groups'])
             && $this->authorizationChecker->isGranted('ROLE_USER') && true === $normalization) {
-            $context['groups'][] = 'forum.topic.user.read';
+            $context['groups'][] = 'forum.topic.topicUser1';
+            $context['groups'][] = 'forum.topicUser.read';
         }
 
         return $context;

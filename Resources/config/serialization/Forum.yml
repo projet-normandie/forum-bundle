@@ -37,9 +37,6 @@ ProjetNormandie\ForumBundle\Entity\Forum:
     lastMessage:
       groups:
         - 'forum.lastMessage'
-    forumUser:
-      groups:
-        - 'forum.user.read'
     createdAt:
       groups: []
     updatedAt:

@@ -20,7 +20,9 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  * @ORM\Table(name="forum_topic")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
  * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener"})
- * @ApiResource(attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}})
+ * @ApiResource(
+ * *     attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}}
+ * )
  * @ApiFilter(BooleanFilter::class, properties={"boolArchive"})
  * @ApiFilter(
  *     SearchFilter::class,
@@ -122,13 +124,6 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicUser", mappedBy="topic")
      */
     private $topicUser;
-
-
-    /**
-     * Shortcut to topicUser[0]
-     * @var TopicUser
-     */
-    private $topicUser1;
 
 
     /**
