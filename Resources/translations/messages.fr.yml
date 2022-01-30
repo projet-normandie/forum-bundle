@@ -14,7 +14,7 @@ label:
     boolArchive: 'Is archived ?'
     boolNotif: 'Is notfied ?'
     position: 'Position'
-    status: 'Status'
+    status: 'Statut'
     type: 'Type'
     user: 'User'
 topic:

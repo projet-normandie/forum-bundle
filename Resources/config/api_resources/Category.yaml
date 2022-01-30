@@ -6,6 +6,6 @@ resources:
         collectionOperations:
             home:
                 method: 'GET'
-                normalization_context: {'groups': [forum.category.read, forum.forum.read, forum.lastMessage, forum.user.read, forum.message.last, forum.forum.forumUser1, forum.forumUser.read]}
+                normalization_context: {'groups': [forum.category.read, forum.forum.read, forum.lastMessage, forum.user.read, forum.message.last]}
                 path: '/categorie/home'
                 controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::home'

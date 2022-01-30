@@ -2,7 +2,7 @@ ProjetNormandie\ForumBundle\Entity\TopicUser:
   attributes:
     id:
       groups:
-        - 'forum.topic.user.read'
+        - 'forum.topicUser.read'
         - 'forum.topic.user.put'
     user:
       groups: []
@@ -10,8 +10,8 @@ ProjetNormandie\ForumBundle\Entity\TopicUser:
       groups: []
     boolRead:
       groups:
-        - 'forum.topic.user.read'
+        - 'forum.topicUser.read'
     boolNotif:
       groups:
-        - 'forum.topic.user.read'
+        - 'forum.topicUser.read'
         - 'forum.topic.user.put'

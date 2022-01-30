@@ -2,14 +2,14 @@
 namespace ProjetNormandie\ForumBundle\Serializer;
 
 use ApiPlatform\Core\Serializer\SerializerContextBuilderInterface;
-use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class ForumContextBuilder implements SerializerContextBuilderInterface
 {
-    private $decorated;
-    private $authorizationChecker;
+    private SerializerContextBuilderInterface $decorated;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(
         SerializerContextBuilderInterface $decorated,
@@ -27,13 +27,15 @@ final class ForumContextBuilder implements SerializerContextBuilderInterface
         if (($context['request_uri'] == '/api/categorie/home')
             && isset($context['groups']) && $this->authorizationChecker->isGranted('ROLE_USER')
             && true === $normalization) {
-            $context['groups'][] = 'forum.user.read';
+            $context['groups'][] = 'forum.forum.forumUser1';
+            $context['groups'][] = 'forum.forumUser.read';
         }
 
         if ($resourceClass === Forum::class
             && isset($context['groups'])
             && $this->authorizationChecker->isGranted('ROLE_USER') && true === $normalization) {
-            $context['groups'][] = 'forum.forum.user.read.1';
+            $context['groups'][] = 'forum.forum.forumUser1';
+            $context['groups'][] = 'forum.ForumUser.read';
         }
         return $context;
     }
