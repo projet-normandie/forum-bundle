@@ -1,6 +1,6 @@
 <?php
 
-namespace ProjetNormandie\ForumBundle\Service;
+namespace ProjetNormandie\ForumBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMException;
