@@ -3,11 +3,12 @@
 namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\ORMException;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 
 class ForumManager
 {
-    private $em;
+    private EntityManagerInterface $em;
 
     public function __construct(EntityManagerInterface $registry)
     {
@@ -30,6 +31,7 @@ class ForumManager
     /**
      * @param array $params
      * @return Forum
+     * @throws ORMException
      */
     public function getForum(array $params = array()): Forum
     {
@@ -37,6 +39,9 @@ class ForumManager
         $forum->setLibForum($params['libForum']);
         if (isset($params['libForumFr'])) {
             $forum->setLibForumFr($params['libForumFr']);
+        }
+        if (isset($params['parent'])) {
+            $forum->setParent($this->em->getReference(Forum::class, $params['parent']));
         }
         return $forum;
     }

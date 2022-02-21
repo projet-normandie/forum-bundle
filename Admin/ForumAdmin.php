@@ -57,9 +57,11 @@ class ForumAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('id', null, ['label' => 'label.id'])
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
-            ->add('status', null, ['label' => 'label.status']);
+            ->add('status', null, ['label' => 'label.status'])
+            ->add('isParent', null, ['label' => 'label.isParent']);
     }
 
     /**
@@ -68,8 +70,8 @@ class ForumAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->addIdentifier('id')
-            ->add('libForum', null, ['label' => 'label.forum'])
             ->add('category', null, ['label' => 'label.category'])
+            ->add('libForum', null, ['label' => 'label.forum'])
             ->add('isParent', null, ['label' => 'label.isParent'])
             ->add('parent', null, ['label' => 'label.parent'])
             ->add('status', null, ['label' => 'label.status'])
@@ -83,8 +85,11 @@ class ForumAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper->add('id')
+            ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('libForumFr', null, ['label' => 'label.forumFr'])
+            ->add('isParent', null, ['label' => 'label.isParent'])
+            ->add('parent', null, ['label' => 'label.parent'])
             ->add('position', null, ['label' => 'label.position'])
             ->add('nbTopic', null, ['label' => 'label.nbTopic'])
             ->add('nbMessage', null, ['label' => 'label.nbMessage'])
