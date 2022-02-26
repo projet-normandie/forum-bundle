@@ -2,15 +2,15 @@
 
 namespace ProjetNormandie\ForumBundle\Controller;
 
+use ProjetNormandie\ForumBundle\Manager\ForumManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use ProjetNormandie\ForumBundle\Service\ForumManager;
 
 /**
  * Class CategoryController
  */
 class CategoryController extends AbstractController
 {
-    private $forumManager;
+    private ForumManager $forumManager;
 
     public function __construct(ForumManager $forumManager)
     {
