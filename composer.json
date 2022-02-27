@@ -8,16 +8,6 @@
       "name": "Benard David",
       "email": "magicbart@gmail.com",
       "role": "Developer"
-    },
-    {
-      "name": "Verlhac Gaëtan",
-      "email": "viviengaetan69@gmail.com",
-      "role": "Developer"
-    },
-    {
-      "name": "Giraud Nicolas",
-      "email": "nicolas.giraud.dev@gmail.com",
-      "role": "Developer"
     }
   ],
   "require": {
