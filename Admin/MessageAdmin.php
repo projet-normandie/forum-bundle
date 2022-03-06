@@ -4,6 +4,7 @@ namespace ProjetNormandie\ForumBundle\Admin;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -21,18 +22,18 @@ class MessageAdmin extends AbstractAdmin
     /**
      * @param RouteCollection $collection
      */
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('export')
             ->remove('create');
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
+        $form->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
             ->add('message', CKEditorType::class, [
                     'label' => 'Message',
                     'required' => true,
@@ -44,33 +45,33 @@ class MessageAdmin extends AbstractAdmin
     }
 
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('topic', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libTopic',
             ]);
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper->addIdentifier('id')
+        $list->addIdentifier('id')
             ->add('message', null, ['label' => 'Message'])
             ->add('user')
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper->add('id')
+        $show->add('id')
             ->add('topic')
             ->add('user')
             ->add('message', null, ['label' => 'Message', 'safe' => true]);

@@ -3,6 +3,7 @@
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -20,28 +21,28 @@ class ForumUserAdmin extends AbstractAdmin
     /**
      * @param RouteCollection $collection
      */
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('export')
             ->remove('create');
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper->add('forum')
+        $form->add('forum')
             ->add('user')
             ->add('boolRead');
     }
 
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('user')
             ->add('forum', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libForum',
@@ -49,22 +50,22 @@ class ForumUserAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper->addIdentifier('forum')
+        $list->addIdentifier('forum')
             ->addIdentifier('user')
             ->add('boolRead')
             ->add('_action', 'actions', ['actions' => ['edit' => []]]);
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper->add('forum')
+        $show->add('forum')
             ->add('user');
     }
 }

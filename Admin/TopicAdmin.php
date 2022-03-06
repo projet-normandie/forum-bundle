@@ -3,6 +3,7 @@
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -21,18 +22,18 @@ class TopicAdmin extends AbstractAdmin
     /**
      * @param RouteCollection $collection
      */
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('export')
             ->remove('create');
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
+        $form->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
             ->add('libTopic', TextType::class, ['label' => 'label.topic'])
             ->add('boolArchive')
             ->add('forum')
@@ -40,11 +41,11 @@ class TopicAdmin extends AbstractAdmin
     }
 
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('forum', ModelAutocompleteFilter::class, [], null, [
                 'property' => 'libForum',
@@ -53,11 +54,11 @@ class TopicAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper->addIdentifier('id', null, ['label' => 'label.id'])
+        $list->addIdentifier('id', null, ['label' => 'label.id'])
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('type', null, ['label' => 'label.type'])
             ->add(
@@ -74,11 +75,11 @@ class TopicAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper->add('id', null, ['label' => 'label.id'])
+        $show->add('id', null, ['label' => 'label.id'])
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('type', null, ['label' => 'label.type'])
             ->add('boolArchive', null, ['label' => 'label.boolArchive'])

@@ -3,6 +3,7 @@
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -23,17 +24,17 @@ class ForumAdmin extends AbstractAdmin
     /**
      * @param RouteCollection $collection
      */
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('export');
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
+        $form->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
             ->add('libForum', TextType::class, ['label' => 'label.forum'])
             ->add('libForumFr', TextType::class, ['label' => 'label.forumFr'])
             ->add('category')
@@ -52,11 +53,11 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('id', null, ['label' => 'label.id'])
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
@@ -65,11 +66,11 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper->addIdentifier('id')
+        $list->addIdentifier('id')
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('isParent', null, ['label' => 'label.isParent'])
@@ -80,11 +81,11 @@ class ForumAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper->add('id')
+        $show->add('id')
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('libForumFr', null, ['label' => 'label.forumFr'])
