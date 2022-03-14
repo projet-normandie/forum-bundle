@@ -3,12 +3,14 @@
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 
 /**
  * Administration manager for the Forum Bundle.
@@ -20,41 +22,42 @@ class TopicUserAdmin extends AbstractAdmin
     /**
      * @param RouteCollection $collection
      */
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('export')
             ->remove('create');
     }
 
     /**
-     * @param FormMapper $formMapper
+     * @param FormMapper $form
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper->add('topic')
+        $form->add('topic')
             ->add('user')
             ->add('boolRead')
             ->add('boolNotif');
     }
 
     /**
-     * @param DatagridMapper $datagridMapper
+     * @param DatagridMapper $filter
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('user')
-            ->add('topic', ModelAutocompleteFilter::class, [], null, [
-                'property' => 'libTopic',
+            ->add('topic', ModelFilter::class, [
+                 'field_type' => ModelAutocompleteType::class,
+                 'field_options' => ['property'=>'libTopic'],
             ]);
     }
 
     /**
-     * @param ListMapper $listMapper
+     * @param ListMapper $list
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $list): void
     {
-        $listMapper->addIdentifier('topic')
+        $list->addIdentifier('topic')
             ->addIdentifier('user')
             ->add('boolRead')
             ->add('boolNotif')
@@ -62,11 +65,11 @@ class TopicUserAdmin extends AbstractAdmin
     }
 
     /**
-     * @param ShowMapper $showMapper
+     * @param ShowMapper $show
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $show): void
     {
-        $showMapper->add('topic')
+        $show->add('topic')
             ->add('user');
     }
 }

@@ -9,19 +9,19 @@ stages:
   - qa
   - deploy-preprod
 
-build:7.2:
+build:7.4:
   stage: build
   image: jakzal/phpqa:php7.4-alpine
   script:
     - composer install
 
-lint:7.2:
+lint:7.4:
   stage: qa
   image: jakzal/phpqa:php7.4-alpine
   script:
     - phplint . --exclude=vendor
 
-phpunit:7.2:
+phpunit:7.4:
   stage: qa
   image: jakzal/phpqa:php7.4-alpine
   script:
