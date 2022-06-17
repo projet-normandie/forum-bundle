@@ -32,6 +32,7 @@ class MessageListener
      */
     public function prePersist(Message $message, LifecycleEventArgs $event)
     {
+        $message->getTopic()->setBoolArchive(false);
         $message->setPosition($message->getTopic()->getNbMessage() + 1);
     }
 
