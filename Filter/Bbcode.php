@@ -317,7 +317,7 @@ class Bbcode
             $new = '';
             $len = strlen($email);
             for ($i = 0; $i < $len; $i++) {
-                $new .= '&#x' . bin2hex($email{$i}) . ';';
+                $new .= '&#x' . bin2hex($email[$i]) . ';';
             }
 
             //formating email mailto.
