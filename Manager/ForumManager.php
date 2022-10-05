@@ -20,11 +20,11 @@ class ForumManager
      */
     public function initUser($user)
     {
-        $list = $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->findBy(array('user' => $user));
+        $list = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->findBy(array('user' => $user));
 
         if (count($list) == 0) {
-            $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')->init($user);
-            $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->init($user);
+            $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->init($user);
+            $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->init($user);
          }
     }
 

@@ -26,7 +26,7 @@ class CategoryController extends AbstractController
             $this->forumManager->initUser($this->getUser());
         }
 
-        return $this->getDoctrine()->getRepository('ProjetNormandieForumBundle:Category')
+        return $this->getDoctrine()->getRepository('ProjetNormandie\ForumBundle\Entity\Category')
             ->getHome($this->getUser())
             ->getResult();
     }
