@@ -41,7 +41,7 @@ final class TopicSubscriber implements EventSubscriberInterface
         if (($topic instanceof Topic) && in_array($method, array(Request::METHOD_GET))) {
             $token = $this->tokenStorage->getToken();
             if ($token->getUser() != 'anon.') {
-                $userTopic = $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->findOneBy(
+                $userTopic = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findOneBy(
                     array(
                         'user' => $token->getUser(),
                         'topic' => $topic,

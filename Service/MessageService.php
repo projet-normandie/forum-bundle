@@ -37,7 +37,7 @@ class MessageService
     public function notify(Message $message, string $type = 'new')
     {
         // Notify users
-        $topicUsers = $this->em->getRepository('ProjetNormandieForumBundle:TopicUser')->findBy(
+        $topicUsers = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findBy(
             array(
                 'topic' => $message->getTopic(),
                 'boolNotif' => 1

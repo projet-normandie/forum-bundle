@@ -2,6 +2,7 @@
 
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,47 +39,37 @@ class Topic implements TimestampableInterface, SluggableInterface
     use SluggableTrait;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private ?int $id = null;
 
     /**
-     * @var string
-     *
      * @Assert\NotNull
      * @Assert\NotBlank
      * @Assert\Length(min="5")
      * @Assert\Length(max="255")
      * @ORM\Column(name="libTopic", type="string", length=255, nullable=false)
      */
-    private $libTopic;
+    private string $libTopic;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="nbMessage", type="integer", nullable=false, options={"default":0})
      */
-    private $nbMessage = 0;
+    private int $nbMessage = 0;
 
 
     /**
-     * @var Forum
-     *
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="topics")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idForum", referencedColumnName="id")
      * })
      */
-    private $forum;
+    private Forum $forum;
 
     /**
-     * @var UserInterface
-     *
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
      * @ORM\JoinColumns({
@@ -88,42 +79,36 @@ class Topic implements TimestampableInterface, SluggableInterface
     private $user;
 
     /**
-     * @var TopicType
-     *
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicType")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idType", referencedColumnName="id")
      * })
      */
-    private $type;
+    private TopicType $type;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", mappedBy="topic", cascade={"persist"})
      */
-    private $messages;
+    private Collection $messages;
 
     /**
-     * @var Message
-     *
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id")
      * })
      */
-    private $lastMessage;
+    private Message $lastMessage;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="boolArchive", type="boolean", nullable=false, options={"default":0})
      */
-    private $boolArchive = false;
+    private bool $boolArchive = false;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicUser", mappedBy="topic")
      */
-    private $topicUser;
+    private Collection $topicUser;
 
 
     /**
@@ -149,7 +134,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param integer $id
      * @return Topic
      */
-    public function setId(int $id)
+    public function setId(int $id): self
     {
         $this->id = $id;
         return $this;
@@ -160,7 +145,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -171,7 +156,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param string $libTopic
      * @return Topic
      */
-    public function setLibTopic(string $libTopic)
+    public function setLibTopic(string $libTopic): self
     {
         $this->libTopic = $libTopic;
 
@@ -183,7 +168,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      *
      * @return string
      */
-    public function getLibTopic()
+    public function getLibTopic(): string
     {
         return $this->libTopic;
     }
@@ -194,7 +179,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param integer $nbMessage
      * @return $this
      */
-    public function setNbMessage(int $nbMessage)
+    public function setNbMessage(int $nbMessage): self
     {
         $this->nbMessage = $nbMessage;
 
@@ -206,17 +191,17 @@ class Topic implements TimestampableInterface, SluggableInterface
      *
      * @return integer
      */
-    public function getNbMessage()
+    public function getNbMessage(): int
     {
         return $this->nbMessage;
     }
 
     /**
      * Set forum
-     * @param Forum|null $forum
+     * @param Forum $forum
      * @return $this
      */
-    public function setForum(Forum $forum = null)
+    public function setForum(Forum $forum): self
     {
         $this->forum = $forum;
         return $this;
@@ -226,17 +211,17 @@ class Topic implements TimestampableInterface, SluggableInterface
      * Get forum
      * @return Forum
      */
-    public function getForum()
+    public function getForum(): Forum
     {
         return $this->forum;
     }
 
     /**
      * Set user
-     * @param null $user
+     * @param $user
      * @return $this
      */
-    public function setUser($user = null)
+    public function setUser($user): self
     {
         $this->user = $user;
         return $this;
@@ -244,7 +229,6 @@ class Topic implements TimestampableInterface, SluggableInterface
 
     /**
      * Get user
-     * @return UserInterface
      */
     public function getUser()
     {
@@ -253,10 +237,10 @@ class Topic implements TimestampableInterface, SluggableInterface
 
     /**
      * Set type
-     * @param TopicType|null $type
+     * @param TopicType $type
      * @return $this
      */
-    public function setType(TopicType $type = null)
+    public function setType(TopicType $type): self
     {
         $this->type = $type;
         return $this;
@@ -266,17 +250,17 @@ class Topic implements TimestampableInterface, SluggableInterface
      * Get type
      * @return TopicType
      */
-    public function getType()
+    public function getType(): TopicType
     {
         return $this->type;
     }
 
     /**
      * Set messages
-     * @param array|null $messages
+     * @param array $messages
      * @return $this
      */
-    public function setMessages(array $messages = null)
+    public function setMessages(array $messages): self
     {
         foreach ($messages as $message) {
             $this->addMessage($message);
@@ -294,9 +278,9 @@ class Topic implements TimestampableInterface, SluggableInterface
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getMessages()
+    public function getMessages(): Collection
     {
         return $this->messages;
     }
@@ -305,7 +289,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param Message|null $message
      * @return $this
      */
-    public function setLastMessage(Message $message = null)
+    public function setLastMessage(Message $message = null): self
     {
         $this->lastMessage = $message;
         return $this;
@@ -315,7 +299,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * Get lastMessage
      * @return Message
      */
-    public function getLastMessage()
+    public function getLastMessage(): Message
     {
         return $this->lastMessage;
     }
@@ -326,7 +310,7 @@ class Topic implements TimestampableInterface, SluggableInterface
      * @param boolean $boolArchive
      * @return $this
      */
-    public function setBoolArchive(bool $boolArchive)
+    public function setBoolArchive(bool $boolArchive): self
     {
         $this->boolArchive = $boolArchive;
 
@@ -338,13 +322,13 @@ class Topic implements TimestampableInterface, SluggableInterface
      *
      * @return boolean
      */
-    public function getBoolArchive()
+    public function getBoolArchive(): bool
     {
         return $this->boolArchive;
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
     public function getTopicUser()
     {
@@ -372,7 +356,7 @@ class Topic implements TimestampableInterface, SluggableInterface
     /**
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return sprintf(
             '%s-forum-f%d/%s-topic-t%d/index',
@@ -382,5 +366,4 @@ class Topic implements TimestampableInterface, SluggableInterface
             $this->getId()
         );
     }
-
 }
