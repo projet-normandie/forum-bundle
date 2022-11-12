@@ -31,7 +31,6 @@ class ForumManager
     /**
      * @param array $params
      * @return Forum
-     * @throws ORMException
      */
     public function getForum(array $params = array()): Forum
     {
@@ -41,7 +40,8 @@ class ForumManager
             $forum->setLibForumFr($params['libForumFr']);
         }
         if (isset($params['parent'])) {
-            $forum->setParent($this->em->getReference(Forum::class, $params['parent']));
+            $parent = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Forum')->findOneBy(['parent' => $params]);
+            $parent ?? $forum->setParent($parent);
         }
         return $forum;
     }
