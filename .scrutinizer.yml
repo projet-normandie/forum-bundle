@@ -1,0 +1,55 @@
+filter:
+    path: [src/*]
+    excluded_paths:
+        - tests/*
+        - vendor/*
+        - bin/*
+        - docker/*
+        - var/*
+        - src/Kernel.php
+    dependency_paths:
+        - "vendor/"
+checks:
+    php:
+        code_rating: true
+        duplication: true
+        return_doc_comments: true
+        return_doc_comment_if_not_inferrable: true
+        remove_extra_empty_lines: true
+        param_doc_comment_if_not_inferrable: true
+        no_goto: true
+        fix_use_statements:
+            remove_unused: true
+            preserve_multiple: false
+            preserve_blanklines: false
+            order_alphabetically: false
+        fix_line_ending: true
+
+tools:
+      php_code_sniffer:
+          enabled: true
+          config:
+              standard: PSR2
+      external_code_coverage: false
+
+build:
+    image: default-bionic
+    environment:
+        php: 
+          version: 7.4
+        mongodb: false
+        redis: false
+        mysql: false
+        postgresql: false
+        variables:
+            APP_ENV: test
+    dependencies:
+        override:
+          - composer install -n --ignore-platform-reqs
+    tests:
+        override: true
+    nodes: 
+        analysis:
+            tests:
+                override:
+                  - php-scrutinizer-run
