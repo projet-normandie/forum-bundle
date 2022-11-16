@@ -11,8 +11,8 @@ use ProjetNormandie\ForumBundle\Service\TopicService;
 
 class MessageListener
 {
-    private $messageService;
-    private $topicService;
+    private MessageService $messageService;
+    private TopicService $topicService;
 
     /**
      * MessageListener constructor.

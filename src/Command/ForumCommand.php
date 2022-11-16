@@ -58,10 +58,6 @@ class ForumCommand extends Command
                 $id = $input->getOption('idForum');
                 $this->forumService->majPosition($id);
                 break;
-            case 'migrate-bbcode':
-                $id = $input->getOption('idForum');
-                $this->forumService->migrateBbcode($id);
-                break;
         }
         return 0;
     }

@@ -11,11 +11,12 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
-        "api-platform/api-pack": "^1.2",
+        "php": "^7.4 || ^8.0",
+        "api-platform/core": "^2.7",
+        "knplabs/doctrine-behaviors": "~2.0",
         "sonata-project/admin-bundle": "^4.0",
         "sonata-project/doctrine-orm-admin-bundle": "^4.0",
-        "knplabs/doctrine-behaviors": "~2.0"
+        "symfony/dependency-injection": "^5.4"
     },
     "autoload": {
         "psr-4": { "ProjetNormandie\\ForumBundle\\": "src/" }

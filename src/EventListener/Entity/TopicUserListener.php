@@ -9,9 +9,9 @@ use ProjetNormandie\ForumBundle\Service\ForumService;
 
 class TopicUserListener
 {
-    private $maj = false;
+    private bool $maj = false;
 
-    private $forumService;
+    private ForumService $forumService;
 
     /**
      * TopicUserListener constructor.
@@ -47,7 +47,7 @@ class TopicUserListener
             $user = $topicUser->getUser();
 
             // IF topic not read => forum is not read
-            if ($topicUser->getBoolRead() == false) {
+            if (false === $topicUser->getBoolRead()) {
                 $this->forumService->setNotRead($forum, $user);
             } else {
                 // Count topic read from forum

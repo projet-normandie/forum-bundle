@@ -13,8 +13,8 @@ use Doctrine\ORM\EntityManagerInterface;
 final class TopicSubscriber implements EventSubscriberInterface
 {
 
-    private $tokenStorage;
-    private $em;
+    private TokenStorageInterface $tokenStorage;
+    private EntityManagerInterface $em;
 
     public function __construct(TokenStorageInterface $tokenStorage, EntityManagerInterface $em)
     {

@@ -103,26 +103,6 @@ class ForumService
 
 
     /**
-     * @param $forum
-     */
-    public function migrateBbcode($forum)
-    {
-        $forum = $this->getForum($forum);
-        if ($forum->getIsParent() == true) {
-            foreach ($forum->getChildrens() as $child) {
-                foreach ($child->getTopics() as $topic) {
-                    $this->topicService->migrateBbcode($topic);
-                }
-            }
-        } else {
-            foreach ($forum->getTopics() as $topic) {
-                $this->topicService->migrateBbcode($topic);
-            }
-        }
-    }
-
-
-    /**
      * @param Forum $forum
      * @param       $user
      */

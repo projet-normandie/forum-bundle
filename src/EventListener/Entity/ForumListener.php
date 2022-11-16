@@ -9,7 +9,7 @@ use ProjetNormandie\ForumBundle\Service\ForumService;
 
 class ForumListener
 {
-    private $forumService;
+    private ForumService $forumService;
 
     /**
      * ForumListener constructor.

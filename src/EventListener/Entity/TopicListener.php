@@ -11,9 +11,9 @@ use ProjetNormandie\ForumBundle\Service\ForumService;
 
 class TopicListener
 {
-    private $changeSet = array();
-    private $topicService;
-    private $forumService;
+    private array $changeSet = array();
+    private TopicService $topicService;
+    private ForumService $forumService;
 
     /**
      * TopicListener constructor.

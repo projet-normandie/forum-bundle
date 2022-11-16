@@ -9,9 +9,9 @@ use ProjetNormandie\ForumBundle\Entity\ForumUser;
 
 class ForumUserListener
 {
-    private $maj = false;
+    private bool $maj = false;
 
-    private $forumService;
+    private ForumService $forumService;
 
     /**
      * ForumListener constructor.
