@@ -3,17 +3,15 @@
 namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
 use ProjetNormandie\ForumBundle\Entity\Message;
-use ProjetNormandie\ForumBundle\Entity\Topic;
 use ProjetNormandie\MessageBundle\Service\Messager;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class MessageService
+class NotifyManager
 {
-    private $em;
-    private $translator;
-    private $messager;
+    private EntityManagerInterface $em;
+    private TranslatorInterface $translator;
+    private Messager $messager;
 
     /**
      * MessageService constructor.
@@ -32,7 +30,6 @@ class MessageService
     /**
      * @param Message $message
      * @param string  $type
-     * @throws ORMException
      */
     public function notify(Message $message, string $type = 'new')
     {
