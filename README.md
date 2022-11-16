@@ -1,3 +1,14 @@
+ProjetNormandieForumBundle
+===========================
+
+Develop
+-------
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/projet-normandie/forum-bundle/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/projet-normandie/forum-bundle/?branch=develop)
+[![Build Status](https://scrutinizer-ci.com/g/projet-normandie/forum-bundle/badges/build.png?b=develop)]()
+
+
+
 Installation
 ============
 
@@ -54,7 +65,6 @@ In order to link your User entity to this module you should add the following co
 # Doctrine Configuration - config.yml
 doctrine:
     orm:
-        ...
         resolve_target_entities:
             ProjetNormandie\ForumBundle\Entity\UserInterface: AppBundle\Entity\User
 ```
