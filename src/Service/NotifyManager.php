@@ -11,7 +11,7 @@ class NotifyManager
 {
     private EntityManagerInterface $em;
     private TranslatorInterface $translator;
-    private MessagerBuilder $messager;
+    private MessagerBuilder $messagerBuilder;
 
     /**
      * MessageService constructor.
