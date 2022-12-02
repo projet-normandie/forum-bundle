@@ -8,8 +8,8 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
 
 class ForumService
 {
-    private $em;
-    private $topicService;
+    private EntityManagerInterface $em;
+    private TopicService $topicService;
 
     /**
      * ForumService constructor.
@@ -88,7 +88,7 @@ class ForumService
     public function majPosition($forum)
     {
         $forum = $this->getForum($forum);
-        if ($forum->getIsParent() == true) {
+        if ($forum->getIsParent()) {
             foreach ($forum->getChildrens() as $child) {
                 foreach ($child->getTopics() as $topic) {
                     $this->topicService->majPositions($topic);

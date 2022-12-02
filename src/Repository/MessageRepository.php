@@ -3,6 +3,7 @@
 namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 
 /**
@@ -10,6 +11,9 @@ use ProjetNormandie\ForumBundle\Entity\Topic;
  */
 class MessageRepository extends EntityRepository
 {
+    /**
+     * @throws NonUniqueResultException
+     */
     public function getPosition($message)
     {
         $qb = $this->createQueryBuilder('message')
