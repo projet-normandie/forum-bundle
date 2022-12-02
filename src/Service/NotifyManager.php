@@ -4,26 +4,26 @@ namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Message;
-use ProjetNormandie\MessageBundle\Service\Messager;
+use ProjetNormandie\MessageBundle\Service\MessagerBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotifyManager
 {
     private EntityManagerInterface $em;
     private TranslatorInterface $translator;
-    private Messager $messager;
+    private MessagerBuilder $messager;
 
     /**
      * MessageService constructor.
      * @param EntityManagerInterface $em
      * @param TranslatorInterface    $translator
-     * @param Messager               $messager
+     * @param MessagerBuilder        $messagerBuilder
      */
-    public function __construct(EntityManagerInterface $em, TranslatorInterface $translator, Messager $messager)
+    public function __construct(EntityManagerInterface $em, TranslatorInterface $translator, MessagerBuilder $messagerBuilder)
     {
         $this->em = $em;
         $this->translator = $translator;
-        $this->messager = $messager;
+        $this->messagerBuilder = $messagerBuilder;
     }
 
 
@@ -41,12 +41,18 @@ class NotifyManager
             )
         );
 
+        $this->messagerBuilder
+            ->setType('FORUM_NOTIF')
+            ->setSender($message->getUser())
+        ;
+
+
         foreach ($topicUsers as $topicUser) {
             $recipient = $topicUser->getUser();
             $url = '/' . $recipient->getLocale() . '/' . $message->getUrl();
             if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
-                $this->messager->send(
-                    sprintf(
+                $this->messagerBuilder
+                    ->setObject(sprintf(
                         $this->translator->trans(
                             'topic.notif.object.' . $type,
                             array(),
@@ -54,8 +60,8 @@ class NotifyManager
                             $topicUser->getUser()->getLocale()
                         ),
                         $message->getTopic()->getLibTopic()
-                    ),
-                    sprintf(
+                    ))
+                    ->setMessage(sprintf(
                         $this->translator->trans(
                             'topic.notif.message',
                             array(),
@@ -65,11 +71,8 @@ class NotifyManager
                         $message->getMessage(),
                         $url,
                         $message->getTopic()->getLibTopic()
-                    ),
-                    $message->getUser(),
-                    $topicUser->getUser(),
-                    'FORUM_NOTIF'
-                );
+                    ))
+                ;
             }
         }
     }
