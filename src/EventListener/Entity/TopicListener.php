@@ -71,11 +71,9 @@ class TopicListener
             }
         }
 
-        if (array_key_exists('forum', $this->changeSet)) {
-            if ($this->changeSet['forum'][0] != $this->changeSet['forum'][1]) {
-                $this->forumService->maj($this->changeSet['forum'][0]);
-                $this->forumService->maj($this->changeSet['forum'][1]);
-            }
+        if ((array_key_exists('forum', $this->changeSet)) && ($this->changeSet['forum'][0] != $this->changeSet['forum'][1])) {
+            $this->forumService->maj($this->changeSet['forum'][0]);
+            $this->forumService->maj($this->changeSet['forum'][1]);
         }
     }
 
