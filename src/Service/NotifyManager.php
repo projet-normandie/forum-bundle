@@ -4,26 +4,26 @@ namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Message;
-use ProjetNormandie\MessageBundle\Service\MessagerBuilder;
+use ProjetNormandie\MessageBundle\Service\MessageBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotifyManager
 {
     private EntityManagerInterface $em;
     private TranslatorInterface $translator;
-    private MessagerBuilder $messagerBuilder;
+    private MessageBuilder $messageBuilder;
 
     /**
      * MessageService constructor.
      * @param EntityManagerInterface $em
      * @param TranslatorInterface    $translator
-     * @param MessagerBuilder        $messagerBuilder
+     * @param MessageBuilder        $messageBuilder
      */
-    public function __construct(EntityManagerInterface $em, TranslatorInterface $translator, MessagerBuilder $messagerBuilder)
+    public function __construct(EntityManagerInterface $em, TranslatorInterface $translator, MessageBuilder $messageBuilder)
     {
         $this->em = $em;
         $this->translator = $translator;
-        $this->messagerBuilder = $messagerBuilder;
+        $this->messageBuilder = $messageBuilder;
     }
 
 
@@ -41,7 +41,7 @@ class NotifyManager
             )
         );
 
-        $this->messagerBuilder
+        $this->messageBuilder
             ->setType('FORUM_NOTIF')
             ->setSender($message->getUser())
         ;
@@ -51,7 +51,7 @@ class NotifyManager
             $recipient = $topicUser->getUser();
             $url = '/' . $recipient->getLocale() . '/' . $message->getUrl();
             if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
-                $this->messagerBuilder
+                $this->messageBuilder
                     ->setObject(sprintf(
                         $this->translator->trans(
                             'topic.notif.object.' . $type,
