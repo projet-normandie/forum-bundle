@@ -1,0 +1,39 @@
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+        # fetching services directly from the container via $container->get() won't work.
+        # The best practice is to be explicit about your dependencies anyway.
+    ProjetNormandie\ForumBundle\:
+        resource: '../../*'
+        exclude: '../../{Admin,DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+    ProjetNormandie\ForumBundle\Serializer\TopicContextBuilder:
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@ProjetNormandie\ForumBundle\Serializer\TopicContextBuilder.inner' ]
+        autoconfigure: false
+    ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder:
+        decorates: 'api_platform.serializer.context_builder'
+        arguments: [ '@ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder.inner' ]
+        autoconfigure: false
+    ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
+    ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
+    ProjetNormandie\ForumBundle\EventListener\Entity\ForumListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\ForumListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
+    ProjetNormandie\ForumBundle\EventListener\Entity\TopicUserListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\TopicUserListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
+    ProjetNormandie\ForumBundle\EventListener\Entity\ForumUserListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\ForumUserListener
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
