@@ -34,7 +34,7 @@ class ForumAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $form): void
     {
-        $form->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
+        $form->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
             ->add('libForum', TextType::class, ['label' => 'label.forum'])
             ->add('libForumFr', TextType::class, ['label' => 'label.forumFr'])
             ->add('category')
@@ -70,7 +70,7 @@ class ForumAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $list): void
     {
-        $list->addIdentifier('id')
+        $list->addIdentifier('id', null, ['label' => 'label.id'])
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('isParent', null, ['label' => 'label.isParent'])
@@ -85,7 +85,7 @@ class ForumAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $show): void
     {
-        $show->add('id')
+        $show->add('id', null, ['label' => 'label.id'])
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('libForumFr', null, ['label' => 'label.forumFr'])
