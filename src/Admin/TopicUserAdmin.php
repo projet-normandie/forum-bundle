@@ -33,10 +33,10 @@ class TopicUserAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $form): void
     {
-        $form->add('topic')
-            ->add('user')
-            ->add('boolRead')
-            ->add('boolNotif');
+        $form->add('topic', null, ['label' => 'label.topic'])
+            ->add('user', null, ['label' => 'label.user'])
+            ->add('boolRead', null, ['label' => 'label.boolRead'])
+            ->add('boolNotif', null, ['label' => 'label.boolNotif']);
     }
 
     /**
@@ -45,10 +45,11 @@ class TopicUserAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('user')
+            ->add('user', null, ['label' => 'label.user'])
             ->add('topic', ModelFilter::class, [
-                 'field_type' => ModelAutocompleteType::class,
-                 'field_options' => ['property'=>'libTopic'],
+                'label' => 'label.topic',
+                'field_type' => ModelAutocompleteType::class,
+                'field_options' => ['property'=>'libTopic'],
             ]);
     }
 
@@ -57,10 +58,10 @@ class TopicUserAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $list): void
     {
-        $list->addIdentifier('topic')
-            ->addIdentifier('user')
-            ->add('boolRead')
-            ->add('boolNotif')
+        $list->addIdentifier('topic', null, ['label' => 'label.topic'])
+            ->addIdentifier('user', null, ['label' => 'label.user'])
+            ->add('boolRead', null, ['label' => 'label.boolRead'])
+            ->add('boolNotif', null, ['label' => 'label.boolNotif'])
             ->add('_action', 'actions', ['actions' => ['edit' => []]]);
     }
 
@@ -69,7 +70,7 @@ class TopicUserAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $show): void
     {
-        $show->add('topic')
-            ->add('user');
+        $show->add('topic', null, ['label' => 'label.topic'])
+            ->add('user', null, ['label' => 'label.user']);
     }
 }

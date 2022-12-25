@@ -33,9 +33,9 @@ class ForumUserAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $form): void
     {
-        $form->add('forum')
-            ->add('user')
-            ->add('boolRead');
+        $form->add('forum', null, ['label' => 'label.forum'])
+            ->add('user', null, ['label' => 'label.user'])
+            ->add('boolRead', null, ['label' => 'label.boolRead']);
     }
 
     /**
@@ -44,10 +44,11 @@ class ForumUserAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('user')
+            ->add('user', null, ['label' => 'label.user'])
             ->add('forum', ModelFilter::class, [
-                 'field_type' => ModelAutocompleteType::class,
-                 'field_options' => ['property'=>'libForum'],
+                'label' => 'label.forum',
+                'field_type' => ModelAutocompleteType::class,
+                'field_options' => ['property'=>'libForum'],
             ]);
     }
 
@@ -56,9 +57,9 @@ class ForumUserAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $list): void
     {
-        $list->addIdentifier('forum')
-            ->addIdentifier('user')
-            ->add('boolRead')
+        $list->addIdentifier('forum', null, ['label' => 'label.forum'])
+            ->addIdentifier('user', null, ['label' => 'label.user'])
+            ->add('boolRead', null, ['label' => 'label.boolRead'])
             ->add('_action', 'actions', ['actions' => ['edit' => []]]);
     }
 
@@ -67,7 +68,7 @@ class ForumUserAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $show): void
     {
-        $show->add('forum')
-            ->add('user');
+        $show->add('forum', null, ['label' => 'label.forum'])
+            ->add('user', null, ['label' => 'label.user']);
     }
 }

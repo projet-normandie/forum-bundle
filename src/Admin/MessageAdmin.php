@@ -34,9 +34,9 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $form): void
     {
-        $form->add('id', TextType::class, ['label' => 'id', 'attr' => ['readonly' => true]])
+        $form->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
             ->add('message', CKEditorType::class, [
-                    'label' => 'Message',
+                    'label' => 'label.message',
                     'required' => true,
                     'config' => array(
                         'height' => '400',
@@ -52,8 +52,9 @@ class MessageAdmin extends AbstractAdmin
     {
         $filter
             ->add('topic', ModelFilter::class, [
-                 'field_type' => ModelAutocompleteType::class,
-                 'field_options' => ['property'=>'libTopic'],
+                'label' => 'label.topic',
+                'field_type' => ModelAutocompleteType::class,
+                'field_options' => ['property'=>'libTopic'],
             ]);
     }
 
@@ -62,9 +63,9 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $list): void
     {
-        $list->addIdentifier('id')
-            ->add('message', null, ['label' => 'Message'])
-            ->add('user')
+        $list->addIdentifier('id', null, ['label' => 'label.id'])
+            ->add('message', null, ['label' => 'label.message'])
+            ->add('user', null, ['label' => 'label.user'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
 
@@ -73,9 +74,9 @@ class MessageAdmin extends AbstractAdmin
      */
     protected function configureShowFields(ShowMapper $show): void
     {
-        $show->add('id')
-            ->add('topic')
-            ->add('user')
-            ->add('message', null, ['label' => 'Message', 'safe' => true]);
+        $show->add('id', null, ['label' => 'label.id'])
+            ->add('topic', null, ['label' => 'label.topic'])
+            ->add('user', null, ['label' => 'label.user'])
+            ->add('message', null, ['label' => 'label.message', 'safe' => true]);
     }
 }
