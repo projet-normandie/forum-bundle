@@ -1,3 +1,10 @@
+breadcrumb:
+    link_category_list: 'Category list'
+    link_forum_list: 'Forum list'
+    link_topic_list: 'Topic list'
+    link_message_list: 'Message list'
+    link_topic_user_list: 'Topic/User list'
+    link_forum_user_list: 'Forum/User list'
 label:
     id: 'id'
     category: 'Category'
@@ -7,7 +14,10 @@ label:
     forumFr: 'Forum [FR]'
     topic: 'Topic'
     topics: 'Topics'
+    lastMessage: 'Last message'
     message: 'Message'
+    nbMessage: 'Nb message'
+    nbTopic: 'Nb topic'
     topicUser : 'Topic / User'
     forumUser: 'Forum / User'
     boolRead: 'Is read ?'
