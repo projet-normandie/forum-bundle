@@ -53,8 +53,8 @@ class TopicListener
         );
         if ($userTopic) {
             $userTopic->setBoolRead(1);
-            $em->flush();
         }
+        $em->flush();
     }
 
     /**
