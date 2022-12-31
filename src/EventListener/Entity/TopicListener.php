@@ -32,6 +32,8 @@ class TopicListener
      */
     public function postPersist(Topic $topic, LifecycleEventArgs $event)
     {
+        $em = $event->getObjectManager();
+
         // Update nbTopic
         $forum = $topic->getForum();
         $forum->setNbTopic($forum->getNbTopic() + 1);
@@ -40,6 +42,18 @@ class TopicListener
         $parent = $forum->getParent();
         if ($parent) {
             $parent->setNbTopic($parent->getNbTopic() + 1);
+        }
+
+        // Read topic
+        $userTopic = $em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findOneBy(
+            array(
+                'user' => $topic->getUser(),
+                'topic' => $topic,
+            )
+        );
+        if ($userTopic) {
+            $userTopic->setBoolRead(1);
+            $em->flush();
         }
     }
 
