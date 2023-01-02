@@ -147,7 +147,7 @@ class ForumService
      */
     public function countSubForumNotRead(Forum $parent, $user): int
     {
-        return $this->em->getRepository('ProjetNormandieForumBundle:ForumUser')
+        return $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
                 ->countSubForumNotRead($parent, $user);
     }
 }
