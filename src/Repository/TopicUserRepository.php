@@ -27,18 +27,6 @@ class TopicUserRepository extends EntityRepository
 
     /**
      * @param $user
-     * @throws Exception
-     */
-    public function readAll($user)
-    {
-        $this->_em->getConnection()->executeStatement(
-            "UPDATE forum_topic_user SET boolRead = 1 WHERE idUser=:idUser",
-            ['idUser' => $user->getId()]
-        );
-    }
-
-    /**
-     * @param $user
      * @param $forum
      * @throws Exception
      */

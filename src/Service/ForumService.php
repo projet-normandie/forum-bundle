@@ -35,24 +35,6 @@ class ForumService
         return $forum;
     }
 
-    /**
-     * @param $user
-     */
-    public function readAll($user)
-    {
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->readAll($user);
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->readAll($user);
-    }
-
-    /**
-     * @param $user
-     * @param $forum
-     */
-    public function read($user, $forum)
-    {
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->readForum($user, $forum);
-        $this->setRead($forum, $user);
-    }
 
     /**
      * @param $forum
@@ -99,19 +81,6 @@ class ForumService
                 $this->topicService->majPositions($topic);
             }
         }
-    }
-
-
-    /**
-     * @param Forum $forum
-     * @param       $user
-     */
-    public function setRead(Forum $forum, $user)
-    {
-        $forumUser = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
-                ->findOneBy(['forum' => $forum, 'user' => $user]);
-        $forumUser->setBoolRead(true);
-        $this->em->flush();
     }
 
 

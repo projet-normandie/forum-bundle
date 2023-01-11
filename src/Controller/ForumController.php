@@ -2,23 +2,22 @@
 
 namespace ProjetNormandie\ForumBundle\Controller;
 
-use ProjetNormandie\ForumBundle\Service\ForumService;
+use Doctrine\DBAL\Exception;
+use ProjetNormandie\ForumBundle\Service\MarkAsReadService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use ProjetNormandie\ForumBundle\Entity\Forum;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 /**
  * Class ForumController
- * @Route("/forum_forums")
  */
 class ForumController extends AbstractController
 {
-    private $forumService;
+    private MarkAsReadService $markAsReadService;
 
-    public function __construct(ForumService $forumService)
+    public function __construct(MarkAsReadService $markAsReadService)
     {
-        $this->forumService = $forumService;
+        $this->markAsReadService = $markAsReadService;
     }
 
     /**
@@ -26,17 +25,19 @@ class ForumController extends AbstractController
      */
     public function readAll(): JsonResponse
     {
-        $this->forumService->readAll($this->getUser());
+        $this->markAsReadService->readAll();
         return new JsonResponse(['sucess' => true]);
     }
+
+
 
     /**
      * @param Forum $forum
      * @return JsonResponse
      */
-    public function read(Forum $forum): JsonResponse
+    public function readForum(Forum $forum): JsonResponse
     {
-        $this->forumService->read($this->getUser(), $forum);
+        $this->markAsReadService->readForum($forum);
         return new JsonResponse(['sucess' => true]);
     }
 }
