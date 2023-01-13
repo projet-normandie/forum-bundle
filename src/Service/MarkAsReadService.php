@@ -2,7 +2,6 @@
 
 namespace ProjetNormandie\ForumBundle\Service;
 
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use Symfony\Component\Security\Core\Security;
