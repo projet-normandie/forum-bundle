@@ -4,6 +4,7 @@ namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\Topic;
 use Symfony\Component\Security\Core\Security;
 
 class MarkAsReadService
@@ -25,7 +26,7 @@ class MarkAsReadService
     /**
      * @return void
      */
-    public function readAlL()
+    public function readAlL(): void
     {
         $user = $this->security->getUser();
 
@@ -48,7 +49,7 @@ class MarkAsReadService
      * @param Forum $forum
      * @return void
      */
-    public function readForum(Forum $forum)
+    public function readForum(Forum $forum): void
     {
         $user = $this->security->getUser();
 
@@ -71,9 +72,33 @@ class MarkAsReadService
             ->setParameter('forum', $forum);
         $query->getQuery()->getResult();
 
-        //@todo forum parent
         if (null !== $forum->getParent()) {
-
+            $query = $this->em->createQueryBuilder()
+                ->update('ProjetNormandie\ForumBundle\Entity\ForumUser', 'fu')
+                ->set('fu.boolRead', true)
+                ->where('fu.user = :user')
+                ->setParameter('user', $user)
+                ->andWhere('fu.forum = :forum')
+                ->setParameter('forum', $forum->getParent());
+            $query->getQuery()->getResult();
         }
+    }
+
+    /**
+     * @param Topic $topic
+     * @return void
+     */
+    public function readTopic(Topic $topic): void
+    {
+        $user = $this->security->getUser();
+
+        $query = $this->em->createQueryBuilder()
+            ->update('ProjetNormandie\ForumBundle\Entity\TopicUser', 'tu')
+            ->set('tu.boolRead', true)
+            ->where('tu.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('tu.topic = :topic')
+            ->setParameter('topic', $topic);
+        $query->getQuery()->getResult();
     }
 }

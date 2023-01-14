@@ -4,19 +4,23 @@ namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
+use ProjetNormandie\ForumBundle\Service\MarkAsNotReadService;
 use ProjetNormandie\ForumBundle\Service\NotifyManager;
 
 class MessageListener
 {
     private NotifyManager $notifyManager;
+    private MarkAsNotReadService $markAsNotReadService;
 
     /**
      * MessageListener constructor.
-     * @param NotifyManager                $notifyManager
+     * @param NotifyManager        $notifyManager
+     * @param MarkAsNotReadService $markAsNotReadService
      */
-    public function __construct(NotifyManager $notifyManager)
+    public function __construct(NotifyManager $notifyManager, MarkAsNotReadService $markAsNotReadService)
     {
         $this->notifyManager = $notifyManager;
+        $this->markAsNotReadService = $markAsNotReadService;
     }
 
 
@@ -49,8 +53,8 @@ class MessageListener
      */
     public function postUpdate(Message $message, LifecycleEventArgs $event): void
     {
-        // Notify
         $this->notifyManager->notify($message, 'edit');
+        $this->markAsNotReadService->notRead($message->getTopic());
     }
     
     /**
