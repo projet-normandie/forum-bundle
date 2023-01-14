@@ -50,19 +50,6 @@ class ForumService
 
 
     /**
-     * @param Forum $forum
-     * @throws ORMException
-     */
-    public function maj(Forum $forum)
-    {
-        $data = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Topic')->getForumData($forum);
-        $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
-        $forum->setNbTopic($data['nbTopic']);
-        $forum->setNbMessage($data['nbMessage']);
-        $this->em->flush();
-    }
-
-    /**
      * @param $forum
      * @deprecated
      */

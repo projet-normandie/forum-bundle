@@ -338,7 +338,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return integer
      */
-    public function getNbMessage()
+    public function getNbMessage(): int
     {
         return $this->nbMessage;
     }

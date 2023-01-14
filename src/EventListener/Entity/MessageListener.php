@@ -53,7 +53,7 @@ class MessageListener
         $this->notifyManager->notify($message, 'edit');
     }
     
-      /**
+    /**
      * @param Message           $message
      * @param LifecycleEventArgs $event
      */
