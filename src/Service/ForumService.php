@@ -35,22 +35,6 @@ class ForumService
 
     /**
      * @param $forum
-     * @throws ORMException
-     * @deprecated
-     */
-    public function majParent($forum)
-    {
-        $forum = $this->getForum($forum);
-        $data = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Forum')->getParentData($forum);
-        $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
-        $forum->setNbTopic($data['nbTopic']);
-        $forum->setNbMessage($data['nbMessage']);
-        $this->em->flush();
-    }
-
-
-    /**
-     * @param $forum
      * @deprecated
      */
     /*public function majPosition($forum)
