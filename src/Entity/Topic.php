@@ -93,7 +93,7 @@ class Topic implements TimestampableInterface, SluggableInterface
     private Collection $messages;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message")
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id")
      * })

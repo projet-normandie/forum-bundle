@@ -2,7 +2,7 @@
 
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ProjetNormandie\ForumBundle\Entity\TopicUser;
 use ProjetNormandie\ForumBundle\Service\ForumService;
@@ -26,7 +26,7 @@ class TopicUserListener
      * @param TopicUser        $topicUser
      * @param PreUpdateEventArgs $event
      */
-    public function preUpdate(TopicUser $topicUser, PreUpdateEventArgs $event)
+    public function preUpdate(TopicUser $topicUser, PreUpdateEventArgs $event): void
     {
         $changeSet = $event->getEntityChangeSet();
 
@@ -40,7 +40,7 @@ class TopicUserListener
      * @param TopicUser        $topicUser
      * @param LifecycleEventArgs $event
      */
-    public function postUpdate(TopicUser $topicUser, LifecycleEventArgs $event)
+    public function postUpdate(TopicUser $topicUser, LifecycleEventArgs $event): void
     {
         if ($this->maj) {
             $forum = $topicUser->getTopic()->getForum();
@@ -52,9 +52,9 @@ class TopicUserListener
             } else {
                 // Count topic read from forum
                 $nb = $this->forumService->countTopicNotRead($forum, $user);
-                if ($nb == 0) {
+                /*if ($nb == 0) {
                     $this->forumService->setRead($forum, $user);
-                }
+                }*/
             }
         }
     }

@@ -3,16 +3,22 @@
 namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
-use VideoGamesRecords\CoreBundle\Entity\Chart;
+use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\ForumUser;
 
 /**
  * Specific repository that serves the Forum entity.
  */
-class ForumUserRepository extends EntityRepository
+class ForumUserRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ForumUser::class);
+    }
+
     /**
      * @param $user
      * @throws Exception

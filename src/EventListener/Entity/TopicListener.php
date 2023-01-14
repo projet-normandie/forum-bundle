@@ -2,7 +2,7 @@
 
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\ORMException;
 use ProjetNormandie\ForumBundle\Entity\Topic;
@@ -30,7 +30,7 @@ class TopicListener
      * @param Topic              $topic
      * @param LifecycleEventArgs $event
      */
-    public function postPersist(Topic $topic, LifecycleEventArgs $event)
+    public function postPersist(Topic $topic, LifecycleEventArgs $event): void
     {
         $em = $event->getObjectManager();
 
@@ -40,9 +40,7 @@ class TopicListener
 
         // Parent
         $parent = $forum->getParent();
-        if ($parent) {
-            $parent->setNbTopic($parent->getNbTopic() + 1);
-        }
+        $parent?->setNbTopic($parent->getNbTopic() + 1);
 
         // Read topic
         $userTopic = $em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findOneBy(
@@ -61,7 +59,7 @@ class TopicListener
      * @param Topic        $topic
      * @param PreUpdateEventArgs $event
      */
-    public function preUpdate(Topic $topic, PreUpdateEventArgs $event)
+    public function preUpdate(Topic $topic, PreUpdateEventArgs $event): void
     {
         $this->changeSet = $event->getEntityChangeSet();
     }
@@ -72,7 +70,7 @@ class TopicListener
      * @param LifecycleEventArgs $event
      * @throws ORMException
      */
-    public function postUpdate(Topic $topic, LifecycleEventArgs $event)
+    public function postUpdate(Topic $topic, LifecycleEventArgs $event): void
     {
         // Topic not read
         if (array_key_exists('nbMessage', $this->changeSet) && array_key_exists('lastMessage', $this->changeSet)) {
@@ -96,7 +94,7 @@ class TopicListener
      * @param LifecycleEventArgs $event
      * @throws ORMException
      */
-    public function postRemove(Topic $topic,  LifecycleEventArgs $event)
+    public function postRemove(Topic $topic,  LifecycleEventArgs $event): void
     {
         // MAJ Forum
         $this->forumService->maj($topic->getForum());

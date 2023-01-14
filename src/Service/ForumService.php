@@ -9,17 +9,14 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
 class ForumService
 {
     private EntityManagerInterface $em;
-    private TopicService $topicService;
 
     /**
      * ForumService constructor.
      * @param EntityManagerInterface $em
-     * @param TopicService           $topicService
      */
-    public function __construct(EntityManagerInterface $em, TopicService $topicService)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->topicService = $topicService;
     }
 
     /**
@@ -39,6 +36,7 @@ class ForumService
     /**
      * @param $forum
      * @throws ORMException
+     * @deprecated
      */
     public function majParent($forum)
     {
@@ -66,8 +64,9 @@ class ForumService
 
     /**
      * @param $forum
+     * @deprecated
      */
-    public function majPosition($forum)
+    /*public function majPosition($forum)
     {
         $forum = $this->getForum($forum);
         if ($forum->getIsParent()) {
@@ -81,7 +80,7 @@ class ForumService
                 $this->topicService->majPositions($topic);
             }
         }
-    }
+    }*/
 
 
     /**

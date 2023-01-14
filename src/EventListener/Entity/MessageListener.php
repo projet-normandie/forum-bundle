@@ -2,26 +2,21 @@
 
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\ORMException;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\ForumBundle\Service\NotifyManager;
-use ProjetNormandie\ForumBundle\Service\TopicService;
 
 class MessageListener
 {
     private NotifyManager $notifyManager;
-    private TopicService $topicService;
 
     /**
      * MessageListener constructor.
-     * @param NotifyManager      $notifyManager
-     * @param TopicService        $topicService
+     * @param NotifyManager                $notifyManager
      */
-    public function __construct(NotifyManager $notifyManager, TopicService $topicService)
+    public function __construct(NotifyManager $notifyManager)
     {
         $this->notifyManager = $notifyManager;
-        $this->topicService = $topicService;
     }
 
 
@@ -29,45 +24,78 @@ class MessageListener
      * @param Message       $message
      * @param LifecycleEventArgs $event
      */
-    public function prePersist(Message $message, LifecycleEventArgs $event)
+    public function prePersist(Message $message, LifecycleEventArgs $event): void
     {
-        $message->getTopic()->setBoolArchive(false);
-        $message->setPosition($message->getTopic()->getNbMessage() + 1);
+        $topic = $message->getTopic();
+        $topic->setNbMessage($topic->getNbMessage() + 1);
+        $topic->setLastMessage($message);
+        $topic->setBoolArchive(false);
+        $message->setPosition($topic->getNbMessage() + 1);
+
+        $forum = $topic->getForum();
+        $forum->setNbMessage($forum->getNbMessage() + 1);
+        $forum->setLastMessage($message);
+
+        $parent = $forum->getParent();
+        if ($parent) {
+            $parent->setNbMessage($parent->getNbMessage());
+            $parent->setLastMessage($message);
+        }
     }
 
     /**
      * @param Message            $message
      * @param LifecycleEventArgs $event
-     * @throws ORMException
      */
-    public function postPersist(Message $message,  LifecycleEventArgs $event)
-    {
-        // MAJ topic
-        $this->topicService->maj($message->getTopic());
-        // Notify
-        $this->notifyManager->notify($message);
-    }
-
-    /**
-     * @param Message            $message
-     * @param LifecycleEventArgs $event
-     */
-    public function postUpdate(Message $message, LifecycleEventArgs $event)
+    public function postUpdate(Message $message, LifecycleEventArgs $event): void
     {
         // Notify
         $this->notifyManager->notify($message, 'edit');
     }
+    
+      /**
+     * @param Message           $message
+     * @param LifecycleEventArgs $event
+     */
+    public function preRemove(Message $message,  LifecycleEventArgs $event): void
+    {
+        $topic = $message->getTopic();
+        $topic->setNbMessage($topic->getNbMessage() -1);
+
+        $i = 1;
+        foreach ($topic->getMessages() as $row) {
+            $row->setPosition($i);
+            $i++;
+        }
+
+        $forum = $topic->getForum();
+        $forum->setNbMessage($forum->getNbMessage() - 1);
+
+        $parent = $forum->getParent();
+        $parent?->setNbMessage($parent->getNbMessage() - 1);
+    }
 
     /**
      * @param Message            $message
      * @param LifecycleEventArgs $event
-     * @throws ORMException
+     * @return void
      */
-    public function postRemove(Message $message,  LifecycleEventArgs $event)
+    public function postRemove(Message $message, LifecycleEventArgs $event): void
     {
-        // MAJ topic
-        $this->topicService->maj($message->getTopic());
-        // MAJ position
-        $this->topicService->majPositions($message->getTopic());
+        $topic = $message->getTopic();
+        $forum = $topic->getForum();
+        $parent = $forum->getParent();
+        $lastMessage = $topic->getMessages()->last();
+        if ($message === $topic->getLastMessage()) {
+            $topic->setLastMessage($lastMessage);
+            $event->getObjectManager()->flush();
+        }
+        if ($message === $forum->getLastMessage()) {
+            $forum->setLastMessage($lastMessage);
+            $event->getObjectManager()->flush();
+        }
+        if ($parent && $message === $parent->getLastMessage()) {
+            $parent->setLastMessage($lastMessage);
+        }
     }
 }

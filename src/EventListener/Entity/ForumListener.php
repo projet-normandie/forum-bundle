@@ -2,7 +2,7 @@
 
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
-use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\ORMException;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Service\ForumService;
@@ -26,7 +26,7 @@ class ForumListener
      * @param LifecycleEventArgs $event
      * @throws ORMException
      */
-    public function postUpdate(Forum $forum, LifecycleEventArgs $event)
+    public function postUpdate(Forum $forum, LifecycleEventArgs $event): void
     {
         if ($forum->getParent() != null) {
             $this->forumService->majParent($forum->getParent());

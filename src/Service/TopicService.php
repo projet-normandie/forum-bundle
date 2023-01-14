@@ -62,16 +62,4 @@ class TopicService
             $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->setNotRead($topic->getForum()->getParent(), $user);
         }
     }
-
-    /**
-     * @param Topic $topic
-     * @throws ORMException
-     */
-    public function maj(Topic $topic)
-    {
-        $data = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Message')->getTopicData($topic);
-        $topic->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
-        $topic->setNbMessage($data['nbMessage']);
-        $this->em->flush();
-    }
 }

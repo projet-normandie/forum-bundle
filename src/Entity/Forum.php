@@ -152,14 +152,12 @@ class Forum implements TimestampableInterface, SluggableInterface
     private $isParent = false;
 
     /**
-     * @var Message
-     *
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message")
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id")
      * })
      */
-    private $lastMessage;
+    private Message $lastMessage;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\ForumUser", mappedBy="forum")
