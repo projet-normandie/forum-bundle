@@ -18,7 +18,7 @@ class ForumManager
     /**
      * @param $user
      */
-    public function initUser($user)
+    public function initUser($user): void
     {
         $list = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->findBy(array('user' => $user));
 

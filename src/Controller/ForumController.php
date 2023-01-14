@@ -2,7 +2,6 @@
 
 namespace ProjetNormandie\ForumBundle\Controller;
 
-use Doctrine\DBAL\Exception;
 use ProjetNormandie\ForumBundle\Service\MarkAsReadService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

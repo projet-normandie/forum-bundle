@@ -32,26 +32,6 @@ class TopicListener
         $parent?->setNbTopic($parent->getNbTopic() + 1);
     }
 
-    /**
-     * @param Topic              $topic
-     * @param LifecycleEventArgs $event
-     */
-    public function postPersist(Topic $topic, LifecycleEventArgs $event): void
-    {
-        $em = $event->getObjectManager();
-
-        // Read topic
-        $userTopic = $em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findOneBy(
-            array(
-                'user' => $topic->getUser(),
-                'topic' => $topic,
-            )
-        );
-        if ($userTopic) {
-            $userTopic->setBoolRead(1);
-        }
-        $em->flush();
-    }
 
     /**
      * @param Topic        $topic
