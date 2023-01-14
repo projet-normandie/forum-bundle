@@ -47,6 +47,17 @@ class MessageListener
         }
     }
 
+
+    /**
+     * @param Message            $message
+     * @param LifecycleEventArgs $event
+     * @return void
+     */
+    public function postPersist(Message $message, LifecycleEventArgs $event): void
+    {
+        $this->notifyManager->notify($message);
+    }
+
     /**
      * @param Message            $message
      * @param LifecycleEventArgs $event
