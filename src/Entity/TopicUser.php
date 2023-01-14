@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="forum_topic_user")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicUserRepository")
- * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\TopicUserListener"})
  */
 class TopicUser
 {

@@ -32,24 +32,6 @@ class ForumUserRepository extends ServiceEntityRepository
 
 
     /**
-     * @param $forum
-     * @param $user
-     */
-    public function setNotRead($forum, $user)
-    {
-         $qb = $this->_em->createQueryBuilder();
-         $query = $qb->update('ProjetNormandie\ForumBundle\Entity\ForumUser', 'fu')
-            ->set('fu.boolRead', ':boolRead')
-            ->where('fu.user != :user')
-            ->andWhere('fu.forum = :forum')
-            ->setParameter('boolRead', 0)
-            ->setParameter('forum', $forum)
-            ->setParameter('user', $user);
-
-        $query->getQuery()->execute();
-    }
-
-    /**
      * @param $parent
      * @param $user
      * @return mixed

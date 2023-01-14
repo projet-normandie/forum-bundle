@@ -27,4 +27,8 @@ interface UserInterface
      * @return integer
      */
     public function getNbForumMessage();
+    /**
+     * @return string
+     */
+    public function __toString();
 }
