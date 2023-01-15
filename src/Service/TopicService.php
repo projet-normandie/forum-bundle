@@ -3,7 +3,6 @@
 namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 
 class TopicService
@@ -23,7 +22,7 @@ class TopicService
     /**
      * @param Topic $topic
      */
-    public function majPositions(Topic $topic)
+    public function majPositions(Topic $topic): void
     {
         $list = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Message')->findBy(['topic' => $topic], ['id' => 'ASC']);
         $i = 1;
