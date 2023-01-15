@@ -52,41 +52,4 @@ class ForumService
             }
         }
     }*/
-
-
-    /**
-     * @param Forum $forum
-     * @param       $user
-     */
-    public function setNotRead(Forum $forum, $user)
-    {
-        $forumUser = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
-                ->findOneBy(['forum' => $forum, 'user' => $user]);
-        $forumUser->setBoolRead(false);
-        $this->em->flush();
-    }
-
-
-    /**
-     * @param Forum $forum
-     * @param       $user
-     * @return int
-     */
-    public function countTopicNotRead(Forum $forum, $user): int
-    {
-        return $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')
-                ->countNotRead($forum,$user);
-    }
-
-
-    /**
-     * @param Forum $parent
-     * @param       $user
-     * @return int
-     */
-    public function countSubForumNotRead(Forum $parent, $user): int
-    {
-        return $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
-                ->countSubForumNotRead($parent, $user);
-    }
 }

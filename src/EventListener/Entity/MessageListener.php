@@ -56,6 +56,7 @@ class MessageListener
     public function postPersist(Message $message, LifecycleEventArgs $event): void
     {
         $this->notifyManager->notify($message);
+        $this->markAsNotReadService->notRead($message->getTopic());
     }
 
     /**
@@ -65,7 +66,6 @@ class MessageListener
     public function postUpdate(Message $message, LifecycleEventArgs $event): void
     {
         $this->notifyManager->notify($message, 'edit');
-        $this->markAsNotReadService->notRead($message->getTopic());
     }
     
     /**

@@ -2,7 +2,10 @@
 namespace ProjetNormandie\ForumBundle\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities as EventPrioritiesAlias;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Service\MarkAsReadService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -13,12 +16,12 @@ use Symfony\Component\Security\Core\Security;
 final class ReadTopicSubscriber implements EventSubscriberInterface
 {
     private Security $security;
-    private EntityManagerInterface $em;
+    private MarkAsReadService $markAsReadService;
 
-    public function __construct(Security $security, EntityManagerInterface $em)
+    public function __construct(Security $security, MarkAsReadService $markAsReadService)
     {
         $this->security = $security;
-        $this->em = $em;
+        $this->markAsReadService = $markAsReadService;
     }
 
     public static function getSubscribedEvents(): array
@@ -30,6 +33,9 @@ final class ReadTopicSubscriber implements EventSubscriberInterface
 
     /**
      * @param RequestEvent $event
+     * @return void
+     * @throws NoResultException
+     * @throws NonUniqueResultException
      */
     public function setRead(RequestEvent $event)
     {
@@ -38,16 +44,7 @@ final class ReadTopicSubscriber implements EventSubscriberInterface
         $user = $this->security->getUser();
 
         if ($user && ($topic instanceof Topic) && $method == Request::METHOD_GET) {
-            $userTopic = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findOneBy(
-                array(
-                    'user' => $user,
-                    'topic' => $topic,
-                )
-            );
-            if ($userTopic) {
-                $userTopic->setBoolRead(true);
-                $this->em->flush();
-            }
+            $this->markAsReadService->readTopic($topic);
         }
     }
 }

@@ -7,6 +7,8 @@ use Doctrine\DBAL\Exception;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\Topic;
 use ProjetNormandie\ForumBundle\Entity\TopicUser;
 
 /**
@@ -30,13 +32,24 @@ class TopicUserRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $forum
-     * @param $user
+     * @param       $user
+     * @param Topic $topic
      * @return mixed
-     * @throws NonUniqueResultException
-     * @throws NoResultException
      */
-    public function countNotRead($forum, $user): mixed
+    public function isRead($user, Topic $topic)
+    {
+        $topicUser = $this->findOneBy(['user' => $user, 'topic' => $topic]);
+        return $topicUser->getBoolRead();
+    }
+
+    /**
+     * @param       $user
+     * @param Forum $forum
+     * @return mixed
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function countTopicNotRead($user, Forum $forum)
     {
          $query = $this->createQueryBuilder('tu')
              ->select('COUNT(tu.id)')
@@ -48,5 +61,29 @@ class TopicUserRepository extends ServiceEntityRepository
              ->setParameter('user', $user);
 
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param            $user
+     * @param Topic|null $topic
+     * @param Forum|null $forum
+     * @return void
+     */
+    public function markAsRead($user, ?Topic $topic = null, ?Forum $forum = null): void
+    {
+        $query = $this->_em->createQueryBuilder()
+            ->update('ProjetNormandie\ForumBundle\Entity\TopicUser', 'tu')
+            ->set('tu.boolRead', true)
+            ->where('tu.user = :user')
+            ->setParameter('user', $user);
+        if ($topic) {
+            $query->andWhere('tu.topic = :topic')
+                ->setParameter('topic', $topic);
+        }
+        if ($forum) {
+            $query->andWhere('tu.topic IN (SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)')
+                ->setParameter('forum', $forum);
+        }
+        $query->getQuery()->getResult();
     }
 }

@@ -7,6 +7,7 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\ForumUser;
 
 /**
@@ -32,13 +33,13 @@ class ForumUserRepository extends ServiceEntityRepository
 
 
     /**
-     * @param $parent
-     * @param $user
+     * @param       $user
+     * @param Forum $parent
      * @return mixed
-     * @throws NonUniqueResultException
      * @throws NoResultException
+     * @throws NonUniqueResultException
      */
-    public function countSubForumNotRead($parent, $user)
+    public function countSubForumNotRead($user, Forum $parent)
     {
          $query = $this->createQueryBuilder('fu')
              ->select('COUNT(fu.id)')
@@ -50,4 +51,25 @@ class ForumUserRepository extends ServiceEntityRepository
              ->setParameter('user', $user);
         return $query->getQuery()->getSingleScalarResult();
     }
+
+    /**
+     * @param            $user
+     * @param Forum|null $forum
+     * @return void
+     */
+    public function markAsRead($user, ?Forum $forum = null): void
+    {
+        $query = $this->_em->createQueryBuilder()
+            ->update('ProjetNormandie\ForumBundle\Entity\ForumUser', 'fu')
+            ->set('fu.boolRead', true)
+            ->where('fu.user = :user')
+            ->setParameter('user', $user);
+
+        if ($forum) {
+            $query->andWhere('fu.forum = :forum')
+                ->setParameter('forum', $forum);
+        }
+        $query->getQuery()->getResult();
+    }
+
 }

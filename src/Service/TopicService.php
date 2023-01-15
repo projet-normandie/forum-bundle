@@ -19,18 +19,6 @@ class TopicService
         $this->em = $em;
     }
 
-    /**
-     * @param $topic
-     * @return Topic
-     */
-    private function getTopic($topic): Topic
-    {
-        if (!$topic instanceof Topic) {
-            $topic = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Topic')
-                ->findOneBy(['id' => $topic]);
-        }
-        return $topic;
-    }
 
     /**
      * @param Topic $topic
@@ -44,22 +32,5 @@ class TopicService
             $i++;
         }
         $this->em->flush();
-    }
-
-    /**
-     * @param Topic $topic
-     * @param       $user
-     */
-    public function setNotRead(Topic $topic, $user)
-    {
-        //
-        // Topic
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->setNotRead($topic, $user);
-        // Forum
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->setNotRead($topic->getForum(), $user);
-        // Forum Parent
-        if ($topic->getForum()->getParent() != null) {
-            $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->setNotRead($topic->getForum()->getParent(), $user);
-        }
     }
 }
