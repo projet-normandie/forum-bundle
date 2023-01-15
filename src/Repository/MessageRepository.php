@@ -2,15 +2,22 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 
 /**
  * Specific repository that serves the Message entity.
  */
-class MessageRepository extends EntityRepository
+class MessageRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Message::class);
+    }
+
     /**
      * @throws NonUniqueResultException
      */
@@ -29,14 +36,16 @@ class MessageRepository extends EntityRepository
     /**
      * @param Topic $topic
      * @return mixed
+     * @throws NonUniqueResultException
      */
-    public function getTopicData(Topic $topic)
+    public function getLastMessageId(Topic $topic)
     {
-         $query = $this->createQueryBuilder('m')
-            ->select('COUNT(m) as nbMessage, MAX(m.id) as lastMessage')
+         $qb = $this->createQueryBuilder('m')
+            ->select('MAX(m.id) as lastMessage')
             ->where('m.topic = :topic')
             ->setParameter('topic', $topic);
 
-        return $query->getQuery()->getResult()[0];
+        return $qb->getQuery()
+            ->getOneOrNullResult();
     }
 }

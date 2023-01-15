@@ -4,7 +4,7 @@ resources:
         collectionOperations:
             get: ~
             read-all:
-                method: 'POST'
+                method: 'GET'
                 access_control: 'is_granted("ROLE_USER")'
                 path: '/forum_forums/read-all'
                 swagger_context:
@@ -25,7 +25,7 @@ resources:
                             in: path
                             required: true
                             type: integer
-                controller: 'ProjetNormandie\ForumBundle\Controller\ForumController::read'
+                controller: 'ProjetNormandie\ForumBundle\Controller\ForumController::readForum'
         properties:
             topics:
                 subresource:

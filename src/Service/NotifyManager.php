@@ -37,7 +37,7 @@ class NotifyManager
         $topicUsers = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findBy(
             array(
                 'topic' => $message->getTopic(),
-                'boolNotif' => 1
+                'boolNotif' => true
             )
         );
 
@@ -52,6 +52,7 @@ class NotifyManager
             $url = '/' . $recipient->getLocale() . '/' . $message->getUrl();
             if ($topicUser->getUser()->getid() != $message->getUser()->getId()) {
                 $this->messageBuilder
+                    ->setRecipient($topicUser->getUser())
                     ->setObject(sprintf(
                         $this->translator->trans(
                             'topic.notif.object.' . $type,
@@ -73,6 +74,7 @@ class NotifyManager
                         $message->getTopic()->getLibTopic()
                     ))
                 ;
+                $this->messageBuilder->send();
             }
         }
     }

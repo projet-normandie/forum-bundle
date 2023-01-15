@@ -20,7 +20,6 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  *
  * @ORM\Table(name="forum_forum")
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
- * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\ForumListener"})
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
@@ -152,14 +151,12 @@ class Forum implements TimestampableInterface, SluggableInterface
     private $isParent = false;
 
     /**
-     * @var Message
-     *
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message")
+     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id")
      * })
      */
-    private $lastMessage;
+    private Message $lastMessage;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\ForumUser", mappedBy="forum")
@@ -340,7 +337,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return integer
      */
-    public function getNbMessage()
+    public function getNbMessage(): int
     {
         return $this->nbMessage;
     }

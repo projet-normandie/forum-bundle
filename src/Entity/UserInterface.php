@@ -8,23 +8,27 @@ namespace ProjetNormandie\ForumBundle\Entity;
 interface UserInterface
 {
     /** @return int  */
-    public function getId();
+    public function getId(): int;
     /** @return string */
-    public function getLocale();
+    public function getLocale(): string;
     /**
      * @return string
      */
-    public function getEmail();
+    public function getEmail(): string;
     /**
      * @return string
      */
-    public function getStatus();
+    public function getStatus(): string;
     /**
      * @return string
      */
-    public function getPseudo();
+    public function getPseudo(): string;
     /**
      * @return integer
      */
-    public function getNbForumMessage();
+    public function getNbForumMessage(): int;
+    /**
+     * @return string
+     */
+    public function __toString();
 }

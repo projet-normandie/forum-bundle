@@ -9,17 +9,14 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
 class ForumService
 {
     private EntityManagerInterface $em;
-    private TopicService $topicService;
 
     /**
      * ForumService constructor.
      * @param EntityManagerInterface $em
-     * @param TopicService           $topicService
      */
-    public function __construct(EntityManagerInterface $em, TopicService $topicService)
+    public function __construct(EntityManagerInterface $em)
     {
         $this->em = $em;
-        $this->topicService = $topicService;
     }
 
     /**
@@ -35,57 +32,12 @@ class ForumService
         return $forum;
     }
 
-    /**
-     * @param $user
-     */
-    public function readAll($user)
-    {
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->readAll($user);
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->readAll($user);
-    }
-
-    /**
-     * @param $user
-     * @param $forum
-     */
-    public function read($user, $forum)
-    {
-        $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->readForum($user, $forum);
-        $this->setRead($forum, $user);
-    }
 
     /**
      * @param $forum
-     * @throws ORMException
+     * @deprecated
      */
-    public function majParent($forum)
-    {
-        $forum = $this->getForum($forum);
-        $data = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Forum')->getParentData($forum);
-        $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
-        $forum->setNbTopic($data['nbTopic']);
-        $forum->setNbMessage($data['nbMessage']);
-        $this->em->flush();
-    }
-
-
-    /**
-     * @param Forum $forum
-     * @throws ORMException
-     */
-    public function maj(Forum $forum)
-    {
-        $data = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Topic')->getForumData($forum);
-        $forum->setLastMessage($this->em->getReference('ProjetNormandie\ForumBundle\Entity\Message', $data['lastMessage']));
-        $forum->setNbTopic($data['nbTopic']);
-        $forum->setNbMessage($data['nbMessage']);
-        $this->em->flush();
-    }
-
-    /**
-     * @param $forum
-     */
-    public function majPosition($forum)
+    /*public function majPosition($forum)
     {
         $forum = $this->getForum($forum);
         if ($forum->getIsParent()) {
@@ -99,55 +51,5 @@ class ForumService
                 $this->topicService->majPositions($topic);
             }
         }
-    }
-
-
-    /**
-     * @param Forum $forum
-     * @param       $user
-     */
-    public function setRead(Forum $forum, $user)
-    {
-        $forumUser = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
-                ->findOneBy(['forum' => $forum, 'user' => $user]);
-        $forumUser->setBoolRead(true);
-        $this->em->flush();
-    }
-
-
-    /**
-     * @param Forum $forum
-     * @param       $user
-     */
-    public function setNotRead(Forum $forum, $user)
-    {
-        $forumUser = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
-                ->findOneBy(['forum' => $forum, 'user' => $user]);
-        $forumUser->setBoolRead(false);
-        $this->em->flush();
-    }
-
-
-    /**
-     * @param Forum $forum
-     * @param       $user
-     * @return int
-     */
-    public function countTopicNotRead(Forum $forum, $user): int
-    {
-        return $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')
-                ->countNotRead($forum,$user);
-    }
-
-
-    /**
-     * @param Forum $parent
-     * @param       $user
-     * @return int
-     */
-    public function countSubForumNotRead(Forum $parent, $user): int
-    {
-        return $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
-                ->countSubForumNotRead($parent, $user);
-    }
+    }*/
 }

@@ -17,7 +17,7 @@ CREATE TRIGGER forumTopicAfterInsert AFTER INSERT ON forum_topic
 FOR EACH ROW
 BEGIN
 	INSERT INTO forum_topic_user (idUser, idTopic, boolRead)
-	SELECT DISTINCT idUser, NEW.id, 1
+	SELECT DISTINCT idUser, NEW.id, 0
 	FROM forum_forum_user;
 END //
 delimiter ;
@@ -30,7 +30,7 @@ CREATE TRIGGER forumForumAfterInsert AFTER INSERT ON forum_forum
     FOR EACH ROW
 BEGIN
     INSERT INTO forum_forum_user (idUser, idForum, boolRead)
-    SELECT DISTINCT idUser, NEW.id, 1
+    SELECT DISTINCT idUser, NEW.id, 0
     FROM forum_forum_user;
 END //
 delimiter ;

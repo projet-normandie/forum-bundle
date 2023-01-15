@@ -3,16 +3,23 @@
 namespace ProjetNormandie\ForumBundle\Repository;
 
 use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NoResultException;
-use VideoGamesRecords\CoreBundle\Entity\Chart;
+use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\ForumUser;
 
 /**
  * Specific repository that serves the Forum entity.
  */
-class ForumUserRepository extends EntityRepository
+class ForumUserRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ForumUser::class);
+    }
+
     /**
      * @param $user
      * @throws Exception
@@ -24,44 +31,15 @@ class ForumUserRepository extends EntityRepository
         $this->_em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
     }
 
-    /**
-     * @param $user
-     * @throws Exception
-     */
-    public function readAll($user)
-    {
-        $this->_em->getConnection()->executeStatement(
-            "UPDATE forum_forum_user SET boolRead = 1 WHERE idUser = :idUser",
-            ['idUser' => $user->getId()]
-        );
-    }
 
     /**
-     * @param $forum
-     * @param $user
-     */
-    public function setNotRead($forum, $user)
-    {
-         $qb = $this->_em->createQueryBuilder();
-         $query = $qb->update('ProjetNormandie\ForumBundle\Entity\ForumUser', 'fu')
-            ->set('fu.boolRead', ':boolRead')
-            ->where('fu.user != :user')
-            ->andWhere('fu.forum = :forum')
-            ->setParameter('boolRead', 0)
-            ->setParameter('forum', $forum)
-            ->setParameter('user', $user);
-
-        $query->getQuery()->execute();
-    }
-
-    /**
-     * @param $parent
-     * @param $user
+     * @param       $user
+     * @param Forum $parent
      * @return mixed
-     * @throws NonUniqueResultException
      * @throws NoResultException
+     * @throws NonUniqueResultException
      */
-    public function countSubForumNotRead($parent, $user)
+    public function countSubForumNotRead($user, Forum $parent)
     {
          $query = $this->createQueryBuilder('fu')
              ->select('COUNT(fu.id)')
@@ -73,4 +51,25 @@ class ForumUserRepository extends EntityRepository
              ->setParameter('user', $user);
         return $query->getQuery()->getSingleScalarResult();
     }
+
+    /**
+     * @param            $user
+     * @param Forum|null $forum
+     * @return void
+     */
+    public function markAsRead($user, ?Forum $forum = null): void
+    {
+        $query = $this->_em->createQueryBuilder()
+            ->update('ProjetNormandie\ForumBundle\Entity\ForumUser', 'fu')
+            ->set('fu.boolRead', true)
+            ->where('fu.user = :user')
+            ->setParameter('user', $user);
+
+        if ($forum) {
+            $query->andWhere('fu.forum = :forum')
+                ->setParameter('forum', $forum);
+        }
+        $query->getQuery()->getResult();
+    }
+
 }

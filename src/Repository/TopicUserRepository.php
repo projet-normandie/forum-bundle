@@ -2,17 +2,24 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Entity\TopicUser;
 
 /**
  * Specific repository that serves the Forum entity.
  */
-class TopicUserRepository extends EntityRepository
+class TopicUserRepository extends ServiceEntityRepository
 {
-
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, TopicUser::class);
+    }
     /**
      * @param $user
      * @throws Exception
@@ -24,61 +31,25 @@ class TopicUserRepository extends EntityRepository
         $this->_em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
     }
 
-
     /**
-     * @param $user
-     * @throws Exception
-     */
-    public function readAll($user)
-    {
-        $this->_em->getConnection()->executeStatement(
-            "UPDATE forum_topic_user SET boolRead = 1 WHERE idUser=:idUser",
-            ['idUser' => $user->getId()]
-        );
-    }
-
-    /**
-     * @param $user
-     * @param $forum
-     * @throws Exception
-     */
-    public function readForum($user, $forum)
-    {
-        $this->_em->getConnection()->executeStatement(
-            "UPDATE forum_topic_user 
-                SET boolRead = 1 
-                WHERE idUser=:idUser
-                AND idTopic IN (SELECT id FROM forum_topic WHERE idForum=:idForum)",
-            ['idUser' => $user->getId(), 'idForum' => $forum->getId()]
-        );
-    }
-
-    /**
-     * @param $topic
-     * @param $user
-     */
-    public function setNotRead($topic, $user)
-    {
-         $qb = $this->_em->createQueryBuilder();
-         $query = $qb->update('ProjetNormandie\ForumBundle\Entity\TopicUser', 'tu')
-            ->set('tu.boolRead', ':boolRead')
-            ->where('tu.user != :user')
-            ->andWhere('tu.topic = :topic')
-            ->setParameter('boolRead', 0)
-            ->setParameter('topic', $topic)
-            ->setParameter('user', $user);
-
-        $query->getQuery()->execute();
-    }
-
-    /**
-     * @param $forum
-     * @param $user
+     * @param       $user
+     * @param Topic $topic
      * @return mixed
-     * @throws NonUniqueResultException
-     * @throws NoResultException
      */
-    public function countNotRead($forum, $user)
+    public function isRead($user, Topic $topic)
+    {
+        $topicUser = $this->findOneBy(['user' => $user, 'topic' => $topic]);
+        return $topicUser->getBoolRead();
+    }
+
+    /**
+     * @param       $user
+     * @param Forum $forum
+     * @return mixed
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function countTopicNotRead($user, Forum $forum)
     {
          $query = $this->createQueryBuilder('tu')
              ->select('COUNT(tu.id)')
@@ -90,5 +61,29 @@ class TopicUserRepository extends EntityRepository
              ->setParameter('user', $user);
 
         return $query->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * @param            $user
+     * @param Topic|null $topic
+     * @param Forum|null $forum
+     * @return void
+     */
+    public function markAsRead($user, ?Topic $topic = null, ?Forum $forum = null): void
+    {
+        $query = $this->_em->createQueryBuilder()
+            ->update('ProjetNormandie\ForumBundle\Entity\TopicUser', 'tu')
+            ->set('tu.boolRead', true)
+            ->where('tu.user = :user')
+            ->setParameter('user', $user);
+        if ($topic) {
+            $query->andWhere('tu.topic = :topic')
+                ->setParameter('topic', $topic);
+        }
+        if ($forum) {
+            $query->andWhere('tu.topic IN (SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)')
+                ->setParameter('forum', $forum);
+        }
+        $query->getQuery()->getResult();
     }
 }
