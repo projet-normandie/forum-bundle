@@ -6,6 +6,9 @@ ProjetNormandie\ForumBundle\Entity\Forum:
     libForum:
       groups:
         - 'forum.forum.read'
+    libForumFr:
+      groups:
+        - 'forum.forum.read'
     slug:
       groups:
         - 'forum.forum.read'
