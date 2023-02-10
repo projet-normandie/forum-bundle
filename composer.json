@@ -14,9 +14,11 @@
         "php": "^7.4 || ^8.0",
         "api-platform/core": "^2.7",
         "knplabs/doctrine-behaviors": "~2.0",
-        "sonata-project/admin-bundle": "^4.0",
-        "sonata-project/doctrine-orm-admin-bundle": "^4.0",
         "symfony/dependency-injection": "^5.4"
+    },
+    "suggest": {
+        "sonata-project/admin-bundle": "To use administration with sonata",
+        "sonata-project/doctrine-orm-admin-bundle": "To use doctrine orm into sonata admin"
     },
     "autoload": {
         "psr-4": { "ProjetNormandie\\ForumBundle\\": "src/" }
