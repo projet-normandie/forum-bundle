@@ -18,7 +18,12 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 /**
  * Topic
  *
- * @ORM\Table(name="forum_topic")
+ * @ORM\Table(
+ *     name="forum_topic",
+ *     indexes={
+ *         @ORM\Index(name="idx_libTopic", columns={"libTopic"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
  * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener"})
  * @ApiResource(

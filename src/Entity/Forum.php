@@ -18,7 +18,13 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 /**
  * Forum
  *
- * @ORM\Table(name="forum_forum")
+ * @ORM\Table(
+ *     name="forum_forum",
+ *     indexes={
+ *         @ORM\Index(name="idx_position", columns={"position"}),
+ *         @ORM\Index(name="idx_libForum", columns={"libForum"})
+ *     }
+ * )
  * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
  * @ApiFilter(
  *     SearchFilter::class,
@@ -70,7 +76,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @var string
      *
      * @Assert\Length(max="255")
-     * @ORM\Column(name="libForum", type="string", length=50, nullable=false)
+     * @ORM\Column(name="libForum", type="string", length=255, nullable=false)
      */
     private $libForum;
 
@@ -78,7 +84,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @var string
      *
      * @Assert\Length(max="255")
-     * @ORM\Column(name="libForumFr", type="string", length=50, nullable=false)
+     * @ORM\Column(name="libForumFr", type="string", length=255, nullable=true)
      */
     private $libForumFr;
 
