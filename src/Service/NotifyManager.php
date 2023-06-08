@@ -4,7 +4,7 @@ namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Message;
-use ProjetNormandie\MessageBundle\Service\MessageBuilder;
+use ProjetNormandie\MessageBundle\Builder\MessageBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotifyManager
