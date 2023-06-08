@@ -1,0 +1,7 @@
+services:
+    pn.forum.manager.notify:
+        class: ProjetNormandie\ForumBundle\Service\NotifyManager
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@translator'
+            - '@pn.message.builder.message'
