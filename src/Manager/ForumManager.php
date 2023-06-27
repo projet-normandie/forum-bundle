@@ -20,12 +20,13 @@ class ForumManager
      */
     public function initUser($user): void
     {
-        $list = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->findBy(array('user' => $user));
+        $list = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')
+            ->findBy(array('user' => $user));
 
         if (count($list) == 0) {
             $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->init($user);
             $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->init($user);
-         }
+        }
     }
 
     /**
@@ -40,7 +41,8 @@ class ForumManager
             $forum->setLibForumFr($params['libForumFr']);
         }
         if (isset($params['parent'])) {
-            $parent = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Forum')->findOneBy(['parent' => $params]);
+            $parent = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Forum')
+                ->findOneBy(['parent' => $params]);
             $parent ?? $forum->setParent($parent);
         }
         return $forum;

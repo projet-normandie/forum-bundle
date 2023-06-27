@@ -19,8 +19,11 @@ class NotifyManager
      * @param TranslatorInterface    $translator
      * @param MessageBuilder        $messageBuilder
      */
-    public function __construct(EntityManagerInterface $em, TranslatorInterface $translator, MessageBuilder $messageBuilder)
-    {
+    public function __construct(
+        EntityManagerInterface $em,
+        TranslatorInterface $translator,
+        MessageBuilder $messageBuilder
+    ) {
         $this->em = $em;
         $this->translator = $translator;
         $this->messageBuilder = $messageBuilder;

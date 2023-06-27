@@ -21,7 +21,11 @@ class MarkAsReadService
      * @param ForumUserRepository $forumUserRepository
      * @param TopicUserRepository $topicUserRepository
      */
-    public function __construct(Security $security, ForumUserRepository $forumUserRepository, TopicUserRepository $topicUserRepository)
+    public function __construct(
+        Security $security,
+        ForumUserRepository $forumUserRepository,
+        TopicUserRepository $topicUserRepository
+    )
     {
         $this->security = $security;
         $this->forumUserRepository = $forumUserRepository;
@@ -77,9 +81,9 @@ class MarkAsReadService
             $this->forumUserRepository->markAsRead($user, $topic->getForum());
             if ($forum->getParent()) {
                  $nbSubForumNotRead = $this->forumUserRepository->countSubForumNotRead($user, $forum->getParent());
-                 if (0 === $nbSubForumNotRead) {
+                if (0 === $nbSubForumNotRead) {
                     $this->forumUserRepository->markAsRead($user, $forum->getParent());
-                 }
+                }
             }
         }
     }

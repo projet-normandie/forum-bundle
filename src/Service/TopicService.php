@@ -24,7 +24,8 @@ class TopicService
      */
     public function majPositions(Topic $topic): void
     {
-        $list = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Message')->findBy(['topic' => $topic], ['id' => 'ASC']);
+        $list = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Message')
+            ->findBy(['topic' => $topic], ['id' => 'ASC']);
         $i = 1;
         foreach ($list as $message) {
             $message->setPosition($i);

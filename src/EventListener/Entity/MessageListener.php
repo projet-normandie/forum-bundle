@@ -67,12 +67,12 @@ class MessageListener
     {
         $this->notifyManager->notify($message, 'edit');
     }
-    
+
     /**
      * @param Message           $message
      * @param LifecycleEventArgs $event
      */
-    public function preRemove(Message $message,  LifecycleEventArgs $event): void
+    public function preRemove(Message $message, LifecycleEventArgs $event): void
     {
         $topic = $message->getTopic();
         $topic->setNbMessage($topic->getNbMessage() -1);

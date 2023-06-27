@@ -81,7 +81,9 @@ class TopicUserRepository extends ServiceEntityRepository
                 ->setParameter('topic', $topic);
         }
         if ($forum) {
-            $query->andWhere('tu.topic IN (SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)')
+            $query->andWhere('tu.topic IN (
+                SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)'
+            )
                 ->setParameter('forum', $forum);
         }
         $query->getQuery()->getResult();
