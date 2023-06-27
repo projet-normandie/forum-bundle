@@ -14,6 +14,8 @@
         "php": "^7.4 || ^8.0",
         "api-platform/core": "^2.7",
         "doctrine/orm": "^2.13",
+        "friendsofsymfony/ckeditor-bundle": "^2.1",
+        "projet-normandie/message-bundle": "dev-master",
         "knplabs/doctrine-behaviors": "~2.0",
         "sonata-project/admin-bundle": "^4.0",
         "sonata-project/doctrine-orm-admin-bundle": "^4.8",
