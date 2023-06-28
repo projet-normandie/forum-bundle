@@ -2,9 +2,10 @@
 
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
@@ -64,97 +65,77 @@ class Forum implements TimestampableInterface, SluggableInterface
     const STATUS_PUBLIC = 'public';
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
-     *
      * @Assert\Length(max="255")
      * @ORM\Column(name="libForum", type="string", length=255, nullable=false)
      */
-    private $libForum;
+    private string $libForum;
 
     /**
-     * @var string
-     *
      * @Assert\Length(max="255")
      * @ORM\Column(name="libForumFr", type="string", length=255, nullable=true)
      */
-    private $libForumFr;
+    private string $libForumFr;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="position", type="integer", nullable=true, options={"default":0})
      */
-    private $position = 0;
+    private int $position = 0;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="status", type="string", nullable=false)
      */
-    private $status = self::STATUS_PUBLIC;
+    private string $status = self::STATUS_PUBLIC;
 
     /**
-     * @var string
-     *
      * @ORM\Column(name="role", type="string", nullable=true)
      */
-    private $role = null;
+    private ?string $role = null;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="nbMessage", type="integer", nullable=false, options={"default":0})
      */
-    private $nbMessage = 0;
+    private int $nbMessage = 0;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="nbTopic", type="integer", nullable=false, options={"default":0})
      */
-    private $nbTopic = 0;
+    private int $nbTopic = 0;
 
     /**
-     * @var Category
-     *
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Category", inversedBy="forums")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idCategory", referencedColumnName="id")
      * })
      */
-    private $category;
+    private ?Category $category;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", mappedBy="forum")
      */
-    private $topics;
+    private Collection $topics;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", mappedBy="parent")
      */
-    private $children;
+    private Collection $children;
 
     /**
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="children")
      * @ORM\JoinColumn(name="idParent", referencedColumnName="id")
      */
-    private $parent;
+    private ?Forum $parent;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="isParent", type="boolean", nullable=false, options={"default":false})
      */
-    private $isParent = false;
+    private bool $isParent = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
@@ -167,7 +148,7 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\ForumUser", mappedBy="forum")
      */
-    private $forumUser;
+    private Collection $forumUser;
 
     /**
      * Constructor
@@ -193,7 +174,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $id
      * @return Forum
      */
-    public function setId(int $id)
+    public function setId(int $id): Forum
     {
         $this->id = $id;
         return $this;
@@ -204,7 +185,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -215,7 +196,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param string $libForum
      * @return Forum
      */
-    public function setLibForum(string $libForum)
+    public function setLibForum(string $libForum): Forum
     {
         $this->libForum = $libForum;
 
@@ -227,7 +208,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return string
      */
-    public function getLibForum()
+    public function getLibForum(): string
     {
         return $this->libForum;
     }
@@ -238,7 +219,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param string $libForumFr
      * @return Forum
      */
-    public function setLibForumFr(string $libForumFr)
+    public function setLibForumFr(string $libForumFr): Forum
     {
         $this->libForumFr = $libForumFr;
 
@@ -250,7 +231,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return string
      */
-    public function getLibForumFr()
+    public function getLibForumFr(): string
     {
         return $this->libForumFr;
     }
@@ -261,7 +242,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $position
      * @return Forum
      */
-    public function setPosition(int $position)
+    public function setPosition(int $position): Forum
     {
         $this->position = $position;
 
@@ -273,7 +254,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return integer
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -284,7 +265,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param string $status
      * @return Forum
      */
-    public function setStatus(string $status)
+    public function setStatus(string $status): Forum
     {
         $this->status = $status;
 
@@ -296,7 +277,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return string
      */
-    public function getStatus()
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -308,7 +289,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param string $role
      * @return Forum
      */
-    public function setRole(string $role)
+    public function setRole(string $role): Forum
     {
         $this->role = $role;
 
@@ -318,9 +299,9 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * Get role
      *
-     * @return string
+     * @return string|null
      */
-    public function getRole()
+    public function getRole(): ?string
     {
         return $this->role;
     }
@@ -331,7 +312,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $nbMessage
      * @return Forum
      */
-    public function setNbMessage(int $nbMessage)
+    public function setNbMessage(int $nbMessage): Forum
     {
         $this->nbMessage = $nbMessage;
 
@@ -354,7 +335,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param integer $nbTopic
      * @return Forum
      */
-    public function setNbTopic(int $nbTopic)
+    public function setNbTopic(int $nbTopic): Forum
     {
         $this->nbTopic = $nbTopic;
 
@@ -376,7 +357,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param Category|null $category
      * @return $this
      */
-    public function setCategory(Category $category = null)
+    public function setCategory(Category $category = null): Forum
     {
         $this->category = $category;
         return $this;
@@ -384,9 +365,9 @@ class Forum implements TimestampableInterface, SluggableInterface
 
     /**
      * Get category
-     * @return Category
+     * @return Category|null
      */
-    public function getCategory()
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
@@ -395,9 +376,9 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * Set parent
      * @param Forum|null $forum
-     * @return $this
+     * @return Forum|null
      */
-    public function setParent(Forum $forum = null)
+    public function setParent(Forum $forum = null): ?Forum
     {
         $this->parent = $forum;
         return $this;
@@ -405,25 +386,25 @@ class Forum implements TimestampableInterface, SluggableInterface
 
     /**
      * Get parent
-     * @return Forum
+     * @return ?Forum
      */
-    public function getParent()
+    public function getParent(): ?Forum
     {
         return $this->parent;
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getTopics()
+    public function getTopics(): Collection
     {
         return $this->topics;
     }
 
      /**
-     * @return mixed
+     * @return Collection
      */
-    public function getChildrens()
+    public function getChildrens(): Collection
     {
         return $this->children;
     }
@@ -432,7 +413,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param Message|null $message
      * @return $this
      */
-    public function setLastMessage(Message $message = null)
+    public function setLastMessage(Message $message = null): Forum
     {
         $this->lastMessage = $message;
         return $this;
@@ -442,15 +423,15 @@ class Forum implements TimestampableInterface, SluggableInterface
      * Get lastMessage
      * @return Message
      */
-    public function getLastMessage()
+    public function getLastMessage(): Message
     {
         return $this->lastMessage;
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getForumUser()
+    public function getForumUser(): Collection
     {
         return $this->forumUser;
     }
@@ -461,7 +442,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      * @param boolean $isParent
      * @return $this
      */
-    public function setIsParent(bool $isParent)
+    public function setIsParent(bool $isParent): Forum
     {
         $this->isParent= $isParent;
 
@@ -473,7 +454,7 @@ class Forum implements TimestampableInterface, SluggableInterface
      *
      * @return boolean
      */
-    public function getIsParent()
+    public function getIsParent(): bool
     {
         return $this->isParent;
     }
@@ -490,7 +471,7 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * @return array
      */
-    public static function getStatusChoices()
+    public static function getStatusChoices(): array
     {
         return [
             self::STATUS_PRIVATE => self::STATUS_PRIVATE,

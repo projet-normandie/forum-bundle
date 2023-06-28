@@ -14,13 +14,11 @@ use Doctrine\ORM\Mapping as ORM;
 class ForumUser
 {
     /**
-     * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var UserInterface
@@ -33,21 +31,17 @@ class ForumUser
     private $user;
 
     /**
-     * @var Forum
-     *
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="forumUser")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idForum", referencedColumnName="id")
      * })
      */
-    private $forum;
+    private Forum $forum;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="boolRead", type="boolean", nullable=false, options={"default":0})
      */
-    private $boolRead = false;
+    private bool $boolRead = false;
 
     /**
      * @return string
@@ -63,7 +57,7 @@ class ForumUser
      * @param integer $id
      * @return ForumUser
      */
-    public function setId(int $id)
+    public function setId(int $id): ForumUser
     {
         $this->id = $id;
         return $this;
@@ -74,7 +68,7 @@ class ForumUser
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -85,7 +79,7 @@ class ForumUser
      * @param $user
      * @return $this
      */
-    public function setUser($user = null)
+    public function setUser($user = null): ForumUser
     {
         $this->user = $user;
         return $this;
@@ -103,10 +97,10 @@ class ForumUser
 
     /**
      * Set forum
-     * @param Forum|null $forum
+     * @param Forum $forum
      * @return $this
      */
-    public function setForum(Forum $forum = null)
+    public function setForum(Forum $forum): ForumUser
     {
         $this->forum = $forum;
         return $this;
@@ -117,7 +111,7 @@ class ForumUser
      *
      * @return Forum
      */
-    public function getForum()
+    public function getForum(): Forum
     {
         return $this->forum;
     }
@@ -128,7 +122,7 @@ class ForumUser
      * @param boolean $boolRead
      * @return $this
      */
-    public function setBoolRead(bool $boolRead)
+    public function setBoolRead(bool $boolRead): ForumUser
     {
         $this->boolRead = $boolRead;
 
@@ -140,7 +134,7 @@ class ForumUser
      *
      * @return boolean
      */
-    public function getBoolRead()
+    public function getBoolRead(): bool
     {
         return $this->boolRead;
     }
