@@ -3,7 +3,6 @@
 namespace ProjetNormandie\ForumBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
-use ProjetNormandie\ForumBundle\Entity\Forum;
 
 class ForumManager
 {
@@ -26,24 +25,5 @@ class ForumManager
             $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\ForumUser')->init($user);
             $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->init($user);
         }
-    }
-
-    /**
-     * @param array $params
-     * @return Forum
-     */
-    public function getForum(array $params = array()): Forum
-    {
-        $forum = new Forum();
-        $forum->setLibForum($params['libForum']);
-        if (isset($params['libForumFr'])) {
-            $forum->setLibForumFr($params['libForumFr']);
-        }
-        if (isset($params['parent'])) {
-            $parent = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\Forum')
-                ->findOneBy(['parent' => $params]);
-            $parent ?? $forum->setParent($parent);
-        }
-        return $forum;
     }
 }

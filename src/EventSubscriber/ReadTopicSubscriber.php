@@ -37,7 +37,7 @@ final class ReadTopicSubscriber implements EventSubscriberInterface
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function setRead(RequestEvent $event)
+    public function setRead(RequestEvent $event): void
     {
         $topic = $event->getRequest()->attributes->get('data');
         $method = $event->getRequest()->getMethod();
