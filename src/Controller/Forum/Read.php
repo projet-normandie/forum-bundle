@@ -1,16 +1,13 @@
 <?php
 
-namespace ProjetNormandie\ForumBundle\Controller;
+namespace ProjetNormandie\ForumBundle\Controller\Forum;
 
+use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Service\MarkAsReadService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use ProjetNormandie\ForumBundle\Entity\Forum;
 
-/**
- * Class ForumController
- */
-class ForumController extends AbstractController
+class Read extends AbstractController
 {
     private MarkAsReadService $markAsReadService;
 
@@ -18,16 +15,6 @@ class ForumController extends AbstractController
     {
         $this->markAsReadService = $markAsReadService;
     }
-
-    /**
-     * @return JsonResponse
-     */
-    public function readAll(): JsonResponse
-    {
-        $this->markAsReadService->readAll();
-        return new JsonResponse(['sucess' => true]);
-    }
-
 
 
     /**
