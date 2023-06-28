@@ -2,24 +2,18 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Doctrine\Persistence\ManagerRegistry;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
-use ProjetNormandie\ForumBundle\Entity\TopicUser;
 
 /**
  * Specific repository that serves the Forum entity.
  */
-class TopicUserRepository extends ServiceEntityRepository
+class TopicUserRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, TopicUser::class);
-    }
     /**
      * @param $user
      * @throws Exception

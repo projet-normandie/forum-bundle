@@ -3,22 +3,15 @@
 namespace ProjetNormandie\ForumBundle\Repository;
 
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
-use ProjetNormandie\ForumBundle\Entity\Category;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 
 /**
  * Specific repository that serves the Category entity.
  */
-class CategoryRepository extends ServiceEntityRepository
+class CategoryRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Category::class);
-    }
-
     /**
      * Finds category with forum
      *
@@ -56,7 +49,6 @@ class CategoryRepository extends ServiceEntityRepository
                 ->setParameter('status', Forum::STATUS_PUBLIC);
         }
 
-        //echo $queryBuilder->getDQL(), "\n"; exit;
         $queryBuilder->orderBy('c.position', 'ASC')
             ->addOrderBy('f.position', 'ASC');
 
