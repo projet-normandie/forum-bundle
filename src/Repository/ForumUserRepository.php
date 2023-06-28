@@ -8,9 +8,6 @@ use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 
-/**
- * Specific repository that serves the Forum entity.
- */
 class ForumUserRepository extends EntityRepository
 {
     /**
@@ -64,5 +61,4 @@ class ForumUserRepository extends EntityRepository
         }
         $query->getQuery()->getResult();
     }
-
 }

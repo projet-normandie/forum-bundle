@@ -20,7 +20,7 @@ class Home extends AbstractController
     /**
      * @return mixed
      */
-    public function __invokde(): mixed
+    public function __invoke(): mixed
     {
         if ($this->getUser() !== null) {
             $this->forumManager->initUser($this->getUser());

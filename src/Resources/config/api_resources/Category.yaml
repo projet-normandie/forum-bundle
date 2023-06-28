@@ -3,9 +3,4 @@ resources:
         shortName: 'ForumCategory'
         itemOperations:
             get: ~
-        collectionOperations:
-            home:
-                method: 'GET'
-                normalization_context: {'groups': [forum.category.read, forum.forum.read, forum.lastMessage, forum.user.read, forum.message.last]}
-                path: '/categorie/home'
-                controller: 'ProjetNormandie\ForumBundle\Controller\CategoryController::home'
+

@@ -6,16 +6,19 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
+use Symfony\Component\Security\Core\Security;
 
 class TopicListener
 {
     private array $changeSet = array();
+    private Security $security;
 
     /**
      * TopicListener constructor.
      */
-    public function __construct()
+    public function __construct(Security $security)
     {
+        $this->security = $security;
     }
 
 
@@ -25,6 +28,12 @@ class TopicListener
      */
     public function prePersist(Topic $topic, LifecycleEventArgs $event): void
     {
+        $topic->setUser($this->security->getUser());
+
+        foreach ($topic->getMessages() as $message) {
+            $message->setUser($this->security->getUser());
+        }
+
         $forum = $topic->getForum();
         $forum->setNbTopic($forum->getNbTopic() + 1);
 
