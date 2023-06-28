@@ -24,3 +24,33 @@ services:
         class: ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener
         tags:
             - { name: doctrine.orm.entity_listener }
+
+    ProjetNormandie\ForumBundle\EventListener\Service\ForumService:
+        class: ProjetNormandie\ForumBundle\EventListener\Service\ForumService
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    ProjetNormandie\ForumBundle\EventListener\Service\MarkAsNotReadService:
+        class: ProjetNormandie\ForumBundle\EventListener\Service\MarkAsNotReadService
+        arguments:
+            - '@security.helper'
+            - '@doctrine.orm.entity_manager'
+
+    ProjetNormandie\ForumBundle\EventListener\Service\MarkAsReadService:
+        class: ProjetNormandie\ForumBundle\EventListener\Service\MarkAsReadService
+        arguments:
+            - '@security.helper'
+            - '@pn.bundle.repository.forum_user'
+            - '@pn.bundle.repository.topic_user'
+
+    ProjetNormandie\ForumBundle\EventListener\Service\NotifyManager:
+        class: ProjetNormandie\ForumBundle\EventListener\Service\NotifyManager
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@translator'
+            - '@pn.message.builder.message'
+
+    ProjetNormandie\ForumBundle\EventListener\Service\TopicService:
+        class: ProjetNormandie\ForumBundle\EventListener\Service\TopicService
+        arguments:
+            - '@doctrine.orm.entity_manager'
