@@ -75,7 +75,6 @@ class Topic implements TimestampableInterface, SluggableInterface
     private Forum $forum;
 
     /**
-     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
@@ -148,7 +147,7 @@ class Topic implements TimestampableInterface, SluggableInterface
     /**
      * Get id
      *
-     * @return integer
+     * @return int|null
      */
     public function getId(): ?int
     {

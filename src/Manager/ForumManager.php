@@ -3,7 +3,6 @@
 namespace ProjetNormandie\ForumBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\ORMException;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 
 class ForumManager

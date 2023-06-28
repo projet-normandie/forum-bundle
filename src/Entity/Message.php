@@ -78,8 +78,6 @@ class Message implements TimestampableInterface
     private int $position = 1;
 
     /**
-     * @var Topic
-     *
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="messages")
      * @ORM\JoinColumns({

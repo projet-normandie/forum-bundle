@@ -41,6 +41,18 @@ class TopicListener
         $parent?->setNbTopic($parent->getNbTopic() + 1);
     }
 
+    /**
+     * @param Topic $topic
+     * @param LifecycleEventArgs $event
+     */
+    public function postPersist(Topic $topic, LifecycleEventArgs $event): void
+    {
+        $connection = $event->getObjectManager()->getConnection();
+        $query ="INSERT INTO forum_topic_user (idTopic, idUser)
+                 SELECT :idTopic, idUser FROM forum_topic";
+        $connection->executeStatement($query, array('idTopic' => $topic->getId()));
+    }
+
 
     /**
      * @param Topic        $topic

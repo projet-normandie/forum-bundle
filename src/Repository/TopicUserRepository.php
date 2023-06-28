@@ -9,16 +9,13 @@ use Doctrine\ORM\NoResultException;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 
-/**
- * Specific repository that serves the Forum entity.
- */
 class TopicUserRepository extends EntityRepository
 {
     /**
      * @param $user
      * @throws Exception
      */
-    public function init($user)
+    public function init($user): void
     {
         $query ="INSERT INTO forum_topic_user (idTopic, idUser)
                  SELECT id, :idUser FROM forum_topic";
@@ -28,9 +25,9 @@ class TopicUserRepository extends EntityRepository
     /**
      * @param       $user
      * @param Topic $topic
-     * @return mixed
+     * @return bool
      */
-    public function isRead($user, Topic $topic)
+    public function isRead($user, Topic $topic): bool
     {
         $topicUser = $this->findOneBy(['user' => $user, 'topic' => $topic]);
         return $topicUser->getBoolRead();
@@ -39,11 +36,11 @@ class TopicUserRepository extends EntityRepository
     /**
      * @param       $user
      * @param Forum $forum
-     * @return mixed
+     * @return int
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function countTopicNotRead($user, Forum $forum)
+    public function countTopicNotRead($user, Forum $forum): int
     {
          $query = $this->createQueryBuilder('tu')
              ->select('COUNT(tu.id)')
@@ -54,7 +51,7 @@ class TopicUserRepository extends EntityRepository
              ->setParameter('forum', $forum)
              ->setParameter('user', $user);
 
-        return $query->getQuery()->getSingleScalarResult();
+        return (int) $query->getQuery()->getSingleScalarResult();
     }
 
     /**

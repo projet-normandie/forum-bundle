@@ -19,13 +19,13 @@ services:
 
 
     pn.forum.handler.mark_as_not_read:
-        class: ProjetNormandie\ForumBundle\EventListener\Service\MarkAsNotReadService
+        class: ProjetNormandie\ForumBundle\Service\MarkAsNotReadService
         arguments:
             - '@security.helper'
             - '@doctrine.orm.entity_manager'
 
     pn.forum.handler.mark_not_read:
-        class: ProjetNormandie\ForumBundle\EventListener\Service\MarkAsReadService
+        class: ProjetNormandie\ForumBundle\Service\MarkAsReadService
         arguments:
             - '@security.helper'
             - '@pn.bundle.repository.forum_user'
