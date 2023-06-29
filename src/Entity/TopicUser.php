@@ -33,7 +33,7 @@ class TopicUser
     /**
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="topicUser")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private Topic $topic;

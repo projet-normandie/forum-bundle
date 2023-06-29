@@ -140,7 +140,7 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id", onDelete="SET NULL")
      * })
      */
     private Message $lastMessage;

@@ -81,7 +81,7 @@ class Message implements TimestampableInterface
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="messages")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id", onDelete="CASCADE")
      * })
      */
     private Topic $topic;
