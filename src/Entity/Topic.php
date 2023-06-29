@@ -33,9 +33,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
- *          "libTopic": "partial",
- *          "forum": "exact",
- *      }
+ *         "libTopic": "partial",
+ *         "forum": "exact",
+ *         "topicUser.user": "exact",
+ *         "topicUser.boolNotif": "exact",
+ *     }
  * )
  */
 class Topic implements TimestampableInterface, SluggableInterface
