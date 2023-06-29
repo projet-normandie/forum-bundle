@@ -10,7 +10,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Security;
 
 final class ReadTopicSubscriber implements EventSubscriberInterface
@@ -42,6 +41,7 @@ final class ReadTopicSubscriber implements EventSubscriberInterface
         $topic = $event->getRequest()->attributes->get('data');
         $method = $event->getRequest()->getMethod();
         $user = $this->security->getUser();
+
 
         if ($user && ($topic instanceof Topic) && $method == Request::METHOD_GET) {
             $this->markAsReadService->readTopic($topic);

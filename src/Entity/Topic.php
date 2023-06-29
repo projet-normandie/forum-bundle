@@ -334,7 +334,7 @@ class Topic implements TimestampableInterface, SluggableInterface
     /**
      * @return Collection
      */
-    public function getTopicUser()
+    public function getTopicUser(): Collection
     {
         return $this->topicUser;
     }

@@ -1,0 +1,15 @@
+services:
+
+  ProjetNormandie\ForumBundle\Doctrine\ForumExtension:
+    arguments:
+      - '@security.helper'
+    tags:
+      - { name: api_platform.doctrine.orm.query_extension.collection, priority: -8 }
+      - { name: api_platform.doctrine.orm.query_extension.item , priority: -8 }
+
+  ProjetNormandie\ForumBundle\Doctrine\TopicExtension:
+    arguments:
+      - '@security.helper'
+    tags:
+      - { name: api_platform.doctrine.orm.query_extension.collection, priority: -8 }
+      - { name: api_platform.doctrine.orm.query_extension.item, priority: -8 }
