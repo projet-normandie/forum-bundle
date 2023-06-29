@@ -140,10 +140,10 @@ class Forum implements TimestampableInterface, SluggableInterface
     /**
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id", onDelete="SET NULL")
+     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      * })
      */
-    private Message $lastMessage;
+    private ?Message $lastMessage;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\ForumUser", mappedBy="forum")
@@ -421,9 +421,9 @@ class Forum implements TimestampableInterface, SluggableInterface
 
     /**
      * Get lastMessage
-     * @return Message
+     * @return ?Message
      */
-    public function getLastMessage(): Message
+    public function getLastMessage(): Message|null
     {
         return $this->lastMessage;
     }
