@@ -14,13 +14,11 @@ class TopicUser
 {
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
      * @var UserInterface
@@ -33,28 +31,22 @@ class TopicUser
     private $user;
 
     /**
-     * @var Topic
-     *
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="topicUser")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id")
      * })
      */
-    private $topic;
+    private Topic $topic;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="boolRead", type="boolean", nullable=false, options={"default":0})
      */
-    private $boolRead = false;
+    private bool $boolRead = false;
 
     /**
-     * @var boolean
-     *
      * @ORM\Column(name="boolNotif", type="boolean", nullable=false, options={"default":0})
      */
-    private $boolNotif = false;
+    private bool $boolNotif = false;
 
     /**
      * @return string
@@ -71,7 +63,7 @@ class TopicUser
      * @param integer $id
      * @return TopicUser
      */
-    public function setId(int $id)
+    public function setId(int $id): TopicUser
     {
         $this->id = $id;
         return $this;
@@ -82,7 +74,7 @@ class TopicUser
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -93,7 +85,7 @@ class TopicUser
      * @param $user
      * @return $this
      */
-    public function setUser($user = null)
+    public function setUser($user = null): TopicUser
     {
         $this->user = $user;
         return $this;
@@ -114,7 +106,7 @@ class TopicUser
      * @param Topic|null $topic
      * @return $this
      */
-    public function setTopic(Topic $topic = null)
+    public function setTopic(Topic $topic = null): TopicUser
     {
         $this->topic = $topic;
         return $this;
@@ -125,7 +117,7 @@ class TopicUser
      *
      * @return Topic
      */
-    public function getTopic()
+    public function getTopic(): Topic
     {
         return $this->topic;
     }
@@ -136,7 +128,7 @@ class TopicUser
      * @param boolean $boolRead
      * @return $this
      */
-    public function setBoolRead(bool $boolRead)
+    public function setBoolRead(bool $boolRead): TopicUser
     {
         $this->boolRead = $boolRead;
 
@@ -148,7 +140,7 @@ class TopicUser
      *
      * @return boolean
      */
-    public function getBoolRead()
+    public function getBoolRead(): bool
     {
         return $this->boolRead;
     }
@@ -159,7 +151,7 @@ class TopicUser
      * @param boolean $boolNotif
      * @return $this
      */
-    public function setBoolNotif(bool $boolNotif)
+    public function setBoolNotif(bool $boolNotif): TopicUser
     {
         $this->boolNotif = $boolNotif;
 
@@ -171,7 +163,7 @@ class TopicUser
      *
      * @return boolean
      */
-    public function getBoolNotif()
+    public function getBoolNotif(): bool
     {
         return $this->boolNotif;
     }

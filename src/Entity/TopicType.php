@@ -14,28 +14,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 class TopicType
 {
     /**
-     * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
-     *
      * @Assert\Length(max="30")
      * @ORM\Column(name="libType", type="string", length=30, nullable=false)
      */
-    private $libType;
+    private string $libType;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="position", type="integer", nullable=true, options={"default":0})
      */
-    private $position = 0;
+    private int $position = 0;
 
 
     /**
@@ -53,7 +47,7 @@ class TopicType
      * @param integer $id
      * @return TopicType
      */
-    public function setId(int $id)
+    public function setId(int $id): TopicType
     {
         $this->id = $id;
         return $this;
@@ -64,7 +58,7 @@ class TopicType
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -75,7 +69,7 @@ class TopicType
      * @param string $libType
      * @return TopicType
      */
-    public function setLibType(string $libType)
+    public function setLibType(string $libType): TopicType
     {
         $this->libType = $libType;
 
@@ -87,7 +81,7 @@ class TopicType
      *
      * @return string
      */
-    public function getLibType()
+    public function getLibType(): string
     {
         return $this->libType;
     }
@@ -98,7 +92,7 @@ class TopicType
      * @param integer $position
      * @return $this
      */
-    public function setPosition(int $position)
+    public function setPosition(int $position): TopicType
     {
         $this->position = $position;
 
@@ -110,7 +104,7 @@ class TopicType
      *
      * @return integer
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }

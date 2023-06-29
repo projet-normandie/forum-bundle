@@ -33,9 +33,11 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  * @ApiFilter(
  *     SearchFilter::class,
  *     properties={
- *          "libTopic": "partial",
- *          "forum": "exact",
- *      }
+ *         "libTopic": "partial",
+ *         "forum": "exact",
+ *         "topicUser.user": "exact",
+ *         "topicUser.boolNotif": "exact",
+ *     }
  * )
  */
 class Topic implements TimestampableInterface, SluggableInterface
@@ -75,7 +77,6 @@ class Topic implements TimestampableInterface, SluggableInterface
     private Forum $forum;
 
     /**
-     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
@@ -148,7 +149,7 @@ class Topic implements TimestampableInterface, SluggableInterface
     /**
      * Get id
      *
-     * @return integer
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -335,7 +336,7 @@ class Topic implements TimestampableInterface, SluggableInterface
     /**
      * @return Collection
      */
-    public function getTopicUser()
+    public function getTopicUser(): Collection
     {
         return $this->topicUser;
     }

@@ -2,41 +2,21 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Doctrine\Persistence\ManagerRegistry;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
-use ProjetNormandie\ForumBundle\Entity\TopicUser;
 
-/**
- * Specific repository that serves the Forum entity.
- */
-class TopicUserRepository extends ServiceEntityRepository
+class TopicUserRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, TopicUser::class);
-    }
-    /**
-     * @param $user
-     * @throws Exception
-     */
-    public function init($user)
-    {
-        $query ="INSERT INTO forum_topic_user (idTopic, idUser)
-                 SELECT id, :idUser FROM forum_topic";
-        $this->_em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
-    }
-
     /**
      * @param       $user
      * @param Topic $topic
-     * @return mixed
+     * @return bool
      */
-    public function isRead($user, Topic $topic)
+    public function isRead($user, Topic $topic): bool
     {
         $topicUser = $this->findOneBy(['user' => $user, 'topic' => $topic]);
         return $topicUser->getBoolRead();
@@ -45,11 +25,11 @@ class TopicUserRepository extends ServiceEntityRepository
     /**
      * @param       $user
      * @param Forum $forum
-     * @return mixed
+     * @return int
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function countTopicNotRead($user, Forum $forum)
+    public function countTopicNotRead($user, Forum $forum): int
     {
          $query = $this->createQueryBuilder('tu')
              ->select('COUNT(tu.id)')
@@ -60,7 +40,7 @@ class TopicUserRepository extends ServiceEntityRepository
              ->setParameter('forum', $forum)
              ->setParameter('user', $user);
 
-        return $query->getQuery()->getSingleScalarResult();
+        return (int) $query->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -81,7 +61,9 @@ class TopicUserRepository extends ServiceEntityRepository
                 ->setParameter('topic', $topic);
         }
         if ($forum) {
-            $query->andWhere('tu.topic IN (SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)')
+            $query->andWhere('tu.topic IN (
+                SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)'
+            )
                 ->setParameter('forum', $forum);
         }
         $query->getQuery()->getResult();

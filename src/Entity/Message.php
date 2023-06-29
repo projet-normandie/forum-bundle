@@ -65,36 +65,30 @@ class Message implements TimestampableInterface
     private ?int $id = null;
 
     /**
-     * @var string
      * @Assert\NotNull
      * @Assert\NotBlank
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    private $message;
+    private string $message;
 
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position = 1;
+    private int $position = 1;
 
     /**
-     * @var Topic
-     *
      * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="messages")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id")
      * })
      */
-    private $topic;
+    private Topic $topic;
 
     /**
      * @var UserInterface
      *
-     * @Assert\NotNull
      * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
@@ -116,7 +110,7 @@ class Message implements TimestampableInterface
      * @param integer $id
      * @return $this
      */
-    public function setId(int $id)
+    public function setId(int $id): Message
     {
         $this->id = $id;
         return $this;
@@ -125,9 +119,9 @@ class Message implements TimestampableInterface
     /**
      * Get id
      *
-     * @return integer
+     * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -138,7 +132,7 @@ class Message implements TimestampableInterface
      * @param string $message
      * @return $this
      */
-    public function setMessage(string $message)
+    public function setMessage(string $message): Message
     {
         $this->message = $message;
         return $this;
@@ -149,7 +143,7 @@ class Message implements TimestampableInterface
      *
      * @return string
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -159,7 +153,7 @@ class Message implements TimestampableInterface
      * @param Topic|null $topic
      * @return $this
      */
-    public function setTopic(Topic $topic = null)
+    public function setTopic(Topic $topic = null): Message
     {
         $this->topic = $topic;
         return $this;
@@ -169,17 +163,17 @@ class Message implements TimestampableInterface
      * Get topic
      * @return Topic
      */
-    public function getTopic()
+    public function getTopic(): Topic
     {
         return $this->topic;
     }
 
     /**
      * Set user
-     * @param null $user
+     * @param $user
      * @return $this
      */
-    public function setUser($user = null)
+    public function setUser($user): Message
     {
         $this->user = $user;
         return $this;
@@ -199,7 +193,7 @@ class Message implements TimestampableInterface
      * @param integer $position
      * @return $this
      */
-    public function setPosition(int $position)
+    public function setPosition(int $position): Message
     {
         $this->position = $position;
         return $this;
@@ -210,7 +204,7 @@ class Message implements TimestampableInterface
      *
      * @return integer
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -218,9 +212,9 @@ class Message implements TimestampableInterface
     /**
      * @return int
      */
-    public function getPage()
+    public function getPage(): int
     {
-        return floor(($this->getPosition() -1) / 20) + 1;
+        return (int) floor(($this->getPosition() -1) / 20) + 1;
     }
 
     /**

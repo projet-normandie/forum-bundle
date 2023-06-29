@@ -2,21 +2,14 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use ProjetNormandie\ForumBundle\Entity\Forum;
-use ProjetNormandie\ForumBundle\Entity\Topic;
 
 /**
  * Specific repository that serves the Topic entity.
  */
-class TopicRepository extends ServiceEntityRepository
+class TopicRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Topic::class);
-    }
-
     /**
      * @param Forum $forum
      * @return mixed

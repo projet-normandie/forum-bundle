@@ -1,0 +1,45 @@
+services:
+    pn.bundle.repository.category:
+        class: ProjetNormandie\ForumBundle\Repository\CategoryRepository
+        factory: [ '@doctrine.orm.entity_manager', 'getRepository' ]
+        arguments:
+            - ProjetNormandie\ForumBundle\Entity\Category
+
+    pn.bundle.repository.forum:
+        class: ProjetNormandie\ForumBundle\Repository\ForumRepository
+        factory: [ '@doctrine.orm.entity_manager', 'getRepository' ]
+        arguments:
+            - ProjetNormandie\ForumBundle\Entity\Forum
+
+    pn.bundle.repository.forum_user:
+        class: ProjetNormandie\ForumBundle\Repository\ForumUserRepository
+        factory: [ '@doctrine.orm.entity_manager', 'getRepository' ]
+        arguments:
+            - ProjetNormandie\ForumBundle\Entity\ForumUser
+
+    pn.bundle.repository.message:
+        class: ProjetNormandie\ForumBundle\Repository\MessageRepository
+        factory: [ '@doctrine.orm.entity_manager', 'getRepository' ]
+        arguments:
+            - ProjetNormandie\ForumBundle\Entity\Message
+
+    pn.bundle.repository.topic:
+        class: ProjetNormandie\ForumBundle\Repository\TopicRepository
+        factory: [ '@doctrine.orm.entity_manager', 'getRepository' ]
+        arguments:
+            - ProjetNormandie\ForumBundle\Entity\Topic
+
+    pn.bundle.repository.topic.type:
+        class: ProjetNormandie\ForumBundle\Repository\TopicTypeRepository
+        factory: [ '@doctrine.orm.entity_manager', 'getRepository' ]
+        arguments:
+            - ProjetNormandie\ForumBundle\Entity\TopicType
+
+    pn.bundle.repository.topic_user:
+        class: ProjetNormandie\ForumBundle\Repository\TopicUserRepository
+        factory: [ '@doctrine.orm.entity_manager', 'getRepository' ]
+        arguments:
+            - ProjetNormandie\ForumBundle\Entity\TopicUser
+
+
+

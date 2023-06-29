@@ -4,21 +4,28 @@ namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
+use ProjetNormandie\ForumBundle\Manager\NotifyManager;
 use ProjetNormandie\ForumBundle\Service\MarkAsNotReadService;
-use ProjetNormandie\ForumBundle\Service\NotifyManager;
+use Symfony\Component\Security\Core\Security;
 
 class MessageListener
 {
+    private Security $security;
     private NotifyManager $notifyManager;
     private MarkAsNotReadService $markAsNotReadService;
 
     /**
      * MessageListener constructor.
-     * @param NotifyManager        $notifyManager
+     * @param Security $security
+     * @param NotifyManager $notifyManager
      * @param MarkAsNotReadService $markAsNotReadService
      */
-    public function __construct(NotifyManager $notifyManager, MarkAsNotReadService $markAsNotReadService)
-    {
+    public function __construct(
+        Security $security,
+        NotifyManager $notifyManager,
+        MarkAsNotReadService $markAsNotReadService
+    ) {
+        $this->security = $security;
         $this->notifyManager = $notifyManager;
         $this->markAsNotReadService = $markAsNotReadService;
     }
@@ -30,6 +37,8 @@ class MessageListener
      */
     public function prePersist(Message $message, LifecycleEventArgs $event): void
     {
+        $message->setUser($this->security->getUser());
+
         $topic = $message->getTopic();
         $topic->setNbMessage($topic->getNbMessage() + 1);
         $topic->setLastMessage($message);
@@ -67,12 +76,12 @@ class MessageListener
     {
         $this->notifyManager->notify($message, 'edit');
     }
-    
+
     /**
      * @param Message           $message
      * @param LifecycleEventArgs $event
      */
-    public function preRemove(Message $message,  LifecycleEventArgs $event): void
+    public function preRemove(Message $message, LifecycleEventArgs $event): void
     {
         $topic = $message->getTopic();
         $topic->setNbMessage($topic->getNbMessage() -1);

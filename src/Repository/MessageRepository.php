@@ -2,22 +2,15 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 
 /**
  * Specific repository that serves the Message entity.
  */
-class MessageRepository extends ServiceEntityRepository
+class MessageRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Message::class);
-    }
-
     /**
      * @throws NonUniqueResultException
      */

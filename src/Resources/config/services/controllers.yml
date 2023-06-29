@@ -1,0 +1,25 @@
+services:
+
+  _defaults:
+    autowire: false
+    autoconfigure: false
+    public: true
+
+  ProjetNormandie\ForumBundle\Controller\Forum\Home:
+    arguments:
+      - '@pn.forum.handler.user_data_init'
+      - '@doctrine.orm.entity_manager'
+    calls:
+      - [ setContainer, [ "@service_container" ] ]
+
+  ProjetNormandie\ForumBundle\Controller\Forum\ReadAll:
+    arguments:
+      - '@doctrine.orm.entity_manager'
+    calls:
+      - [ setContainer, [ "@service_container" ] ]
+
+  ProjetNormandie\ForumBundle\Controller\Forum\Read:
+    arguments:
+      - '@doctrine.orm.entity_manager'
+    calls:
+      - [ setContainer, [ "@service_container" ] ]

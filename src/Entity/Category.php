@@ -2,9 +2,10 @@
 
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 
@@ -19,33 +20,27 @@ class Category implements TimestampableInterface
     use TimestampableTrait;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private int $id;
 
     /**
-     * @var string
-     *
      * @Assert\Length(max="50")
      * @ORM\Column(name="libCategory", type="string", length=50, nullable=false)
      */
-    private $libCategory;
+    private string $libCategory;
 
     /**
-     * @var integer
-     *
      * @ORM\Column(name="position", type="integer", nullable=true, options={"default":0})
      */
-    private $position = 0;
+    private int $position = 0;
 
     /**
      * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", mappedBy="category")
      */
-    private $forums;
+    private Collection $forums;
 
 
     /**
@@ -70,7 +65,7 @@ class Category implements TimestampableInterface
      * @param integer $id
      * @return Category
      */
-    public function setId(int $id)
+    public function setId(int $id): Category
     {
         $this->id = $id;
         return $this;
@@ -81,7 +76,7 @@ class Category implements TimestampableInterface
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -92,7 +87,7 @@ class Category implements TimestampableInterface
      * @param string $libCategory
      * @return Category
      */
-    public function setLibCategory(string $libCategory)
+    public function setLibCategory(string $libCategory): Category
     {
         $this->libCategory = $libCategory;
 
@@ -104,7 +99,7 @@ class Category implements TimestampableInterface
      *
      * @return string
      */
-    public function getLibCategory()
+    public function getLibCategory(): string
     {
         return $this->libCategory;
     }
@@ -115,7 +110,7 @@ class Category implements TimestampableInterface
      * @param integer $position
      * @return Category
      */
-    public function setPosition(int $position)
+    public function setPosition(int $position): Category
     {
         $this->position = $position;
 
@@ -127,15 +122,15 @@ class Category implements TimestampableInterface
      *
      * @return integer
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getForums()
+    public function getForums(): Collection
     {
         return $this->forums;
     }

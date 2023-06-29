@@ -1,0 +1,20 @@
+services:
+    ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener
+        arguments:
+            - '@security.helper'
+            - '@pn.forum.manager.notify'
+            - '@pn.forum.handler.mark_as_not_read'
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
+    ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener:
+        class: ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener
+        arguments:
+            - '@security.helper'
+        tags:
+            - { name: doctrine.orm.entity_listener }
+
+
+
+
