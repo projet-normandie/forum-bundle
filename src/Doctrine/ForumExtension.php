@@ -2,6 +2,7 @@
 namespace ProjetNormandie\ForumBundle\Doctrine;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
+use ApiPlatform\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
 use ProjetNormandie\ForumBundle\Entity\Forum;
@@ -9,7 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Security\Core\Security;
 
-final class ForumExtension implements QueryCollectionExtensionInterface
+final class ForumExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
     private Security $security;
 
@@ -34,6 +35,18 @@ final class ForumExtension implements QueryCollectionExtensionInterface
     ): void {
         $this->addWhere($queryBuilder, $resourceClass);
     }
+
+    public function applyToItem(
+        QueryBuilder $queryBuilder,
+        QueryNameGeneratorInterface $queryNameGenerator,
+        string $resourceClass,
+        array $identifiers,
+        Operation $operation = null,
+        array $context = []): void
+    {
+        $this->addWhere($queryBuilder, $resourceClass);
+    }
+
 
     /**
      * @param QueryBuilder $queryBuilder
