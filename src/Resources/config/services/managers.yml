@@ -1,9 +1,4 @@
 services:
-    pn.forum.manager.forum:
-        class: ProjetNormandie\ForumBundle\Manager\ForumManager
-        arguments:
-            - '@doctrine.orm.entity_manager'
-
     pn.forum.manager.notify:
         class: ProjetNormandie\ForumBundle\Manager\NotifyManager
         arguments:

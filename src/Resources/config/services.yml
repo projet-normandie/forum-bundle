@@ -17,6 +17,12 @@ services:
              - '@security.authorization_checker'
         autoconfigure: false
 
+    # Handlers
+    pn.forum.handler.user_data_init:
+        class: ProjetNormandie\ForumBundle\Handler\UserDataInitHandler
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
 
     pn.forum.handler.mark_as_not_read:
         class: ProjetNormandie\ForumBundle\Service\MarkAsNotReadService

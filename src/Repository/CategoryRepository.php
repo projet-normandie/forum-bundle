@@ -7,9 +7,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 
-/**
- * Specific repository that serves the Category entity.
- */
 class CategoryRepository extends EntityRepository
 {
     /**

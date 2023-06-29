@@ -2,7 +2,6 @@
 
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
@@ -11,25 +10,13 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
 class ForumUserRepository extends EntityRepository
 {
     /**
-     * @param $user
-     * @throws Exception
-     */
-    public function init($user)
-    {
-        $query ="INSERT INTO forum_forum_user (idForum, idUser)
-                SELECT id, :idUser FROM forum_forum";
-        $this->_em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
-    }
-
-
-    /**
      * @param       $user
      * @param Forum $parent
-     * @return mixed
+     * @return int
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function countSubForumNotRead($user, Forum $parent)
+    public function countSubForumNotRead($user, Forum $parent): int
     {
          $query = $this->createQueryBuilder('fu')
              ->select('COUNT(fu.id)')
@@ -39,7 +26,7 @@ class ForumUserRepository extends EntityRepository
              ->andWhere('fu.boolRead = 0')
              ->setParameter('parent', $parent)
              ->setParameter('user', $user);
-        return $query->getQuery()->getSingleScalarResult();
+        return (int) $query->getQuery()->getSingleScalarResult();
     }
 
     /**

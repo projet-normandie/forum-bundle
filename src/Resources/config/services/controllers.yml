@@ -7,7 +7,7 @@ services:
 
   ProjetNormandie\ForumBundle\Controller\Forum\Home:
     arguments:
-      - '@pn.forum.manager.forum'
+      - '@pn.forum.handler.user_data_init'
       - '@doctrine.orm.entity_manager'
     calls:
       - [ setContainer, [ "@service_container" ] ]
