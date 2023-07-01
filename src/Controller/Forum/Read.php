@@ -21,7 +21,7 @@ class Read extends AbstractController
      * @param Forum $forum
      * @return JsonResponse
      */
-    public function readForum(Forum $forum): JsonResponse
+    public function __invoke(Forum $forum): JsonResponse
     {
         $this->markAsReadService->readForum($forum);
         return new JsonResponse(['sucess' => true]);

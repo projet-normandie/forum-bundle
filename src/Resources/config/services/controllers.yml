@@ -14,12 +14,12 @@ services:
 
   ProjetNormandie\ForumBundle\Controller\Forum\ReadAll:
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@pn.forum.handler.mark_as_read'
     calls:
       - [ setContainer, [ "@service_container" ] ]
 
   ProjetNormandie\ForumBundle\Controller\Forum\Read:
     arguments:
-      - '@doctrine.orm.entity_manager'
+      - '@pn.forum.handler.mark_as_read'
     calls:
       - [ setContainer, [ "@service_container" ] ]
