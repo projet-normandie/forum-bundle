@@ -4,7 +4,6 @@ namespace ProjetNormandie\ForumBundle\Controller\Forum;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
-use ProjetNormandie\ForumBundle\Handler\ForumManager;
 use ProjetNormandie\ForumBundle\Handler\UserDataInitHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
