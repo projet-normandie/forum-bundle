@@ -1,0 +1,7 @@
+services:
+    ProjetNormandie\ForumBundle\EventSubscriber\ReadTopicSubscriber:
+        class: ProjetNormandie\ForumBundle\EventSubscriber\ReadTopicSubscriber
+        arguments:
+            - '@security.helper'
+            - '@pn.forum.handler.mark_as_read'
+        tags: [ { name: 'kernel.event_subscriber' } ]

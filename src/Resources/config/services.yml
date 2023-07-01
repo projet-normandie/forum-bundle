@@ -30,7 +30,7 @@ services:
             - '@security.helper'
             - '@doctrine.orm.entity_manager'
 
-    pn.forum.handler.mark_not_read:
+    pn.forum.handler.mark_as_read:
         class: ProjetNormandie\ForumBundle\Service\MarkAsReadService
         arguments:
             - '@security.helper'

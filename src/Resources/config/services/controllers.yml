@@ -14,12 +14,12 @@ services:
 
   ProjetNormandie\ForumBundle\Controller\Forum\ReadAll:
     arguments:
-      - '@pn.forum.handler.mark_not_read'
+      - '@pn.forum.handler.mark_as_read'
     calls:
       - [ setContainer, [ "@service_container" ] ]
 
   ProjetNormandie\ForumBundle\Controller\Forum\Read:
     arguments:
-      - '@pn.forum.handler.mark_not_read'
+      - '@pn.forum.handler.mark_as_read'
     calls:
       - [ setContainer, [ "@service_container" ] ]
