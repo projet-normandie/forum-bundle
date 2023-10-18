@@ -47,12 +47,14 @@ class TopicAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
+            ->add('id', null, ['label' => 'label.id'])
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('forum', ModelFilter::class, [
                  'field_type' => ModelAutocompleteType::class,
                  'field_options' => ['property'=>'libForum'],
+                 'label' => 'label.forum',
             ])
-            ->add('boolArchive');
+            ->add('boolArchive', null, ['label' => 'label.boolArchive']);
     }
 
     /**
@@ -88,6 +90,7 @@ class TopicAdmin extends AbstractAdmin
             ->add('nbMessage', null, ['label' => 'label.nbMessage'])
             ->add('lastMessage', null, ['label' => 'label.lastMessage'])
             ->add('forum', null, ['label' => 'label.forum'])
-            ->add('user', null, ['label' => 'label.user']);
+            ->add('user', null, ['label' => 'label.user'])
+            ->add('messages', null, ['label' => 'label.messages']);
     }
 }

@@ -9,6 +9,7 @@ label:
     topics: 'Topics'
     lastMessage: 'Dernier message'
     message: 'Message'
+    messages: 'Messages'
     nbMessage: 'Nb message'
     nbTopic: 'Nb topic'
     topicUser : 'Topic / User'

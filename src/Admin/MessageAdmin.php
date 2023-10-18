@@ -51,6 +51,7 @@ class MessageAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
+            ->add('id', null, ['label' => 'label.id'])
             ->add('topic', ModelFilter::class, [
                 'label' => 'label.topic',
                 'field_type' => ModelAutocompleteType::class,

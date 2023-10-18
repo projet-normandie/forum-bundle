@@ -26,6 +26,8 @@ services:
                 manager_type: orm
                 group: "group.forums"
                 label: "label.topic"
+        calls:
+            - [ setTemplate, [ 'show', '@@ProjetNormandieForum/Admin/topic_show.html.twig' ] ]
     sonata.admin.forum.message:
         class: ProjetNormandie\ForumBundle\Admin\MessageAdmin
         tags:
