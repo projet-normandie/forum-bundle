@@ -14,6 +14,8 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Serializer\Filter\GroupFilter;
 
 /**
  * Topic
@@ -35,9 +37,32 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
  *     properties={
  *         "libTopic": "partial",
  *         "forum": "exact",
+ *         "forum.status": "exact",
  *         "topicUser.user": "exact",
  *         "topicUser.boolNotif": "exact",
  *     }
+ * )
+ * @ApiFilter(
+ *     GroupFilter::class,
+ *     arguments={
+ *         "parameterName": "groups",
+ *         "overrideDefaultGroups": true,
+ *         "whitelist": {
+ *              "forum.read",
+ *              "forum.topic.read",
+ *              "forum.topic.lastMessage",
+ *              "forum.message.last",
+ *              "forum.topicUser.read",
+ *              "forum.topic.topicUser1",
+ *          }
+ *     }
+ * )
+ * @ApiFilter(
+ *      OrderFilter::class,
+ *      properties={
+ *          "lastMessage.id":"DESC",
+ *      },
+ *      arguments={"orderParameterName"="order"}
  * )
  */
 class Topic implements TimestampableInterface, SluggableInterface
