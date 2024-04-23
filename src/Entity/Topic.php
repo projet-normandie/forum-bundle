@@ -48,7 +48,7 @@ use ApiPlatform\Core\Serializer\Filter\GroupFilter;
  *         "parameterName": "groups",
  *         "overrideDefaultGroups": true,
  *         "whitelist": {
- *              "forum.read",
+ *              "forum.forum.read",
  *              "forum.topic.read",
  *              "forum.topic.lastMessage",
  *              "forum.message.last",
