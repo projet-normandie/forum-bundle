@@ -1,139 +1,74 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use ProjetNormandie\ForumBundle\Repository\ForumUserRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * Topic
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="forum_forum_user")
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumUserRepository")
- */
+#[ORM\Table(name:'pnf_forum_user')]
+#[ORM\Entity(repositoryClass: ForumUserRepository::class)]
+#[ORM\UniqueConstraint(name: "uniq_forum_user", columns: ["user_id", "forum_id"])]
 class ForumUser
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[Groups(['forum-user:read'])]
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private int $id;
 
-    /**
-     * @var UserInterface
-     *
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
-     * })
-     */
+    #[ORM\ManyToOne(targetEntity: UserInterface::class)]
+    #[ORM\JoinColumn(name:'user_id', referencedColumnName:'id', nullable:false)]
     private $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="forumUser")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idForum", referencedColumnName="id")
-     * })
-     */
+    #[ORM\ManyToOne(targetEntity: Forum::class, inversedBy: 'forumUser')]
+    #[ORM\JoinColumn(name:'forum_id', referencedColumnName:'id', nullable:false)]
     private Forum $forum;
 
-    /**
-     * @ORM\Column(name="boolRead", type="boolean", nullable=false, options={"default":0})
-     */
+    #[Groups(['forum-user:read'])]
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     private bool $boolRead = false;
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('%s - %s', $this->getUser(), $this->getForum());
     }
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return ForumUser
-     */
-    public function setId(int $id): ForumUser
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set user
-     *
-     * @param $user
-     * @return $this
-     */
-    public function setUser($user = null): ForumUser
+    public function setUser($user): void
     {
         $this->user = $user;
-        return $this;
     }
 
-    /**
-     * Get user
-     *
-     * @return UserInterface
-     */
     public function getUser()
     {
         return $this->user;
     }
 
-    /**
-     * Set forum
-     * @param Forum $forum
-     * @return $this
-     */
-    public function setForum(Forum $forum): ForumUser
+    public function setForum(Forum $forum): void
     {
         $this->forum = $forum;
-        return $this;
     }
 
-    /**
-     * Get forum
-     *
-     * @return Forum
-     */
     public function getForum(): Forum
     {
         return $this->forum;
     }
 
-    /**
-     * Set boolRead
-     *
-     * @param boolean $boolRead
-     * @return $this
-     */
-    public function setBoolRead(bool $boolRead): ForumUser
+    public function setBoolRead(bool $boolRead): void
     {
         $this->boolRead = $boolRead;
-
-        return $this;
     }
 
-    /**
-     * Get boolRead
-     *
-     * @return boolean
-     */
     public function getBoolRead(): bool
     {
         return $this->boolRead;

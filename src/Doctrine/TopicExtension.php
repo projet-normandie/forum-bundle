@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Doctrine;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
@@ -8,7 +11,7 @@ use ApiPlatform\Metadata\Operation;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class TopicExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
@@ -42,8 +45,8 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
         string $resourceClass,
         array $identifiers,
         Operation $operation = null,
-        array $context = []): void
-    {
+        array $context = []
+    ): void {
         $this->addWhere($queryBuilder, $resourceClass, $context);
     }
 
@@ -54,13 +57,15 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
      */
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass, array $context): void
     {
-        if (Topic::class !== $resourceClass || !$this->security->isGranted(
+        if (
+            Topic::class !== $resourceClass || !$this->security->isGranted(
                 'ROLE_USER'
-            ) || null === $user = $this->security->getUser()) {
+            ) || null === $user = $this->security->getUser()
+        ) {
             return;
         }
 
-        if (array_key_exists('forum.topicUser.read', $context['groups'])) {
+        if (array_key_exists('topic:topic-user-1', $context['groups'])) {
             $queryBuilder->innerJoin('o.topicUser', 'tu', Join::WITH, 'tu.user = :current_user');
             $queryBuilder->addSelect('tu');
             $queryBuilder->setParameter('current_user', $user);

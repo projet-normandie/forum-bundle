@@ -1,21 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Repository;
 
-
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\Query;
-use ProjetNormandie\ForumBundle\Entity\Forum;
+use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\Category;
+use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
 
-class CategoryRepository extends EntityRepository
+class CategoryRepository extends ServiceEntityRepository
 {
-    /**
-     * Finds category with forum
-     *
-     * @param $user
-     *
-     * @return Query
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Category::class);
+    }
+
     public function getHome($user = null): Query
     {
         $queryBuilder = $this->createQueryBuilder('c')
@@ -37,13 +39,13 @@ class CategoryRepository extends EntityRepository
                         '(f.status = :status2) AND (f.role IN (:roles))'
                     )
                 )
-                ->setParameter('status1', Forum::STATUS_PUBLIC)
-                ->setParameter('status2', Forum::STATUS_PRIVATE)
+                ->setParameter('status1', ForumStatus::PUBLIC)
+                ->setParameter('status2', ForumStatus::PRIVATE)
                 ->setParameter('user', $user)
                 ->setParameter('roles', $user->getRoles());
         } else {
             $queryBuilder->where('f.status = :status')
-                ->setParameter('status', Forum::STATUS_PUBLIC);
+                ->setParameter('status', ForumStatus::PUBLIC);
         }
 
         $queryBuilder->orderBy('c.position', 'ASC')

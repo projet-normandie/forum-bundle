@@ -1,21 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\DBAL\Exception;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
+use Doctrine\Persistence\ManagerRegistry;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Entity\TopicUser;
 
-class TopicUserRepository extends EntityRepository
+class TopicUserRepository extends ServiceEntityRepository
 {
-    /**
-     * @param       $user
-     * @param Topic $topic
-     * @return bool
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, TopicUser::class);
+    }
+
     public function isRead($user, Topic $topic): bool
     {
         $topicUser = $this->findOneBy(['user' => $user, 'topic' => $topic]);
@@ -62,8 +65,7 @@ class TopicUserRepository extends EntityRepository
         }
         if ($forum) {
             $query->andWhere('tu.topic IN (
-                SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)'
-            )
+                SELECT t FROM ProjetNormandie\ForumBundle\Entity\Topic t WHERE t.forum = :forum)')
                 ->setParameter('forum', $forum);
         }
         $query->getQuery()->getResult();

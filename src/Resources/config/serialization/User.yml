@@ -2,26 +2,19 @@ ProjetNormandie\UserBundle\Entity\User:
   attributes:
     id:
       groups:
-        - 'forum.user.read'
-        - 'forum.message.last'
+        - 'user:read'
     username:
       groups:
-        - 'forum.user.read'
-        - 'forum.message.last'
+        - 'user:read'
     avatar:
       groups:
-        - 'forum.user.read'
+        - 'user:read'
     slug:
       groups:
-        - 'forum.user.read'
-        - 'forum.message.last'
+        - 'user:read'
     status:
       groups:
-        - 'forum.user.status'
+        - 'user:read'
     nbForumMessage:
       groups:
-        - 'forum.user.read'
-    isOnline:
-      groups:
-        - 'forum.user.read'
-
+        - 'user:read'

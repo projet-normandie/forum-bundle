@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,32 +11,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NotifyManager
 {
-    private EntityManagerInterface $em;
-    private TranslatorInterface $translator;
-    private MessageBuilder $messageBuilder;
-
-    /**
-     * MessageService constructor.
-     * @param EntityManagerInterface $em
-     * @param TranslatorInterface    $translator
-     * @param MessageBuilder        $messageBuilder
-     */
     public function __construct(
-        EntityManagerInterface $em,
-        TranslatorInterface $translator,
-        MessageBuilder $messageBuilder
+        private readonly EntityManagerInterface $em,
+        private readonly TranslatorInterface $translator,
+        private readonly MessageBuilder $messageBuilder
     ) {
-        $this->em = $em;
-        $this->translator = $translator;
-        $this->messageBuilder = $messageBuilder;
     }
-
 
     /**
      * @param Message $message
      * @param string  $type
      */
-    public function notify(Message $message, string $type = 'new')
+    public function notify(Message $message, string $type = 'new'): void
     {
         // Notify users
         $topicUsers = $this->em->getRepository('ProjetNormandie\ForumBundle\Entity\TopicUser')->findBy(

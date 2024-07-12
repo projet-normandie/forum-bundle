@@ -1,109 +1,71 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\ORM\Mapping as ORM;
+use ProjetNormandie\ForumBundle\Repository\TopicTypeRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Type
- *
- * @ORM\Table(name="forum_topic_type")
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicTypeRepository")
- */
+#[ORM\Table(name:'pnf_topic_type')]
+#[ORM\Entity(repositoryClass: TopicTypeRepository::class)]
+#[ApiResource(
+    shortName: 'ForumTopicType',
+    operations: [
+        new GetCollection(),
+        new Get(),
+    ],
+    normalizationContext: ['groups' => ['topic-type:read']]
+)]
 class TopicType
 {
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[Groups(['topic-type:read'])]
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private int $id;
 
-    /**
-     * @Assert\Length(max="30")
-     * @ORM\Column(name="libType", type="string", length=30, nullable=false)
-     */
+    #[Groups(['topic-type:read'])]
+    #[Assert\Length(max: 30)]
+    #[ORM\Column(length: 30, nullable: false)]
     private string $libType;
 
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=true, options={"default":0})
-     */
+    #[ORM\Column(nullable: false, options: ['default' => 0])]
     private int $position = 0;
 
-
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('%s [%s]', $this->getLibType(), $this->getId());
     }
 
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return TopicType
-     */
-    public function setId(int $id): TopicType
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    /**
-     * Get idType
-     *
-     * @return integer
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * Set libType
-     *
-     * @param string $libType
-     * @return TopicType
-     */
-    public function setLibType(string $libType): TopicType
+    public function setLibType(string $libType): void
     {
         $this->libType = $libType;
-
-        return $this;
     }
 
-    /**
-     * Get libType
-     *
-     * @return string
-     */
     public function getLibType(): string
     {
         return $this->libType;
     }
 
-    /**
-     * Set position
-     *
-     * @param integer $position
-     * @return $this
-     */
-    public function setPosition(int $position): TopicType
+    public function setPosition(int $position): void
     {
         $this->position = $position;
-
-        return $this;
     }
 
-    /**
-     * Get position
-     *
-     * @return integer
-     */
     public function getPosition(): int
     {
         return $this->position;

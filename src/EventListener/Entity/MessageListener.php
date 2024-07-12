@@ -1,33 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\ForumBundle\Manager\NotifyManager;
 use ProjetNormandie\ForumBundle\Service\MarkAsNotReadService;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class MessageListener
 {
-    private Security $security;
-    private NotifyManager $notifyManager;
-    private MarkAsNotReadService $markAsNotReadService;
-
-    /**
-     * MessageListener constructor.
-     * @param Security $security
-     * @param NotifyManager $notifyManager
-     * @param MarkAsNotReadService $markAsNotReadService
-     */
     public function __construct(
-        Security $security,
-        NotifyManager $notifyManager,
-        MarkAsNotReadService $markAsNotReadService
+        private readonly Security $security,
+        private readonly NotifyManager $notifyManager,
+        private readonly MarkAsNotReadService $markAsNotReadService
     ) {
-        $this->security = $security;
-        $this->notifyManager = $notifyManager;
-        $this->markAsNotReadService = $markAsNotReadService;
     }
 
 
@@ -84,7 +73,7 @@ class MessageListener
     public function preRemove(Message $message, LifecycleEventArgs $event): void
     {
         $topic = $message->getTopic();
-        $topic->setNbMessage($topic->getNbMessage() -1);
+        $topic->setNbMessage($topic->getNbMessage() - 1);
 
         $i = 1;
         foreach ($topic->getMessages() as $row) {

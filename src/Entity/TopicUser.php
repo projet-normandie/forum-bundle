@@ -1,168 +1,104 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
+use ProjetNormandie\ForumBundle\Repository\TopicUserRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
- * Topic
- *
- * @ORM\Table(name="forum_topic_user")
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicUserRepository")
- */
+#[ORM\Table(name:'pnf_topic_user')]
+#[ORM\Entity(repositoryClass: TopicUserRepository::class)]
+#[ORM\UniqueConstraint(name: "uniq_topic_user", columns: ["user_id", "topic_id"])]
+#[ApiResource(
+    shortName: 'ForumTopicUser',
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(
+            security: 'is_granted("ROLE_USER") and object.getUser() == user',
+            denormalizationContext: ['groups' => ['topic-user:update']],
+        )
+    ],
+    normalizationContext: ['groups' => ['topic-read']]
+)]
 class TopicUser
 {
-
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[Groups(['topic-user:read', 'topic-user:update'])]
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private int $id;
 
-    /**
-     * @var UserInterface
-     *
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
-     * })
-     */
+    #[ORM\ManyToOne(targetEntity: UserInterface::class)]
+    #[ORM\JoinColumn(name:'user_id', referencedColumnName:'id', nullable:false)]
     private $user;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="topicUser")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id", onDelete="CASCADE")
-     * })
-     */
+    #[ORM\ManyToOne(targetEntity: Topic::class, inversedBy: 'topicUser')]
+    #[ORM\JoinColumn(name:'topic_id', referencedColumnName:'id', nullable:false, onDelete:'CASCADE')]
     private Topic $topic;
 
-    /**
-     * @ORM\Column(name="boolRead", type="boolean", nullable=false, options={"default":0})
-     */
+    #[Groups(['topic-user:read'])]
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     private bool $boolRead = false;
 
-    /**
-     * @ORM\Column(name="boolNotif", type="boolean", nullable=false, options={"default":0})
-     */
+    #[Groups(['topic-user:read', 'topic-user:update'])]
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     private bool $boolNotif = false;
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('%s - %s', $this->getUser(), $this->getTopic());
     }
 
-
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return TopicUser
-     */
-    public function setId(int $id): TopicUser
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set user
-     *
-     * @param $user
-     * @return $this
-     */
-    public function setUser($user = null): TopicUser
+    public function setUser($user = null): void
     {
         $this->user = $user;
-        return $this;
     }
 
-    /**
-     * Get user
-     *
-     * @return UserInterface
-     */
     public function getUser()
     {
         return $this->user;
     }
 
-    /**
-     * Set topic
-     * @param Topic|null $topic
-     * @return $this
-     */
-    public function setTopic(Topic $topic = null): TopicUser
+    public function setTopic(Topic $topic = null): void
     {
         $this->topic = $topic;
-        return $this;
     }
 
-    /**
-     * Get topic
-     *
-     * @return Topic
-     */
     public function getTopic(): Topic
     {
         return $this->topic;
     }
 
-    /**
-     * Set boolRead
-     *
-     * @param boolean $boolRead
-     * @return $this
-     */
-    public function setBoolRead(bool $boolRead): TopicUser
+    public function setBoolRead(bool $boolRead): void
     {
         $this->boolRead = $boolRead;
-
-        return $this;
     }
 
-    /**
-     * Get boolRead
-     *
-     * @return boolean
-     */
     public function getBoolRead(): bool
     {
         return $this->boolRead;
     }
 
-    /**
-     * Set boolNotif
-     *
-     * @param boolean $boolNotif
-     * @return $this
-     */
-    public function setBoolNotif(bool $boolNotif): TopicUser
+    public function setBoolNotif(bool $boolNotif): void
     {
         $this->boolNotif = $boolNotif;
-
-        return $this;
     }
 
-    /**
-     * Get boolNotif
-     *
-     * @return boolean
-     */
     public function getBoolNotif(): bool
     {
         return $this->boolNotif;

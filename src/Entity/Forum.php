@@ -1,489 +1,308 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\DateFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\OpenApi\Model;
+use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Core\Serializer\Filter\GroupFilter;
+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use ProjetNormandie\ForumBundle\Controller\GetHomeForums;
+use ProjetNormandie\ForumBundle\Controller\ReadForum;
+use ProjetNormandie\ForumBundle\Repository\ForumRepository;
+use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Forum
- *
- * @ORM\Table(
- *     name="forum_forum",
- *     indexes={
- *         @ORM\Index(name="idx_position", columns={"position"}),
- *         @ORM\Index(name="idx_libForum", columns={"libForum"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\ForumRepository")
- * @ApiFilter(
- *     SearchFilter::class,
- *     properties={
- *          "parent": "exact",
- *     }
- * )
- * @ApiFilter(DateFilter::class, properties={"lastMessage.createdAt": DateFilter::EXCLUDE_NULL})
- * @ApiFilter(
- *     OrderFilter::class,
- *     properties={
- *          "lastMessage.id":"DESC",
- *     },
- *     arguments={"orderParameterName"="order"}
- * )
- * @ApiFilter(
- *     GroupFilter::class,
- *     arguments={
- *          "parameterName": "groups",
- *          "overrideDefaultGroups": true,
- *          "whitelist": {
- *              "forum.forum.read",
- *              "forum.lastMessage",
- *              "forum.message.last",
- *              "forum.forum.forumUser1",
- *              "forum.forumUser.read"
- *          }
- *     }
- * )
- */
+#[ORM\Table(name:'pnf_forum')]
+#[ORM\Entity(repositoryClass: ForumRepository::class)]
+#[ORM\EntityListeners(["ProjetNormandie\ForumBundle\EventListener\Entity\ForumListener"])]
+#[ORM\Index(name: "idx_position", columns: ["position"])]
+#[ORM\Index(name: "idx_lib_forum", columns: ["lib_forum"])]
+#[ApiResource(
+    shortName: 'ForumForum',
+    operations: [
+        new GetCollection(
+            uriTemplate: '/forum_forums',
+        ),
+        new Get(
+            uriTemplate: '/forum_forums/{id}',
+            security: 'object.getStatus() == "public" or is_granted(object.getRole())',
+        ),
+        new Get(
+            uriTemplate: '/forum_forums/{id}/read',
+            controller: ReadForum::class,
+            security: 'is_granted("ROLE_USER")',
+            openapi: new Model\Operation(
+                summary: 'Mark forum as read',
+                description: 'Mark forum as read'
+            ),
+        ),
+    ],
+    normalizationContext: ['groups' => ['forum:read']
+    ]
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'parent' => 'exact',
+    ]
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'lastMessage.id"' => 'DESC'
+    ]
+)]
+#[ApiFilter(
+    GroupFilter::class,
+    arguments: [
+        'parameterName' => 'groups',
+        'overrideDefaultGroups' => true,
+        'whitelist' => [
+            'forum:read',
+            'forum:last-message',
+            'message:read',
+            'forum:forum-user-1',
+            'forum-user:read'
+        ]
+    ]
+)]
+#[ApiFilter(DateFilter::class, properties: ['lastMessage.createdAt' => DateFilterInterface::EXCLUDE_NULL])]
 class Forum implements TimestampableInterface, SluggableInterface
 {
     use TimestampableTrait;
     use SluggableTrait;
 
-    const STATUS_PRIVATE = 'private';
-    const STATUS_PUBLIC = 'public';
-
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[Groups(['forum:read'])]
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private int $id;
 
-    /**
-     * @Assert\Length(max="255")
-     * @ORM\Column(name="libForum", type="string", length=255, nullable=false)
-     */
+    #[Groups(['forum:read'])]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
     private string $libForum;
 
-    /**
-     * @Assert\Length(max="255")
-     * @ORM\Column(name="libForumFr", type="string", length=255, nullable=true)
-     */
+    #[Groups(['forum:read'])]
+    #[Assert\Length(max: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private string $libForumFr;
 
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=true, options={"default":0})
-     */
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $position = 0;
 
-    /**
-     * @ORM\Column(name="status", type="string", nullable=false)
-     */
-    private string $status = self::STATUS_PUBLIC;
+    #[Groups(['forum:read'])]
+    #[ORM\Column(length: 20, nullable: false)]
+    private string $status = ForumStatus::PUBLIC;
 
-    /**
-     * @ORM\Column(name="role", type="string", nullable=true)
-     */
+    #[Groups(['forum:read'])]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $role = null;
 
-    /**
-     * @ORM\Column(name="nbMessage", type="integer", nullable=false, options={"default":0})
-     */
+    #[Groups(['forum:read'])]
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $nbMessage = 0;
 
-    /**
-     * @ORM\Column(name="nbTopic", type="integer", nullable=false, options={"default":0})
-     */
+    #[Groups(['forum:read'])]
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $nbTopic = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Category", inversedBy="forums")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idCategory", referencedColumnName="id")
-     * })
-     */
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'forums')]
+    #[ORM\JoinColumn(name:'category_id', referencedColumnName:'id', nullable:true)]
     private ?Category $category;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", mappedBy="forum")
-     */
+    #[ORM\OneToMany(targetEntity: Topic::class, mappedBy: 'forum')]
     private Collection $topics;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", mappedBy="parent")
-     */
-    private Collection $children;
+    #[ORM\OneToMany(targetEntity: Forum::class, mappedBy: 'parent')]
+    private Collection $childrens;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="children")
-     * @ORM\JoinColumn(name="idParent", referencedColumnName="id")
-     */
+    #[Groups(['forum:read'])]
+    #[ORM\ManyToOne(targetEntity: Forum::class, inversedBy: 'childrens')]
+    #[ORM\JoinColumn(name:'parent_id', referencedColumnName:'id', nullable:true)]
     private ?Forum $parent;
 
-    /**
-     * @ORM\Column(name="isParent", type="boolean", nullable=false, options={"default":false})
-     */
+    #[Groups(['forum:read'])]
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     private bool $isParent = false;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     * })
-     */
+    #[Groups(['forum:last-message'])]
+    #[ORM\ManyToOne(targetEntity: Message::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name:'max_message_id', referencedColumnName:'id', nullable:true, onDelete: 'SET NULL')]
     private ?Message $lastMessage;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\ForumUser", mappedBy="forum")
-     */
+    #[Groups(['forum:forum-user'])]
+    #[ORM\OneToMany(targetEntity: ForumUser::class, mappedBy: 'forum')]
     private Collection $forumUser;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->topics = new ArrayCollection();
         $this->forumUser = new ArrayCollection();
-        $this->children = new ArrayCollection();
+        $this->childrens = new ArrayCollection();
     }
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('%s [%s]', $this->getLibForum(), $this->getId());
     }
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return Forum
-     */
-    public function setId(int $id): Forum
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set libForum
-     *
-     * @param string $libForum
-     * @return Forum
-     */
-    public function setLibForum(string $libForum): Forum
+    public function setLibForum(string $libForum): void
     {
         $this->libForum = $libForum;
-
-        return $this;
     }
 
-    /**
-     * Get libForum
-     *
-     * @return string
-     */
     public function getLibForum(): string
     {
         return $this->libForum;
     }
 
-     /**
-     * Set libForumFr
-     *
-     * @param string $libForumFr
-     * @return Forum
-     */
-    public function setLibForumFr(string $libForumFr): Forum
+    public function setLibForumFr(string $libForumFr): void
     {
         $this->libForumFr = $libForumFr;
-
-        return $this;
     }
 
-    /**
-     * Get libForumFr
-     *
-     * @return string
-     */
     public function getLibForumFr(): string
     {
         return $this->libForumFr;
     }
 
-    /**
-     * Set position
-     *
-     * @param integer $position
-     * @return Forum
-     */
-    public function setPosition(int $position): Forum
+    public function setPosition(int $position): void
     {
         $this->position = $position;
-
-        return $this;
     }
 
-    /**
-     * Get position
-     *
-     * @return integer
-     */
     public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * Set status
-     *
-     * @param string $status
-     * @return Forum
-     */
-    public function setStatus(string $status): Forum
+    public function setStatus(string $status): void
     {
         $this->status = $status;
-
-        return $this;
     }
 
-    /**
-     * Get status
-     *
-     * @return string
-     */
     public function getStatus(): string
     {
         return $this->status;
     }
 
-
-    /**
-     * Set role
-     *
-     * @param string $role
-     * @return Forum
-     */
-    public function setRole(string $role): Forum
+    public function setRole(string $role): void
     {
         $this->role = $role;
-
-        return $this;
     }
 
-    /**
-     * Get role
-     *
-     * @return string|null
-     */
     public function getRole(): ?string
     {
         return $this->role;
     }
 
-    /**
-     * Set nbMessage
-     *
-     * @param integer $nbMessage
-     * @return Forum
-     */
-    public function setNbMessage(int $nbMessage): Forum
+    public function setNbMessage(int $nbMessage): void
     {
         $this->nbMessage = $nbMessage;
-
-        return $this;
     }
 
-    /**
-     * Get nbMessage
-     *
-     * @return integer
-     */
     public function getNbMessage(): int
     {
         return $this->nbMessage;
     }
 
-    /**
-     * Set nbTopic
-     *
-     * @param integer $nbTopic
-     * @return Forum
-     */
-    public function setNbTopic(int $nbTopic): Forum
+    public function setNbTopic(int $nbTopic): void
     {
         $this->nbTopic = $nbTopic;
-
-        return $this;
     }
 
-    /**
-     * Get nbTopic
-     *
-     * @return integer
-     */
-    public function getNbTopic()
+
+    public function getNbTopic(): int
     {
         return $this->nbTopic;
     }
 
-    /**
-     * Set category
-     * @param Category|null $category
-     * @return $this
-     */
-    public function setCategory(Category $category = null): Forum
+    public function setCategory(Category $category = null): void
     {
         $this->category = $category;
-        return $this;
     }
 
-    /**
-     * Get category
-     * @return Category|null
-     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-
-    /**
-     * Set parent
-     * @param Forum|null $forum
-     * @return Forum|null
-     */
-    public function setParent(Forum $forum = null): ?Forum
+    public function setParent(Forum $forum = null): void
     {
         $this->parent = $forum;
-        return $this;
     }
 
-    /**
-     * Get parent
-     * @return ?Forum
-     */
     public function getParent(): ?Forum
     {
         return $this->parent;
     }
 
-    /**
-     * @return Collection
-     */
     public function getTopics(): Collection
     {
         return $this->topics;
     }
 
-     /**
-     * @return Collection
-     */
     public function getChildrens(): Collection
     {
-        return $this->children;
+        return $this->childrens;
     }
 
-    /**
-     * @param Message|null $message
-     * @return $this
-     */
-    public function setLastMessage(Message $message = null): Forum
+    public function setLastMessage(Message $message = null): void
     {
         $this->lastMessage = $message;
-        return $this;
     }
 
-    /**
-     * Get lastMessage
-     * @return ?Message
-     */
-    public function getLastMessage(): Message|null
+    public function getLastMessage(): ?Message
     {
         return $this->lastMessage;
     }
 
-    /**
-     * @return Collection
-     */
     public function getForumUser(): Collection
     {
         return $this->forumUser;
     }
 
-     /**
-     * Set isParent
-     *
-     * @param boolean $isParent
-     * @return $this
-     */
-    public function setIsParent(bool $isParent): Forum
+    public function setIsParent(bool $isParent): void
     {
-        $this->isParent= $isParent;
-
-        return $this;
+        $this->isParent = $isParent;
     }
 
-    /**
-     * Get isParent
-     *
-     * @return boolean
-     */
     public function getIsParent(): bool
     {
         return $this->isParent;
     }
 
-     /**
-     * @return mixed
-     */
+    #[Groups(['forum:forum-user-1'])]
     public function getForumUser1()
     {
         return $this->forumUser[0];
     }
 
-
-    /**
-     * @return array
-     */
-    public static function getStatusChoices(): array
-    {
-        return [
-            self::STATUS_PRIVATE => self::STATUS_PRIVATE,
-            self::STATUS_PUBLIC => self::STATUS_PUBLIC,
-        ];
-    }
-
-    /**
-     * Returns an array of the fields used to generate the slug.
-     *
-     * @return string[]
-     */
     public function getSluggableFields(): array
     {
         return ['libForum'];

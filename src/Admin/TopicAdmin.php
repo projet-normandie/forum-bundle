@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -18,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 class TopicAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_topic';
+    protected $baseRouteName = 'pnf_admin_topic';
 
     /**
      * @param RouteCollection $collection
@@ -51,7 +53,7 @@ class TopicAdmin extends AbstractAdmin
             ->add('libTopic', null, ['label' => 'label.topic'])
             ->add('forum', ModelFilter::class, [
                  'field_type' => ModelAutocompleteType::class,
-                 'field_options' => ['property'=>'libForum'],
+                 'field_options' => ['property' => 'libForum'],
                  'label' => 'label.forum',
             ])
             ->add('boolArchive', null, ['label' => 'label.boolArchive']);

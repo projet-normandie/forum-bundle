@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -17,7 +19,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
  */
 class ForumUserAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_forumUser';
+    protected $baseRouteName = 'pnf_admin_forumUser';
 
     /**
      * @param RouteCollection $collection
@@ -48,7 +50,7 @@ class ForumUserAdmin extends AbstractAdmin
             ->add('forum', ModelFilter::class, [
                 'label' => 'label.forum',
                 'field_type' => ModelAutocompleteType::class,
-                'field_options' => ['property'=>'libForum'],
+                'field_options' => ['property' => 'libForum'],
             ]);
     }
 

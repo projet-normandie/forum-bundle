@@ -1,21 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\NonUniqueResultException;
-use Doctrine\ORM\NoResultException;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\ForumUser;
 
-class ForumUserRepository extends EntityRepository
+class ForumUserRepository extends ServiceEntityRepository
 {
-    /**
-     * @param       $user
-     * @param Forum $parent
-     * @return int
-     * @throws NoResultException
-     * @throws NonUniqueResultException
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, ForumUser::class);
+    }
+
     public function countSubForumNotRead($user, Forum $parent): int
     {
          $query = $this->createQueryBuilder('fu')

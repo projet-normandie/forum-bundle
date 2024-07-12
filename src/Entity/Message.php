@@ -1,225 +1,176 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use ProjetNormandie\ForumBundle\Repository\MessageRepository;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Serializer\Filter\GroupFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Message
- *
- * @ORM\Table(name="forum_message")
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\MessageRepository")
- * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener"})
- * @ApiResource(attributes={"order"={"id": "ASC"}})
- * @ApiFilter(
- *     OrderFilter::class,
- *     properties={
- *          "id": "ASC",
- *          "createdAt": "DESC"
- *      },
- *     arguments={"orderParameterName"="order"}
- * )
- * @ApiFilter(
- *     SearchFilter::class,
- *     properties={
- *          "topic": "exact",
- *          "user": "exact",
- *          "topic.forum.status": "exact",
- *      }
- * )
- * @ApiFilter(
- *     GroupFilter::class,
- *     arguments={
- *          "parameterName": "groups",
- *          "overrideDefaultGroups": true,
- *          "whitelist": {
- *              "forum.message.read",
- *              "forum.message.topic",
- *              "forum.topic.read",
- *              "forum.topic.forum",
- *              "forum.forum.read",
- *              "forum.user.read",
- *              "forum.user.status",
- *              "user.status.read"
- *          }
- *     }
- * )
- */
+#[ORM\Table(name:'pnf_message')]
+#[ORM\Entity(repositoryClass: MessageRepository::class)]
+#[ORM\EntityListeners(["ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener"])]
+#[ApiResource(
+    shortName: 'ForumMessage',
+    order: ['id' => 'ASC'],
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' => ['message:read', 'message:message', 'message:user', 'user:read']]
+        ),
+        new Get(),
+        new Post(
+            denormalizationContext: ['groups' => ['message:insert']],
+            security: 'is_granted("ROLE_USER")',
+        ),
+        new Put(
+            denormalizationContext: ['groups' => ['message:update']],
+            security: 'is_granted("ROLE_USER") and object.getUser() == user',
+        ),
+    ],
+    normalizationContext: ['groups' => ['message:read', 'message:message']]
+)]
+#[ApiResource(
+    shortName: 'ForumMessage',
+    uriTemplate: '/forum_topics/{id}/messages',
+    uriVariables: [
+        'id' => new Link(fromClass: Topic::class, toProperty: 'topic'),
+    ],
+    operations: [ new GetCollection() ],
+    normalizationContext: ['groups' => ['message:read', 'user:read']],
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'topic' => 'exact',
+        'user' => 'exact',
+        'topic.forum.status' => 'exact',
+    ]
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'id' => 'ASC',
+        'createdAt' => 'ASC',
+    ]
+)]
+#[ApiFilter(
+    GroupFilter::class,
+    arguments: [
+        'parameterName' => 'groups',
+        'overrideDefaultGroups' => true,
+        'whitelist' => [
+            'message:read"',
+            'message:topic',
+            'topic:read',
+            'topic:forum',
+            'forum:read',
+            'forum:user',
+            'user:read',
+        ]
+    ]
+)]
 class Message implements TimestampableInterface
 {
     use TimestampableTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[Groups(['message:read', 'message:update'])]
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private ?int $id = null;
 
-    /**
-     * @Assert\NotNull
-     * @Assert\NotBlank
-     * @ORM\Column(name="message", type="text", nullable=true)
-     */
+    #[Groups(['message:message', 'message:insert'])]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[ORM\Column(type: 'text', nullable: false)]
     private string $message;
 
-
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=false)
-     */
+    #[Groups(['message:read'])]
+    #[ORM\Column(nullable: false, options: ['default' => 1])]
     private int $position = 1;
 
-    /**
-     * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Topic", inversedBy="messages")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idTopic", referencedColumnName="id", onDelete="CASCADE")
-     * })
-     */
+    #[Groups(['message:topic'])]
+    #[ORM\ManyToOne(targetEntity: Topic::class, inversedBy: 'messages')]
+    #[ORM\JoinColumn(name:'topic_id', referencedColumnName:'id', nullable:false)]
     private Topic $topic;
 
-    /**
-     * @var UserInterface
-     *
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
-     * })
-     */
+    #[Groups(['message:user'])]
+    #[ORM\ManyToOne(targetEntity: UserInterface::class)]
+    #[ORM\JoinColumn(name:'user_id', referencedColumnName:'id', nullable:false)]
     private $user;
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('[%s]', $this->getId());
     }
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return $this
-     */
-    public function setId(int $id): Message
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    /**
-     * Get id
-     *
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set message
-     *
-     * @param string $message
-     * @return $this
-     */
-    public function setMessage(string $message): Message
+    public function setMessage(string $message): void
     {
         $this->message = $message;
-        return $this;
     }
 
-    /**
-     * Get message
-     *
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * Set topic
-     * @param Topic|null $topic
-     * @return $this
-     */
-    public function setTopic(Topic $topic = null): Message
+    public function setTopic(Topic $topic = null): void
     {
         $this->topic = $topic;
-        return $this;
     }
 
-    /**
-     * Get topic
-     * @return Topic
-     */
     public function getTopic(): Topic
     {
         return $this->topic;
     }
 
-    /**
-     * Set user
-     * @param $user
-     * @return $this
-     */
-    public function setUser($user): Message
+    public function setUser($user): void
     {
         $this->user = $user;
-        return $this;
     }
 
-    /**
-     * Get user
-     * @return UserInterface
-     */
     public function getUser()
     {
         return $this->user;
     }
 
-     /**
-     * Set position
-     * @param integer $position
-     * @return $this
-     */
-    public function setPosition(int $position): Message
+    public function setPosition(int $position): void
     {
         $this->position = $position;
-        return $this;
     }
 
-    /**
-     * Get position
-     *
-     * @return integer
-     */
     public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @return int
-     */
     public function getPage(): int
     {
-        return (int) floor(($this->getPosition() -1) / 20) + 1;
+        return (int) floor(($this->getPosition() - 1) / 20) + 1;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->getTopic()->getUrl() . '?page=' . $this->getPage() . '#' . $this->getId();

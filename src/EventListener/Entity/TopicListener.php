@@ -1,21 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class TopicListener
 {
     private array $changeSet = array();
     private Security $security;
 
-    /**
-     * TopicListener constructor.
-     */
     public function __construct(Security $security)
     {
         $this->security = $security;
@@ -48,8 +47,8 @@ class TopicListener
     public function postPersist(Topic $topic, LifecycleEventArgs $event): void
     {
         $connection = $event->getObjectManager()->getConnection();
-        $query ="INSERT INTO forum_topic_user (idTopic, idUser)
-                 SELECT :idTopic, idUser FROM forum_topic";
+        $query = "INSERT INTO pnf_topic_user (topic_id, user_id)
+                 SELECT DISTINCT :idTopic, user_id FROM pnf_topic_user";
         $connection->executeStatement($query, array('idTopic' => $topic->getId()));
     }
 

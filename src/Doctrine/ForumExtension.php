@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Doctrine;
 
 use ApiPlatform\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
@@ -8,7 +11,7 @@ use ApiPlatform\Metadata\Operation;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class ForumExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
@@ -42,8 +45,8 @@ final class ForumExtension implements QueryCollectionExtensionInterface, QueryIt
         string $resourceClass,
         array $identifiers,
         Operation $operation = null,
-        array $context = []): void
-    {
+        array $context = []
+    ): void {
         $this->addWhere($queryBuilder, $resourceClass);
     }
 
@@ -54,9 +57,11 @@ final class ForumExtension implements QueryCollectionExtensionInterface, QueryIt
      */
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass): void
     {
-        if (Forum::class !== $resourceClass || !$this->security->isGranted(
+        if (
+            Forum::class !== $resourceClass || !$this->security->isGranted(
                 'ROLE_USER'
-            ) || null === $user = $this->security->getUser()) {
+            ) || null === $user = $this->security->getUser()
+        ) {
             return;
         }
         $queryBuilder->innerJoin('o.forumUser', 'fu', Join::WITH, 'fu.user = :current_user');

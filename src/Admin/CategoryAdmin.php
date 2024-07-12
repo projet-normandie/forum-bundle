@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -16,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 class CategoryAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_category';
+    protected $baseRouteName = 'pnf_admin_category';
 
     /**
      * @param RouteCollection $collection

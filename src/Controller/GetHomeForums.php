@@ -1,13 +1,15 @@
 <?php
 
-namespace ProjetNormandie\ForumBundle\Controller\Forum;
+declare(strict_types=1);
+
+namespace ProjetNormandie\ForumBundle\Controller;
 
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Handler\UserDataInitHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class Home extends AbstractController
+class GetHomeForums extends AbstractController
 {
     private UserDataInitHandler $userDataInitHandler;
     private EntityManagerInterface $em;

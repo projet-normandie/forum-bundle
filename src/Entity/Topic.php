@@ -1,392 +1,283 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use ProjetNormandie\ForumBundle\Repository\TopicRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Serializer\Filter\GroupFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Topic
- *
- * @ORM\Table(
- *     name="forum_topic",
- *     indexes={
- *         @ORM\Index(name="idx_libTopic", columns={"libTopic"})
- *     }
- * )
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\TopicRepository")
- * @ORM\EntityListeners({"ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener"})
- * @ApiResource(
- * *     attributes={"order"={"type.position": "ASC","lastMessage.id": "DESC"}}
- * )
- * @ApiFilter(BooleanFilter::class, properties={"boolArchive"})
- * @ApiFilter(
- *     SearchFilter::class,
- *     properties={
- *         "libTopic": "partial",
- *         "forum": "exact",
- *         "forum.status": "exact",
- *         "topicUser.user": "exact",
- *         "topicUser.boolNotif": "exact",
- *     }
- * )
- * @ApiFilter(
- *     GroupFilter::class,
- *     arguments={
- *         "parameterName": "groups",
- *         "overrideDefaultGroups": true,
- *         "whitelist": {
- *              "forum.forum.read",
- *              "forum.topic.read",
- *              "forum.topic.lastMessage",
- *              "forum.message.last",
- *              "forum.topicUser.read",
- *              "forum.topic.topicUser1",
- *          }
- *     }
- * )
- * @ApiFilter(
- *      OrderFilter::class,
- *      properties={
- *          "lastMessage.id":"DESC",
- *      },
- *      arguments={"orderParameterName"="order"}
- * )
- */
+#[ORM\Table(name:'pnf_topic')]
+#[ORM\Entity(repositoryClass: TopicRepository::class)]
+#[ORM\EntityListeners(["ProjetNormandie\ForumBundle\EventListener\Entity\TopicListener"])]
+#[ORM\Index(name: "idx_lib_topic", columns: ["lib_topic"])]
+#[ApiResource(
+    shortName: 'ForumTopic',
+    order: ['type.position' => 'ASC', 'lastMessage.id' => 'DESC'],
+    operations: [
+        new GetCollection(
+            normalizationContext: ['groups' =>
+                ['topic:read', 'topic:last-message', 'message:read', 'topic:forum', 'forum:read', 'topic:type', 'topic-type:read']
+            ]
+        ),
+        new Get(),
+        new Post(
+            denormalizationContext: ['groups' => ['topic:insert', 'message:insert']],
+            normalizationContext: ['groups' =>
+                ['topic:read', 'topic:forum', 'forum:read']
+            ],
+            security: 'is_granted("ROLE_USER")',
+        ),
+        new Put(
+            security: 'is_granted("ROLE_USER") and object.getUser() == user',
+        )
+    ],
+    normalizationContext: ['groups' => ['topic:read']]
+)]
+#[ApiResource(
+    shortName: 'ForumTopic',
+    uriTemplate: '/forum_forums/{id}/topics',
+    uriVariables: [
+        'id' => new Link(fromClass: Forum::class, toProperty: 'forum'),
+    ],
+    operations: [ new GetCollection() ],
+    normalizationContext: ['groups' => ['forum:read']],
+)]
+#[ApiFilter(
+    SearchFilter::class,
+    properties: [
+        'libTopic' => 'partial',
+        'forum' => 'exact',
+        'forum.status' => 'exact',
+        'topicUser.user' => 'exact',
+        'topicUser.boolNotif' => 'exact'
+    ]
+)]
+#[ApiFilter(
+    OrderFilter::class,
+    properties: [
+        'lastMessage.id' => 'DESC',
+    ]
+)]
+#[ApiFilter(
+    GroupFilter::class,
+    arguments: [
+        'parameterName' => 'groups',
+        'overrideDefaultGroups' => true,
+        'whitelist' => [
+            'forum:read',
+            'topic:read',
+            'topic:type',
+            'topic-type:read',
+            'topic:forum',
+            'topic:user',
+            'forum:read"',
+            'topic:last-message',
+            'topic-user:read',
+            'topic:topic-user-1',
+            'message:read',
+            'message:user',
+            'user:read'
+        ]
+    ]
+)]
+#[ApiFilter(BooleanFilter::class, properties: ['boolArchive'])]
 class Topic implements TimestampableInterface, SluggableInterface
 {
     use TimestampableTrait;
     use SluggableTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[Groups(['topic:read'])]
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private ?int $id = null;
 
-    /**
-     * @Assert\NotNull
-     * @Assert\NotBlank
-     * @Assert\Length(min="3")
-     * @Assert\Length(max="255")
-     * @ORM\Column(name="libTopic", type="string", length=255, nullable=false)
-     */
+    #[Groups(['topic:read', 'topic:insert'])]
+    #[Assert\NotNull]
+    #[Assert\NotBlank]
+    #[Assert\Length(min:3, max: 255)]
+    #[ORM\Column(length: 255, nullable: false)]
     private string $libTopic;
 
-    /**
-     * @ORM\Column(name="nbMessage", type="integer", nullable=false, options={"default":0})
-     */
+    #[Groups(['topic:read'])]
+    #[ORM\Column(nullable: false, options: ['default' => 0])]
     private int $nbMessage = 0;
 
-
-    /**
-     * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", inversedBy="topics")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idForum", referencedColumnName="id")
-     * })
-     */
+    #[Groups(['topic:forum', 'topic:insert'])]
+    #[ORM\ManyToOne(targetEntity: Forum::class, inversedBy: 'topics')]
+    #[ORM\JoinColumn(name:'forum_id', referencedColumnName:'id', nullable:false)]
     private Forum $forum;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\UserInterface")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idUser", referencedColumnName="id")
-     * })
-     */
+    #[Groups(['topic:user'])]
+    #[ORM\ManyToOne(targetEntity: UserInterface::class)]
+    #[ORM\JoinColumn(name:'user_id', referencedColumnName:'id', nullable:false)]
     private $user;
 
-    /**
-     * @Assert\NotNull
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicType")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idType", referencedColumnName="id")
-     * })
-     */
+    #[Groups(['topic:type', 'topic:insert'])]
+    #[ORM\ManyToOne(targetEntity: TopicType::class)]
+    #[ORM\JoinColumn(name:'type_id', referencedColumnName:'id', nullable:false)]
     private TopicType $type;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", mappedBy="topic", cascade={"persist"})
-     */
+    #[Groups(['topic:insert'])]
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'topic', cascade: ['persist'])]
     private Collection $messages;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="ProjetNormandie\ForumBundle\Entity\Message", cascade={"persist"})
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="idMessageMax", referencedColumnName="id", nullable=true, onDelete="SET NULL")
-     * })
-     */
+    #[Groups(['topic:last-message'])]
+    #[ORM\ManyToOne(targetEntity: Message::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name:'max_message_id', referencedColumnName:'id', nullable:true, onDelete: 'SET NULL')]
     private ?Message $lastMessage;
 
-    /**
-     * @ORM\Column(name="boolArchive", type="boolean", nullable=false, options={"default":0})
-     */
+    #[ORM\Column(nullable: false, options: ['default' => false])]
     private bool $boolArchive = false;
 
-    /**
-     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\TopicUser", mappedBy="topic")
-     */
+    #[ORM\OneToMany(targetEntity: TopicUser::class, mappedBy: 'topic')]
     private Collection $topicUser;
 
 
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('%s [%s]', $this->getLibTopic(), $this->getId());
     }
 
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
         $this->topicUser = new ArrayCollection();
     }
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return Topic
-     */
-    public function setId(int $id): self
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    /**
-     * Get id
-     *
-     * @return int|null
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set libTopic
-     *
-     * @param string $libTopic
-     * @return Topic
-     */
-    public function setLibTopic(string $libTopic): self
+    public function setLibTopic(string $libTopic): void
     {
         $this->libTopic = $libTopic;
-
-        return $this;
     }
 
-    /**
-     * Get libTopic
-     *
-     * @return string
-     */
     public function getLibTopic(): string
     {
         return $this->libTopic;
     }
 
-    /**
-     * Set nbMessage
-     *
-     * @param integer $nbMessage
-     * @return $this
-     */
-    public function setNbMessage(int $nbMessage): self
+    public function setNbMessage(int $nbMessage): void
     {
         $this->nbMessage = $nbMessage;
-
-        return $this;
     }
 
-    /**
-     * Get nbMessage
-     *
-     * @return integer
-     */
     public function getNbMessage(): int
     {
         return $this->nbMessage;
     }
 
-    /**
-     * Set forum
-     * @param Forum $forum
-     * @return $this
-     */
-    public function setForum(Forum $forum): self
+    public function setForum(Forum $forum): void
     {
         $this->forum = $forum;
-        return $this;
     }
 
-    /**
-     * Get forum
-     * @return Forum
-     */
     public function getForum(): Forum
     {
         return $this->forum;
     }
 
-    /**
-     * Set user
-     * @param $user
-     * @return $this
-     */
-    public function setUser($user): self
+    public function setUser($user): void
     {
         $this->user = $user;
-        return $this;
     }
 
-    /**
-     * Get user
-     */
     public function getUser()
     {
         return $this->user;
     }
 
-    /**
-     * Set type
-     * @param TopicType $type
-     * @return $this
-     */
-    public function setType(TopicType $type): self
+    public function setType(TopicType $type): void
     {
         $this->type = $type;
-        return $this;
     }
 
-    /**
-     * Get type
-     * @return TopicType
-     */
     public function getType(): TopicType
     {
         return $this->type;
     }
 
-    /**
-     * Set messages
-     * @param array $messages
-     * @return $this
-     */
-    public function setMessages(array $messages): self
+    public function setMessages(array $messages): void
     {
         foreach ($messages as $message) {
             $this->addMessage($message);
         }
-        return $this;
     }
 
-    /**
-     * @param Message $message
-     */
-    public function addMessage(Message $message)
+    public function addMessage(Message $message): void
     {
         $message->setTopic($this);
         $this->messages[] = $message;
     }
 
-    /**
-     * @return Collection
-     */
     public function getMessages(): Collection
     {
         return $this->messages;
     }
 
-    /**
-     * @param Message|null $message
-     * @return $this
-     */
-    public function setLastMessage(Message $message = null): self
+    public function setLastMessage(Message $message = null): void
     {
         $this->lastMessage = $message;
-        return $this;
     }
 
-    /**
-     * Get lastMessage
-     * @return Message|null
-     */
-    public function getLastMessage(): Message|null
+    public function getLastMessage(): ?Message
     {
         return $this->lastMessage;
     }
 
-    /**
-     * Set boolArchive
-     *
-     * @param boolean $boolArchive
-     * @return $this
-     */
-    public function setBoolArchive(bool $boolArchive): self
+    public function setBoolArchive(bool $boolArchive): void
     {
         $this->boolArchive = $boolArchive;
-
-        return $this;
     }
 
-    /**
-     * Get boolArchive
-     *
-     * @return boolean
-     */
     public function getBoolArchive(): bool
     {
         return $this->boolArchive;
     }
 
-    /**
-     * @return Collection
-     */
     public function getTopicUser(): Collection
     {
         return $this->topicUser;
     }
 
-    /**
-     * @return TopicUser
-     */
+    #[Groups(['topic:topic-user-1'])]
     public function getTopicUser1(): TopicUser
     {
         return $this->topicUser[0];
     }
 
-    /**
-     * Returns an array of the fields used to generate the slug.
-     *
-     * @return string[]
-     */
     public function getSluggableFields(): array
     {
         return ['libTopic'];
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return sprintf(

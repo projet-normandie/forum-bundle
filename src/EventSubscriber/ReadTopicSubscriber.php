@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\EventSubscriber;
 
 use ApiPlatform\Symfony\EventListener\EventPriorities as EventPrioritiesAlias;
@@ -10,17 +13,14 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class ReadTopicSubscriber implements EventSubscriberInterface
 {
-    private Security $security;
-    private MarkAsReadService $markAsReadService;
-
-    public function __construct(Security $security, MarkAsReadService $markAsReadService)
-    {
-        $this->security = $security;
-        $this->markAsReadService = $markAsReadService;
+    public function __construct(
+        private readonly Security $security,
+        private readonly MarkAsReadService $markAsReadService
+    ) {
     }
 
     public static function getSubscribedEvents(): array
