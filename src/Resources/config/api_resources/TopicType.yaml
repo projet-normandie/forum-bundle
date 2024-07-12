@@ -1,5 +1,0 @@
-resources:
-    ProjetNormandie\ForumBundle\Entity\TopicType:
-        shortName: 'ForumTopicType'
-        itemOperations:
-            get: ~

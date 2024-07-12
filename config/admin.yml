@@ -1,0 +1,51 @@
+services:
+  sonata.admin.forum.category:
+    class: ProjetNormandie\ForumBundle\Admin\CategoryAdmin
+    tags:
+      - name: sonata.admin
+        model_class: 'ProjetNormandie\ForumBundle\Entity\Category'
+        manager_type: orm
+        group: "group.forums"
+        label: "label.category"
+  sonata.admin.forum.forum:
+    class: ProjetNormandie\ForumBundle\Admin\ForumAdmin
+    tags:
+      - name: sonata.admin
+        model_class: 'ProjetNormandie\ForumBundle\Entity\Forum'
+        manager_type: orm
+        group: "group.forums"
+        label: "label.forum"
+  sonata.admin.forum.topic:
+    class: ProjetNormandie\ForumBundle\Admin\TopicAdmin
+    tags:
+      - name: sonata.admin
+        model_class: 'ProjetNormandie\ForumBundle\Entity\Topic'
+        manager_type: orm
+        group: "group.forums"
+        label: "label.topic"
+    calls:
+      - [ setTemplate, [ 'show', '@@ProjetNormandieForum/Admin/topic_show.html.twig' ] ]
+  sonata.admin.forum.message:
+    class: ProjetNormandie\ForumBundle\Admin\MessageAdmin
+    tags:
+      - name: sonata.admin
+        model_class: 'ProjetNormandie\ForumBundle\Entity\Message'
+        manager_type: orm
+        group: "group.forums"
+        label: "label.message"
+  sonata.admin.forum.topicUser:
+    class: ProjetNormandie\ForumBundle\Admin\TopicUserAdmin
+    tags:
+      - name: sonata.admin
+        model_class: 'ProjetNormandie\ForumBundle\Entity\TopicUser'
+        manager_type: orm
+        group: "group.forums"
+        label: "label.topicUser"
+  sonata.admin.forum.forumUser:
+    class: ProjetNormandie\ForumBundle\Admin\ForumUserAdmin
+    tags:
+      - name: sonata.admin
+        model_class: 'ProjetNormandie\ForumBundle\Entity\ForumUser'
+        manager_type: orm
+        group: "group.forums"
+        label: "label.forumUser"

@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\Forum;
 
-class ForumRepository extends EntityRepository
+class ForumRepository extends ServiceEntityRepository
 {
-    /**
-     * @param $forum
-     * @return mixed
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Forum::class);
+    }
+
     public function getParentData($forum)
     {
          $query = $this->createQueryBuilder('f')

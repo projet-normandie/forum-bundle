@@ -1,19 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\Topic;
 
-/**
- * Specific repository that serves the Topic entity.
- */
-class TopicRepository extends EntityRepository
+class TopicRepository extends ServiceEntityRepository
 {
-    /**
-     * @param Forum $forum
-     * @return mixed
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Topic::class);
+    }
+
     public function getForumData(Forum $forum)
     {
          $query = $this->createQueryBuilder('t')

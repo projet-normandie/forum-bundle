@@ -1,135 +1,94 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use ProjetNormandie\ForumBundle\Repository\CategoryRepository;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Category
- *
- * @ORM\Table(name="forum_category")
- * @ORM\Entity(repositoryClass="ProjetNormandie\ForumBundle\Repository\CategoryRepository")
- */
+#[ORM\Table(name:'pnf_category')]
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
+#[ApiResource(
+    shortName: 'ForumCategory',
+    order: ['position' => 'ASC'],
+    operations: [
+        new GetCollection(),
+        new Get(),
+    ],
+    normalizationContext: ['groups' => ['category:read']]
+)]
 class Category implements TimestampableInterface
 {
     use TimestampableTrait;
 
-    /**
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
+    #[Groups(['category:read'])]
+    #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private int $id;
 
-    /**
-     * @Assert\Length(max="50")
-     * @ORM\Column(name="libCategory", type="string", length=50, nullable=false)
-     */
+    #[Groups(['category:read'])]
+    #[ORM\Column(length: 50, nullable: false)]
     private string $libCategory;
 
-    /**
-     * @ORM\Column(name="position", type="integer", nullable=true, options={"default":0})
-     */
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $position = 0;
 
     /**
-     * @ORM\OneToMany(targetEntity="ProjetNormandie\ForumBundle\Entity\Forum", mappedBy="category")
+     * @var Collection<int, Forum>
      */
+    #[Groups(['category:forums'])]
+    #[ORM\OneToMany(targetEntity: Forum::class, mappedBy: 'category')]
     private Collection $forums;
 
-
-    /**
-     * @return string
-     */
     public function __toString()
     {
         return sprintf('%s [%s]', $this->getLibCategory(), $this->getId());
     }
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->forums = new ArrayCollection();
     }
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     * @return Category
-     */
-    public function setId(int $id): Category
+    public function setId(int $id): void
     {
         $this->id = $id;
-        return $this;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set libCategory
-     *
-     * @param string $libCategory
-     * @return Category
-     */
-    public function setLibCategory(string $libCategory): Category
+    public function setLibCategory(string $libCategory): void
     {
         $this->libCategory = $libCategory;
-
-        return $this;
     }
 
-    /**
-     * Get libCategory
-     *
-     * @return string
-     */
     public function getLibCategory(): string
     {
         return $this->libCategory;
     }
 
-    /**
-     * Set position
-     *
-     * @param integer $position
-     * @return Category
-     */
-    public function setPosition(int $position): Category
+    public function setPosition(int $position): void
     {
         $this->position = $position;
-
-        return $this;
     }
 
-    /**
-     * Get position
-     *
-     * @return integer
-     */
     public function getPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @return Collection
-     */
     public function getForums(): Collection
     {
         return $this->forums;

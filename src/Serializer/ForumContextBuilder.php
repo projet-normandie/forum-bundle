@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Serializer;
 
 use ApiPlatform\Serializer\SerializerContextBuilderInterface;
@@ -24,18 +27,22 @@ final class ForumContextBuilder implements SerializerContextBuilderInterface
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
         $resourceClass = $context['resource_class'] ?? null;
 
-        if (($context['request_uri'] == '/api/categorie/home')
+        if (
+            ($context['request_uri'] == '/api/categorie/home')
             && isset($context['groups'])
             && $this->authorizationChecker->isGranted('ROLE_USER')
-            && true === $normalization) {
+            && true === $normalization
+        ) {
             $context['groups'][] = 'forum.forum.forumUser1';
             $context['groups'][] = 'forum.forumUser.read';
         }
 
-        if ($resourceClass === Forum::class
+        if (
+            $resourceClass === Forum::class
             && isset($context['groups'])
             && $this->authorizationChecker->isGranted('ROLE_USER')
-            && true === $normalization) {
+            && true === $normalization
+        ) {
             $context['groups'][] = 'forum.forum.forumUser1';
             $context['groups'][] = 'forum.ForumUser.read';
         }

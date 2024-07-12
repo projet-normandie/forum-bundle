@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Handler;
 
 use Doctrine\DBAL\Exception;
@@ -7,11 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UserDataInitHandler
 {
-    private EntityManagerInterface $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(private readonly EntityManagerInterface $em)
     {
-        $this->em = $em;
     }
 
     /**
@@ -20,20 +19,24 @@ class UserDataInitHandler
      */
     public function process($user): void
     {
-        if (null === $user) return;
+        if (null === $user) {
+            return;
+        }
 
-        if ($this->isInitialized($user)) return;
+        if ($this->isInitialized($user)) {
+            return;
+        }
 
         try {
             $this->em->beginTransaction();
 
             // FORUM_USER
-            $query ="INSERT INTO forum_forum_user (idForum, idUser)
-                SELECT id, :idUser FROM forum_forum";
+            $query = "INSERT INTO pnf_forum_user (forum_id, user_id)
+                SELECT id, :idUser FROM pnf_forum";
             $this->em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
 
             //TOPIC_USER
-            $query ="INSERT INTO forum_topic_user (idTopic, idUser)
+            $query = "INSERT INTO pnf_topic_user (topic_id, user_id)
                  SELECT id, :idUser FROM forum_topic";
             $this->em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
 

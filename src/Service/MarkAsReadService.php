@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Service;
 
 use Doctrine\ORM\NonUniqueResultException;
@@ -25,8 +27,7 @@ class MarkAsReadService
         Security $security,
         ForumUserRepository $forumUserRepository,
         TopicUserRepository $topicUserRepository
-    )
-    {
+    ) {
         $this->security = $security;
         $this->forumUserRepository = $forumUserRepository;
         $this->topicUserRepository = $topicUserRepository;

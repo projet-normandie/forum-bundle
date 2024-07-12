@@ -1,15 +1,14 @@
 <?php
 
-namespace ProjetNormandie\ForumBundle\Controller\Forum;
+declare(strict_types=1);
+
+namespace ProjetNormandie\ForumBundle\Controller;
 
 use ProjetNormandie\ForumBundle\Service\MarkAsReadService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-/**
- * Class ForumController
- */
-class ReadAll extends AbstractController
+class ReadAllForum extends AbstractController
 {
     private MarkAsReadService $markAsReadService;
 

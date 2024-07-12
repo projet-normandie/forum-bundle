@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Admin;
 
+use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -19,7 +22,7 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
  */
 class ForumAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_forum';
+    protected $baseRouteName = 'pnf_admin_forum';
 
     /**
      * @param RouteCollection $collection
@@ -46,7 +49,7 @@ class ForumAdmin extends AbstractAdmin
                 ChoiceType::class,
                 [
                     'label' => 'label.status',
-                    'choices' => Forum::getStatusChoices(),
+                    'choices' => ForumStatus::getStatusChoices(),
                 ]
             )
             ->add('position', TextType::class, ['label' => 'label.position', 'required' => true]);

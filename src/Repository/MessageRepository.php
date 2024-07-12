@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\Persistence\ManagerRegistry;
+use ProjetNormandie\ForumBundle\Entity\Message;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 
-/**
- * Specific repository that serves the Message entity.
- */
-class MessageRepository extends EntityRepository
+class MessageRepository extends ServiceEntityRepository
 {
-    /**
-     * @throws NonUniqueResultException
-     */
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Message::class);
+    }
+
     public function getPosition($message)
     {
         $qb = $this->createQueryBuilder('message')

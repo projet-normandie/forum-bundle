@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ProjetNormandie\ForumBundle\Admin;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
@@ -13,12 +15,13 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 /**
  * Administration manager for the Forum Bundle.
  */
 class MessageAdmin extends AbstractAdmin
 {
-    protected $baseRouteName = 'pnforumbundle_admin_message';
+    protected $baseRouteName = 'pnf_admin_message';
 
     /**
      * @param RouteCollection $collection
@@ -55,7 +58,7 @@ class MessageAdmin extends AbstractAdmin
             ->add('topic', ModelFilter::class, [
                 'label' => 'label.topic',
                 'field_type' => ModelAutocompleteType::class,
-                'field_options' => ['property'=>'libTopic'],
+                'field_options' => ['property' => 'libTopic'],
             ]);
     }
 
