@@ -16,7 +16,7 @@
         "doctrine/orm": "^2.5",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "knplabs/doctrine-behaviors": "~2.0",
-        "projet-normandie/message-bundle": "dev-feat-symfony-6",
+        "projet-normandie/message-bundle": "dev-main",
         "sonata-project/admin-bundle": "^4.0",
         "sonata-project/doctrine-orm-admin-bundle": "^4.8",
         "symfony/dependency-injection": "^6.4",
