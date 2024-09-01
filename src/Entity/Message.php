@@ -73,8 +73,10 @@ use Symfony\Component\Validator\Constraints as Assert;
         'parameterName' => 'groups',
         'overrideDefaultGroups' => true,
         'whitelist' => [
-            'message:read"',
+            'message:read',
+            'message:user',
             'message:topic',
+            'message:message',
             'topic:read',
             'topic:forum',
             'forum:read',
