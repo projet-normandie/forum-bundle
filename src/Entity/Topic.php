@@ -51,7 +51,7 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: 'is_granted("ROLE_USER") and object.getUser() == user',
         )
     ],
-    normalizationContext: ['groups' => ['topic:read']]
+    normalizationContext: ['groups' => ['topic:read', 'topic:type', 'topic-type:read']],
 )]
 #[ApiResource(
     shortName: 'ForumTopic',
