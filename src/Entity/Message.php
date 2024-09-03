@@ -103,7 +103,7 @@ class Message implements TimestampableInterface
     #[ORM\Column(nullable: false, options: ['default' => 1])]
     private int $position = 1;
 
-    #[Groups(['message:topic'])]
+    #[Groups(['message:topic', 'message:insert'])]
     #[ORM\ManyToOne(targetEntity: Topic::class, inversedBy: 'messages')]
     #[ORM\JoinColumn(name:'topic_id', referencedColumnName:'id', nullable:false)]
     private Topic $topic;
