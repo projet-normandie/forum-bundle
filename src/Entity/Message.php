@@ -93,7 +93,7 @@ class Message implements TimestampableInterface
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
     private ?int $id = null;
 
-    #[Groups(['message:message', 'message:insert'])]
+    #[Groups(['message:message', 'message:insert', 'message:update'])]
     #[Assert\NotNull]
     #[Assert\NotBlank]
     #[ORM\Column(type: 'text', nullable: false)]
