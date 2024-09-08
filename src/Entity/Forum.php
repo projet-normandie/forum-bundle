@@ -65,7 +65,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiFilter(
     OrderFilter::class,
     properties: [
-        'lastMessage.id"' => 'DESC'
+        'lastMessage.id' => 'DESC'
     ]
 )]
 #[ApiFilter(
