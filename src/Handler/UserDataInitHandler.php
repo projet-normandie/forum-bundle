@@ -37,7 +37,7 @@ class UserDataInitHandler
 
             //TOPIC_USER
             $query = "INSERT INTO pnf_topic_user (topic_id, user_id)
-                 SELECT id, :idUser FROM forum_topic";
+                 SELECT id, :idUser FROM pnf_topic";
             $this->em->getConnection()->executeStatement($query, array('idUser' => $user->getId()));
 
             $this->em->commit();
