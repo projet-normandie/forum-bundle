@@ -11,8 +11,9 @@
         }
     ],
     "require": {
-        "php": "^8.1",
-        "api-platform/core": "^3.2",
+        "php": "^8.3",
+        "api-platform/doctrine-orm": "^4.0",
+        "api-platform/symfony": "^4.0",
         "doctrine/orm": "^2.5",
         "friendsofsymfony/ckeditor-bundle": "^2.1",
         "knplabs/doctrine-behaviors": "~2.0",

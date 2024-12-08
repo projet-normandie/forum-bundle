@@ -21,7 +21,6 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use ProjetNormandie\ForumBundle\Controller\GetHomeForums;
 use ProjetNormandie\ForumBundle\Controller\ReadForum;
 use ProjetNormandie\ForumBundle\Repository\ForumRepository;
 use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
