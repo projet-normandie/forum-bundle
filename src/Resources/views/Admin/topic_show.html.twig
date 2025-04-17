@@ -30,7 +30,7 @@
                                                     <td>
                                                         <ul>
                                                     {% for message in object.getMessages() %}
-                                                            <li><a href="{{ path('pnforumbundle_admin_message_show', {'id': message.getId()}) }}">By {{ message.getUser() }}</a></li>
+                                                            <li><a href="{{ path('pnf_admin_message_show', {'id': message.getId()}) }}">By {{ message.getUser() }}</a></li>
                                                             <li>{{ message.getMessage() | raw }}</li>
                                                     {% endfor %}
                                                         </ul>
