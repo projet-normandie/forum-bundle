@@ -20,10 +20,10 @@
         "projet-normandie/message-bundle": "dev-main",
         "sonata-project/admin-bundle": "^4.0",
         "sonata-project/doctrine-orm-admin-bundle": "^4.8",
-        "symfony/dependency-injection": "^6.4",
-        "symfony/event-dispatcher": "^6.4",
-        "symfony/security-bundle": "^6.4",
-        "symfony/validator": "^6.4",
+        "symfony/dependency-injection": "^6.4 | ^7.2",
+        "symfony/event-dispatcher": "^6.4 | ^7.2",
+        "symfony/security-bundle": "^6.4 | ^7.2",
+        "symfony/validator": "^6.4 | ^7.2",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
