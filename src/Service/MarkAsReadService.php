@@ -10,7 +10,7 @@ use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 use ProjetNormandie\ForumBundle\Repository\ForumUserRepository;
 use ProjetNormandie\ForumBundle\Repository\TopicUserRepository;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class MarkAsReadService
 {

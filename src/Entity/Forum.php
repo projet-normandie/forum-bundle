@@ -17,10 +17,8 @@ use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 use ProjetNormandie\ForumBundle\Controller\ReadForum;
 use ProjetNormandie\ForumBundle\Repository\ForumRepository;
 use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
@@ -84,10 +82,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(DateFilter::class, properties: ['lastMessage.createdAt' => DateFilterInterface::EXCLUDE_NULL])]
-class Forum implements TimestampableInterface, SluggableInterface
+class Forum
 {
-    use TimestampableTrait;
-    use SluggableTrait;
+    use TimestampableEntity;
 
     #[Groups(['forum:read'])]
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
@@ -121,6 +118,10 @@ class Forum implements TimestampableInterface, SluggableInterface
     #[Groups(['forum:read'])]
     #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $nbTopic = 0;
+
+    #[ORM\Column(length: 128)]
+    #[Gedmo\Slug(fields: ['libForum'])]
+    protected string $slug;
 
     #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'forums')]
     #[ORM\JoinColumn(name:'category_id', referencedColumnName:'id', nullable:true)]
@@ -243,7 +244,12 @@ class Forum implements TimestampableInterface, SluggableInterface
         return $this->nbTopic;
     }
 
-    public function setCategory(Category $category = null): void
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setCategory(?Category $category = null): void
     {
         $this->category = $category;
     }
@@ -253,7 +259,7 @@ class Forum implements TimestampableInterface, SluggableInterface
         return $this->category;
     }
 
-    public function setParent(Forum $forum = null): void
+    public function setParent(?Forum $forum = null): void
     {
         $this->parent = $forum;
     }
@@ -273,7 +279,7 @@ class Forum implements TimestampableInterface, SluggableInterface
         return $this->childrens;
     }
 
-    public function setLastMessage(Message $message = null): void
+    public function setLastMessage(?Message $message = null): void
     {
         $this->lastMessage = $message;
     }
@@ -302,10 +308,5 @@ class Forum implements TimestampableInterface, SluggableInterface
     public function getForumUser1()
     {
         return $this->forumUser[0];
-    }
-
-    public function getSluggableFields(): array
-    {
-        return ['libForum'];
     }
 }

@@ -74,7 +74,7 @@ class TopicUser
         return $this->user;
     }
 
-    public function setTopic(Topic $topic = null): void
+    public function setTopic(Topic $topic): void
     {
         $this->topic = $topic;
     }

@@ -15,9 +15,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use ProjetNormandie\ForumBundle\Repository\MessageRepository;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -85,9 +84,9 @@ use Symfony\Component\Validator\Constraints as Assert;
         ]
     ]
 )]
-class Message implements TimestampableInterface
+class Message
 {
-    use TimestampableTrait;
+    use TimestampableEntity;
 
     #[Groups(['message:read', 'message:update'])]
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
@@ -138,7 +137,7 @@ class Message implements TimestampableInterface
         return $this->message;
     }
 
-    public function setTopic(Topic $topic = null): void
+    public function setTopic(Topic $topic): void
     {
         $this->topic = $topic;
     }

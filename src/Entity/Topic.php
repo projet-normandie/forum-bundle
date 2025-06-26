@@ -17,12 +17,10 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Gedmo\Mapping\Annotation as Gedmo;
 use ProjetNormandie\ForumBundle\Repository\TopicRepository;
 use Doctrine\Common\Collections\ArrayCollection;
-use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -100,10 +98,9 @@ use Symfony\Component\Validator\Constraints as Assert;
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['boolArchive'])]
-class Topic implements TimestampableInterface, SluggableInterface
+class Topic
 {
-    use TimestampableTrait;
-    use SluggableTrait;
+    use TimestampableEntity;
 
     #[Groups(['topic:read'])]
     #[ORM\Id, ORM\Column, ORM\GeneratedValue]
@@ -129,6 +126,10 @@ class Topic implements TimestampableInterface, SluggableInterface
     #[ORM\ManyToOne(targetEntity: UserInterface::class)]
     #[ORM\JoinColumn(name:'user_id', referencedColumnName:'id', nullable:false)]
     private $user;
+
+    #[ORM\Column(length: 255)]
+    #[Gedmo\Slug(fields: ['libTopic'])]
+    protected string $slug;
 
     #[Groups(['topic:type', 'topic:insert'])]
     #[ORM\ManyToOne(targetEntity: TopicType::class)]
@@ -213,6 +214,11 @@ class Topic implements TimestampableInterface, SluggableInterface
         return $this->user;
     }
 
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
     public function setType(TopicType $type): void
     {
         $this->type = $type;
@@ -241,7 +247,7 @@ class Topic implements TimestampableInterface, SluggableInterface
         return $this->messages;
     }
 
-    public function setLastMessage(Message $message = null): void
+    public function setLastMessage(?Message $message = null): void
     {
         $this->lastMessage = $message;
     }
@@ -270,11 +276,6 @@ class Topic implements TimestampableInterface, SluggableInterface
     public function getTopicUser1(): TopicUser
     {
         return $this->topicUser[0];
-    }
-
-    public function getSluggableFields(): array
-    {
-        return ['libTopic'];
     }
 
     public function getUrl(): string

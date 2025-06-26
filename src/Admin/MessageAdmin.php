@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ProjetNormandie\ForumBundle\Admin;
 
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use ProjetNormandie\ForumBundle\Form\Type\RichTextEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
@@ -38,14 +38,10 @@ class MessageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
-            ->add('message', CKEditorType::class, [
+            ->add('message', RichTextEditorType::class, [
                     'label' => 'label.message',
                     'required' => true,
-                    'config' => array(
-                        'height' => '400',
-                        'toolbar' => 'standard'
-                    ),
-                ]);
+                  ]);
     }
 
     /**
