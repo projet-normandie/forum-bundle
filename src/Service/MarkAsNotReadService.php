@@ -7,7 +7,7 @@ namespace ProjetNormandie\ForumBundle\Service;
 use Doctrine\ORM\EntityManagerInterface;
 use ProjetNormandie\ForumBundle\Entity\Topic;
 use ProjetNormandie\ForumBundle\Entity\Forum;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class MarkAsNotReadService
 {
