@@ -6,7 +6,6 @@ namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
-use ProjetNormandie\ForumBundle\Manager\NotifyManager;
 use ProjetNormandie\ForumBundle\Service\MarkAsNotReadService;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -14,7 +13,6 @@ class MessageListener
 {
     public function __construct(
         private readonly Security $security,
-        private readonly NotifyManager $notifyManager,
         private readonly MarkAsNotReadService $markAsNotReadService
     ) {
     }
@@ -47,27 +45,17 @@ class MessageListener
 
 
     /**
-     * @param Message            $message
+     * @param Message $message
      * @param LifecycleEventArgs $event
      * @return void
      */
     public function postPersist(Message $message, LifecycleEventArgs $event): void
     {
-        $this->notifyManager->notify($message);
         $this->markAsNotReadService->notRead($message->getTopic());
     }
 
     /**
-     * @param Message            $message
-     * @param LifecycleEventArgs $event
-     */
-    public function postUpdate(Message $message, LifecycleEventArgs $event): void
-    {
-        $this->notifyManager->notify($message, 'edit');
-    }
-
-    /**
-     * @param Message           $message
+     * @param Message $message
      * @param LifecycleEventArgs $event
      */
     public function preRemove(Message $message, LifecycleEventArgs $event): void
