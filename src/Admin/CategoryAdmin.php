@@ -34,7 +34,7 @@ class CategoryAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
-            ->add('libCategory', TextType::class, ['label' => 'label.category'])
+            ->add('name', TextType::class, ['label' => 'label.name'])
             ->add('position', TextType::class, ['label' => 'label.position', 'required' => false]);
     }
 
@@ -51,7 +51,7 @@ class CategoryAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('id', null, ['label' => 'label.id'])
-            ->add('libCategory', null, ['label' => 'label.category'])
+            ->add('name', null, ['label' => 'label.name'])
             ->add('position', null, ['label' => 'label.position'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
@@ -62,7 +62,7 @@ class CategoryAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show->add('id', null, ['label' => 'label.id'])
-            ->add('libCategory', null, ['label' => 'label.category'])
+            ->add('name', null, ['label' => 'label.name'])
             ->add('position', null, ['label' => 'label.position']);
     }
 }

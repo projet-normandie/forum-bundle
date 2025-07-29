@@ -7,6 +7,9 @@ services:
     resource: '../src/*'
     exclude: '../src/{Admin,Entity,DependencyInjection,Migrations,Tests,Kernel.php}'
 
+  ProjetNormandie\ForumBundle\Serializer\ForumContextBuilder:
+    decorates: 'api_platform.serializer.context_builder'
+    autoconfigure: false
 
   pn.forum.event.entity.message:
     class: ProjetNormandie\ForumBundle\EventListener\Entity\MessageListener

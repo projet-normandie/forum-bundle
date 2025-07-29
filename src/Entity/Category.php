@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use ProjetNormandie\ForumBundle\Controller\GetHome;
 use ProjetNormandie\ForumBundle\Repository\CategoryRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,6 +24,22 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(),
+        new GetCollection(
+            uriTemplate: '/forum_category/get-home',
+            controller: GetHome::class,
+            read: false,
+            normalizationContext: [
+                'groups' => [
+                    'category:read',
+                    'category:forums',
+                    'forum:read',
+                    'forum:last-message',
+                    'message:read',
+                    'message:user',
+                    'user:read:minimal',
+                ]
+            ],
+        ),
     ],
     normalizationContext: ['groups' => ['category:read']]
 )]
@@ -36,7 +53,7 @@ class Category
 
     #[Groups(['category:read'])]
     #[ORM\Column(length: 50, nullable: false)]
-    private string $libCategory;
+    private string $name;
 
     #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $position = 0;
@@ -50,7 +67,7 @@ class Category
 
     public function __toString()
     {
-        return sprintf('%s [%s]', $this->getLibCategory(), $this->getId());
+        return sprintf('%s [%s]', $this->getName(), $this->getId());
     }
 
     public function __construct()
@@ -68,14 +85,14 @@ class Category
         return $this->id;
     }
 
-    public function setLibCategory(string $libCategory): void
+    public function setName(string $name): void
     {
-        $this->libCategory = $libCategory;
+        $this->name = $name;
     }
 
-    public function getLibCategory(): string
+    public function getName(): string
     {
-        return $this->libCategory;
+        return $this->name;
     }
 
     public function setPosition(int $position): void
