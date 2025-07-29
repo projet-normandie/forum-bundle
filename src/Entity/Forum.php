@@ -130,18 +130,6 @@ class Forum
     #[ORM\OneToMany(targetEntity: Topic::class, mappedBy: 'forum')]
     private Collection $topics;
 
-    #[ORM\OneToMany(targetEntity: Forum::class, mappedBy: 'parent')]
-    private Collection $childrens;
-
-    #[Groups(['forum:read'])]
-    #[ORM\ManyToOne(targetEntity: Forum::class, inversedBy: 'childrens')]
-    #[ORM\JoinColumn(name:'parent_id', referencedColumnName:'id', nullable:true)]
-    private ?Forum $parent;
-
-    #[Groups(['forum:read'])]
-    #[ORM\Column(nullable: false, options: ['default' => false])]
-    private bool $isParent = false;
-
     #[Groups(['forum:last-message'])]
     #[ORM\ManyToOne(targetEntity: Message::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name:'max_message_id', referencedColumnName:'id', nullable:true, onDelete: 'SET NULL')]
@@ -155,7 +143,6 @@ class Forum
     {
         $this->topics = new ArrayCollection();
         $this->forumUser = new ArrayCollection();
-        $this->childrens = new ArrayCollection();
     }
 
     public function __toString()
@@ -259,24 +246,10 @@ class Forum
         return $this->category;
     }
 
-    public function setParent(?Forum $forum = null): void
-    {
-        $this->parent = $forum;
-    }
-
-    public function getParent(): ?Forum
-    {
-        return $this->parent;
-    }
 
     public function getTopics(): Collection
     {
         return $this->topics;
-    }
-
-    public function getChildrens(): Collection
-    {
-        return $this->childrens;
     }
 
     public function setLastMessage(?Message $message = null): void
@@ -292,16 +265,6 @@ class Forum
     public function getForumUser(): Collection
     {
         return $this->forumUser;
-    }
-
-    public function setIsParent(bool $isParent): void
-    {
-        $this->isParent = $isParent;
-    }
-
-    public function getIsParent(): bool
-    {
-        return $this->isParent;
     }
 
     #[Groups(['forum:forum-user-1'])]

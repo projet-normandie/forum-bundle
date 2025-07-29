@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace ProjetNormandie\ForumBundle\Serializer;
 
-use ApiPlatform\Serializer\SerializerContextBuilderInterface;
+use ApiPlatform\State\SerializerContextBuilderInterface;
+use ProjetNormandie\ForumBundle\Entity\Category;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -27,17 +28,34 @@ final class ForumContextBuilder implements SerializerContextBuilderInterface
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
         $resourceClass = $context['resource_class'] ?? null;
 
+        // Gestion du endpoint GetHome pour Category
         if (
-            ($context['request_uri'] == '/api/categorie/home')
+            $resourceClass === Category::class
+            && str_contains($request->getRequestUri(), '/forum_category/get-home')
             && isset($context['groups'])
-            && $this->authorizationChecker->isGranted('ROLE_USER')
             && true === $normalization
         ) {
-            $context['groups'][] = 'forum.forum.forumUser1';
-            $context['groups'][] = 'forum.forumUser.read';
+            // Groups de base pour tous (guests et users)
+            $baseGroups = [
+                'category:read',
+                'category:forums',
+                'forum:read',
+                'forum:last-message',
+                'message:read',
+                'message:user',
+                'user:read:minimal',
+            ];
+
+            // Si l'utilisateur est connecté, ajouter les groups spécifiques
+            if ($this->authorizationChecker->isGranted('ROLE_USER')) {
+                $baseGroups[] = 'forum:forum-user-1';
+                $baseGroups[] = 'forum-user:read';
+            }
+
+            $context['groups'] = $baseGroups;
         }
 
-        if (
+        /*if (
             $resourceClass === Forum::class
             && isset($context['groups'])
             && $this->authorizationChecker->isGranted('ROLE_USER')
@@ -45,7 +63,7 @@ final class ForumContextBuilder implements SerializerContextBuilderInterface
         ) {
             $context['groups'][] = 'forum.forum.forumUser1';
             $context['groups'][] = 'forum.ForumUser.read';
-        }
+        }*/
         return $context;
     }
 }

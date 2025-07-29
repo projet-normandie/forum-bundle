@@ -41,9 +41,6 @@ class ForumAdmin extends AbstractAdmin
             ->add('libForum', TextType::class, ['label' => 'label.forum'])
             ->add('libForumFr', TextType::class, ['label' => 'label.forumFr'])
             ->add('category')
-            ->add('isParent', CheckboxType::class, [
-                'required' => false,
-            ])
             ->add(
                 'status',
                 ChoiceType::class,
@@ -64,8 +61,7 @@ class ForumAdmin extends AbstractAdmin
             ->add('id', null, ['label' => 'label.id'])
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
-            ->add('status', null, ['label' => 'label.status'])
-            ->add('isParent', null, ['label' => 'label.isParent']);
+            ->add('status', null, ['label' => 'label.status']);
     }
 
     /**
@@ -76,8 +72,6 @@ class ForumAdmin extends AbstractAdmin
         $list->addIdentifier('id', null, ['label' => 'label.id'])
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
-            ->add('isParent', null, ['label' => 'label.isParent'])
-            ->add('parent', null, ['label' => 'label.parent'])
             ->add('status', null, ['label' => 'label.status'])
             ->add('position', null, ['label' => 'label.position'])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
@@ -92,8 +86,6 @@ class ForumAdmin extends AbstractAdmin
             ->add('category', null, ['label' => 'label.category'])
             ->add('libForum', null, ['label' => 'label.forum'])
             ->add('libForumFr', null, ['label' => 'label.forumFr'])
-            ->add('isParent', null, ['label' => 'label.isParent'])
-            ->add('parent', null, ['label' => 'label.parent'])
             ->add('position', null, ['label' => 'label.position'])
             ->add('nbTopic', null, ['label' => 'label.nbTopic'])
             ->add('nbMessage', null, ['label' => 'label.nbMessage'])
