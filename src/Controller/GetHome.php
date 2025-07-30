@@ -59,12 +59,12 @@ class GetHome extends AbstractController
                 ->setParameter('status', ForumStatus::PUBLIC);
         }
 
-        $queryBuilder->andWhere('c.id NOT IN (8,9)');
-
+        // Filtrer les catégories qui doivent être affichées sur la home
+        $queryBuilder->andWhere('c.displayOnHome = :displayOnHome')
+            ->setParameter('displayOnHome', true);
 
         $queryBuilder->orderBy('c.position', 'ASC')
             ->addOrderBy('f.position', 'ASC');
-
 
         return $queryBuilder->getQuery()->getResult();
     }
