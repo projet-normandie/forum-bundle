@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
@@ -35,7 +36,11 @@ class CategoryAdmin extends AbstractAdmin
     {
         $form->add('id', TextType::class, ['label' => 'label.id', 'attr' => ['readonly' => true]])
             ->add('name', TextType::class, ['label' => 'label.name'])
-            ->add('position', TextType::class, ['label' => 'label.position', 'required' => false]);
+            ->add('position', TextType::class, ['label' => 'label.position', 'required' => false])
+            ->add('displayOnHome', CheckboxType::class, [
+                'label' => 'label.displayOnHome',
+                'required' => false
+            ]);
     }
 
     /**
@@ -43,6 +48,9 @@ class CategoryAdmin extends AbstractAdmin
      */
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        $filter
+            ->add('name', null, ['label' => 'label.name'])
+            ->add('displayOnHome', null, ['label' => 'label.displayOnHome']);
     }
 
     /**
@@ -53,6 +61,10 @@ class CategoryAdmin extends AbstractAdmin
         $list->addIdentifier('id', null, ['label' => 'label.id'])
             ->add('name', null, ['label' => 'label.name'])
             ->add('position', null, ['label' => 'label.position'])
+            ->add('displayOnHome', null, [
+                'label' => 'label.displayOnHome',
+                'editable' => true
+            ])
             ->add('_action', 'actions', ['actions' => ['show' => [], 'edit' => []]]);
     }
 
@@ -63,6 +75,7 @@ class CategoryAdmin extends AbstractAdmin
     {
         $show->add('id', null, ['label' => 'label.id'])
             ->add('name', null, ['label' => 'label.name'])
-            ->add('position', null, ['label' => 'label.position']);
+            ->add('position', null, ['label' => 'label.position'])
+            ->add('displayOnHome', null, ['label' => 'label.displayOnHome']);
     }
 }

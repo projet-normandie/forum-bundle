@@ -58,6 +58,10 @@ class Category
     #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $position = 0;
 
+    #[Groups(['category:read'])]
+    #[ORM\Column(nullable: false, options: ['default' => true])]
+    private bool $displayOnHome = true;
+
     /**
      * @var Collection<int, Forum>
      */
@@ -103,6 +107,16 @@ class Category
     public function getPosition(): int
     {
         return $this->position;
+    }
+
+    public function setDisplayOnHome(bool $displayOnHome): void
+    {
+        $this->displayOnHome = $displayOnHome;
+    }
+
+    public function getDisplayOnHome(): bool
+    {
+        return $this->displayOnHome;
     }
 
     public function getForums(): Collection
