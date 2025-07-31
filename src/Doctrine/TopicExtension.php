@@ -51,17 +51,21 @@ final class TopicExtension implements QueryCollectionExtensionInterface, QueryIt
     private function addWhere(QueryBuilder $queryBuilder, string $resourceClass, array $context): void
     {
         if (
-            Topic::class !== $resourceClass || !$this->security->isGranted(
-                'ROLE_USER'
-            ) || null === $user = $this->security->getUser()
+            Topic::class !== $resourceClass ||
+            !$this->security->isGranted('ROLE_USER') ||
+            null === $user = $this->security->getUser()
         ) {
             return;
         }
 
-        if (array_key_exists('topic:topic-user-1', $context['groups'])) {
-            $queryBuilder->innerJoin('o.topicUser', 'tu', Join::WITH, 'tu.user = :current_user');
-            $queryBuilder->addSelect('tu');
-            $queryBuilder->setParameter('current_user', $user);
-        }
+        // Jointure LEFT avec TopicUserLastVisit pour récupérer les infos de lecture
+        $queryBuilder->leftJoin(
+            'o.userLastVisits',
+            'tuv',
+            Join::WITH,
+            'tuv.user = :current_user'
+        );
+        $queryBuilder->addSelect('tuv');
+        $queryBuilder->setParameter('current_user', $user);
     }
 }

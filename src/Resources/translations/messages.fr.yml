@@ -1,3 +1,16 @@
+error:
+    authentication_required: 'Authentification requise'
+    notification_update_failed: 'Erreur lors de la mise à jour des notifications'
+    mark_as_read_failed: 'Erreur lors du marquage comme lu'
+
+topic:
+    notification:
+        enabled: 'Notifications activées pour ce topic'
+        disabled: 'Notifications désactivées pour ce topic'
+    marked_as_read: 'Topic marqué comme lu'
+    already_read: 'Topic déjà marqué comme lu'
+
+
 label:
     id: 'id'
     category: 'Category'
@@ -21,12 +34,4 @@ label:
     status: 'Statut'
     type: 'Type'
     user: 'User'
-topic:
-    notif:
-        object:
-            new: 'Nouvelle réponse sur : %s'
-            edit: 'Réponse éditée sur : %s'
-        message: |
-            <p><i>Message</i> : </p>
-            %s
-            <p><a href="%s">%s</a></p>
+

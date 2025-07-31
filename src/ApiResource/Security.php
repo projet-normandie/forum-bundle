@@ -5,14 +5,14 @@ namespace ProjetNormandie\ForumBundle\ApiResource;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\OpenApi\Model;
-use ProjetNormandie\ForumBundle\Controller\ReadAllForum;
+use ProjetNormandie\ForumBundle\Controller\ReadAll;
 
 #[ApiResource(
     shortName: 'ForumForum',
     operations: [
         new Get(
             uriTemplate: '/forum_forums/read-all',
-            controller: ReadAllForum::class,
+            controller: ReadAll::class,
             read: false,
             security: 'is_granted("ROLE_USER")',
             openapi: new Model\Operation(

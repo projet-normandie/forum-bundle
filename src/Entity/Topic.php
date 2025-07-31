@@ -12,13 +12,16 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
+use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
+use ProjetNormandie\ForumBundle\Controller\Topic\GetRecentActivity;
+use ProjetNormandie\ForumBundle\Controller\Topic\MarkAsRead;
+use ProjetNormandie\ForumBundle\Controller\Topic\ToggleNotification;
 use ProjetNormandie\ForumBundle\Repository\TopicRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -34,7 +37,32 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(
             normalizationContext: ['groups' =>
-                ['topic:read', 'topic:last-message', 'message:read', 'topic:forum', 'forum:read', 'topic:type', 'topic-type:read']
+                [
+                    'topic:read',
+                    'topic:last-message',
+                    'message:read',
+                    'topic:forum',
+                    'forum:read',
+                    'topic:type',
+                    'topic-type:read'
+                ]
+            ]
+        ),
+        new GetCollection(
+            uriTemplate: '/forum_topics/recent-activity',
+            controller: GetRecentActivity::class,
+            normalizationContext: ['groups' =>
+                [
+                    'topic:read',
+                    'topic:last-message',
+                    'message:read',
+                    'topic:forum',
+                    'forum:read',
+                    'topic:type',
+                    'topic-type:read',
+                    'message:user',
+                    'user:read',
+                ]
             ]
         ),
         new Get(),
@@ -47,6 +75,18 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Put(
             security: 'is_granted("ROLE_USER") and object.getUser() == user',
+        ),
+        new Get(
+            uriTemplate: '/forum_topics/{id}/toggle-notification',
+            controller: ToggleNotification::class,
+            security: 'is_granted("ROLE_USER")',
+            read: false,
+        ),
+        new Get(
+            uriTemplate: '/forum_topics/{id}/mark-as-read',
+            controller: MarkAsRead::class,
+            security: 'is_granted("ROLE_USER")',
+            read: false,
         )
     ],
     normalizationContext: ['groups' => ['topic:read', 'topic:type', 'topic-type:read']],
@@ -57,13 +97,24 @@ use Symfony\Component\Validator\Constraints as Assert;
     uriVariables: [
         'id' => new Link(fromClass: Forum::class, toProperty: 'forum'),
     ],
-    operations: [ new GetCollection() ],
-    normalizationContext: ['groups' => ['forum:read']],
+    operations: [
+        new GetCollection(
+            order: ['type.position' => 'ASC', 'lastMessage.id' => 'DESC']
+        )
+    ],
+    normalizationContext: ['groups' => [
+        'topic:read',
+        'topic:last-message',
+        'message:read',
+        'message:user',
+        'topic:type',
+        'topic-type:read']
+    ],
 )]
 #[ApiFilter(
     SearchFilter::class,
     properties: [
-        'libTopic' => 'partial',
+        'name' => 'partial',
         'forum' => 'exact',
         'forum.status' => 'exact',
         'topicUser.user' => 'exact',
@@ -74,27 +125,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     OrderFilter::class,
     properties: [
         'lastMessage.id' => 'DESC',
-    ]
-)]
-#[ApiFilter(
-    GroupFilter::class,
-    arguments: [
-        'parameterName' => 'groups',
-        'overrideDefaultGroups' => true,
-        'whitelist' => [
-            'forum:read',
-            'topic:read',
-            'topic:type',
-            'topic-type:read',
-            'topic:forum',
-            'topic:user',
-            'topic:last-message',
-            'topic-user:read',
-            'topic:topic-user-1',
-            'message:read',
-            'message:user',
-            'user:read'
-        ]
     ]
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['boolArchive'])]
@@ -111,7 +141,7 @@ class Topic
     #[Assert\NotBlank]
     #[Assert\Length(min:3, max: 255)]
     #[ORM\Column(length: 255, nullable: false)]
-    private string $libTopic;
+    private string $name;
 
     #[Groups(['topic:read'])]
     #[ORM\Column(nullable: false, options: ['default' => 0])]
@@ -127,8 +157,9 @@ class Topic
     #[ORM\JoinColumn(name:'user_id', referencedColumnName:'id', nullable:false)]
     private $user;
 
+    #[Groups(['topic:read'])]
     #[ORM\Column(length: 255)]
-    #[Gedmo\Slug(fields: ['libTopic'])]
+    #[Gedmo\Slug(fields: ['name'])]
     protected string $slug;
 
     #[Groups(['topic:type', 'topic:insert'])]
@@ -148,20 +179,20 @@ class Topic
     #[ORM\Column(nullable: false, options: ['default' => false])]
     private bool $boolArchive = false;
 
-    #[ORM\OneToMany(targetEntity: TopicUser::class, mappedBy: 'topic')]
-    private Collection $topicUser;
+    #[ORM\OneToMany(targetEntity: TopicUserLastVisit::class, mappedBy: 'topic')]
+    private Collection $userLastVisits;
 
 
     public function __toString()
     {
-        return sprintf('%s [%s]', $this->getLibTopic(), $this->getId());
+        return sprintf('%s [%s]', $this->getName(), $this->getId());
     }
 
 
     public function __construct()
     {
         $this->messages = new ArrayCollection();
-        $this->topicUser = new ArrayCollection();
+        $this->userLastVisits = new ArrayCollection();
     }
 
     public function setId(int $id): void
@@ -174,14 +205,14 @@ class Topic
         return $this->id;
     }
 
-    public function setLibTopic(string $libTopic): void
+    public function setName(string $name): void
     {
-        $this->libTopic = $libTopic;
+        $this->name = $name;
     }
 
-    public function getLibTopic(): string
+    public function getName(): string
     {
-        return $this->libTopic;
+        return $this->name;
     }
 
     public function setNbMessage(int $nbMessage): void
@@ -267,16 +298,57 @@ class Topic
         return $this->boolArchive;
     }
 
-    public function getTopicUser(): Collection
+    public function getLastVisitData(): ?TopicUserLastVisit
     {
-        return $this->topicUser;
+        if ($this->userLastVisits->first()) {
+            return $this->userLastVisits->first();
+        }
+        return null;
     }
 
-    #[Groups(['topic:topic-user-1'])]
-    public function getTopicUser1(): TopicUser
+    #[Groups(['topic:read-status'])]
+    public function getIsRead(): ?bool
     {
-        return $this->topicUser[0];
+        $topicVisit = $this->getLastVisitData();
+        if ($topicVisit && $this->getLastMessage()) {
+            return $topicVisit->getLastVisitedAt() >= $this->getLastMessage()->getCreatedAt();
+        } else {
+            return $this->getLastMessage() === null;
+        }
     }
+
+    #[Groups(['topic:read-status'])]
+    public function hasNewContent(): ?bool
+    {
+        $topicVisit = $this->getLastVisitData();
+        if ($topicVisit && $this->getLastMessage()) {
+            return !$this->getIsRead();
+        } else {
+            return $this->getLastMessage() !== null;
+        }
+    }
+
+    #[Groups(['topic:read-status'])]
+    public function getHasBeenVisited(): ?bool
+    {
+        $topicVisit = $this->getLastVisitData();
+        return $topicVisit !== null;
+    }
+
+    #[Groups(['topic:read-status'])]
+    public function getLastVisitedAt(): ?\DateTime
+    {
+        $topicVisit = $this->getLastVisitData();
+        return $topicVisit?->getLastVisitedAt();
+    }
+
+    #[Groups(['topic:read-status'])]
+    public function getIsNotify(): ?bool
+    {
+        $topicVisit = $this->getLastVisitData();
+        return $topicVisit && $topicVisit->getIsNotify();
+    }
+
 
     public function getUrl(): string
     {
