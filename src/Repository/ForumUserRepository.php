@@ -16,19 +16,6 @@ class ForumUserRepository extends ServiceEntityRepository
         parent::__construct($registry, ForumUser::class);
     }
 
-    public function countSubForumNotRead($user, Forum $parent): int
-    {
-         $query = $this->createQueryBuilder('fu')
-             ->select('COUNT(fu.id)')
-             ->join('fu.forum', 'f')
-             ->where('f.parent = :parent')
-             ->andWhere('fu.user = :user')
-             ->andWhere('fu.boolRead = 0')
-             ->setParameter('parent', $parent)
-             ->setParameter('user', $user);
-        return (int) $query->getQuery()->getSingleScalarResult();
-    }
-
     /**
      * @param            $user
      * @param Forum|null $forum
@@ -38,7 +25,7 @@ class ForumUserRepository extends ServiceEntityRepository
     {
         $query = $this->_em->createQueryBuilder()
             ->update('ProjetNormandie\ForumBundle\Entity\ForumUser', 'fu')
-            ->set('fu.boolRead', true)
+            ->set('fu.isRead', true)
             ->where('fu.user = :user')
             ->setParameter('user', $user);
 

@@ -8,6 +8,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Forum;
 use ProjetNormandie\ForumBundle\Entity\Topic;
+use ProjetNormandie\ForumBundle\Entity\TopicType;
 use Symfony\Bundle\SecurityBundle\Security;
 
 class TopicListener
@@ -29,27 +30,15 @@ class TopicListener
     {
         $topic->setUser($this->security->getUser());
 
+        // Default type topic
+        $topic->setType($event->getObjectManager()->getRepository(TopicType::class)->find(3));
+
         foreach ($topic->getMessages() as $message) {
             $message->setUser($this->security->getUser());
         }
 
         $forum = $topic->getForum();
         $forum->setNbTopic($forum->getNbTopic() + 1);
-
-        $parent = $forum->getParent();
-        $parent?->setNbTopic($parent->getNbTopic() + 1);
-    }
-
-    /**
-     * @param Topic $topic
-     * @param LifecycleEventArgs $event
-     */
-    public function postPersist(Topic $topic, LifecycleEventArgs $event): void
-    {
-        $connection = $event->getObjectManager()->getConnection();
-        $query = "INSERT INTO pnf_topic_user (topic_id, user_id)
-                 SELECT DISTINCT :idTopic, user_id FROM pnf_topic_user";
-        $connection->executeStatement($query, array('idTopic' => $topic->getId()));
     }
 
 
@@ -80,16 +69,9 @@ class TopicListener
             $forumSource->setNbTopic($forumSource->getNbTopic() - 1);
             $forumSource->setNbMessage($forumSource->getNbMessage() - $nbMessage);
 
-            $parent = $forumSource->getParent();
-            $parent?->setNbTopic($parent->getNbTopic() - 1);
-            $parent?->setNbMessage($parent->getNbMessage() - $nbMessage);
-
             $forumDestination->setNbTopic($forumDestination->getNbTopic() + 1);
             $forumDestination->setNbMessage($forumDestination->getNbMessage() + $nbMessage);
 
-            $parent = $forumDestination->getParent();
-            $parent?->setNbTopic($parent->getNbTopic() + 1);
-            $parent?->setNbMessage($parent->getNbMessage() + $nbMessage);
             $event->getObjectManager()->flush();
         }
     }
@@ -106,9 +88,5 @@ class TopicListener
         $forum = $topic->getForum();
         $forum->setNbTopic($forum->getNbTopic() - 1);
         $forum->setNbMessage($forum->getNbMessage() - $nbMessage);
-
-        $parent = $forum->getParent();
-        $parent?->setNbTopic($parent->getNbTopic() - 1);
-        $parent?->setNbMessage($parent->getNbMessage() - $nbMessage);
     }
 }

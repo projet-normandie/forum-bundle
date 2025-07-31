@@ -13,7 +13,6 @@ use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Link;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use ProjetNormandie\ForumBundle\Repository\MessageRepository;
@@ -49,7 +48,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         'id' => new Link(fromClass: Topic::class, toProperty: 'topic'),
     ],
     operations: [ new GetCollection() ],
-    normalizationContext: ['groups' => ['message:read', 'user:read']],
+    normalizationContext: ['groups' => ['message:read', 'message:message', 'message:user', 'user:read:minimal']],
 )]
 #[ApiFilter(
     SearchFilter::class,
@@ -64,24 +63,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     properties: [
         'id' => 'ASC',
         'createdAt' => 'ASC',
-    ]
-)]
-#[ApiFilter(
-    GroupFilter::class,
-    arguments: [
-        'parameterName' => 'groups',
-        'overrideDefaultGroups' => true,
-        'whitelist' => [
-            'message:read',
-            'message:user',
-            'message:topic',
-            'message:message',
-            'topic:read',
-            'topic:forum',
-            'forum:read',
-            'forum:user',
-            'user:read',
-        ]
     ]
 )]
 class Message

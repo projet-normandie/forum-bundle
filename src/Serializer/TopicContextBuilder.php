@@ -7,10 +7,11 @@ namespace ProjetNormandie\ForumBundle\Serializer;
 use ApiPlatform\State\SerializerContextBuilderInterface;
 use ProjetNormandie\ForumBundle\Entity\Category;
 use ProjetNormandie\ForumBundle\Entity\Forum;
+use ProjetNormandie\ForumBundle\Entity\Topic;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-final class ForumContextBuilder implements SerializerContextBuilderInterface
+final class TopicContextBuilder implements SerializerContextBuilderInterface
 {
     private SerializerContextBuilderInterface $decorated;
     private AuthorizationCheckerInterface $authorizationChecker;
@@ -28,32 +29,19 @@ final class ForumContextBuilder implements SerializerContextBuilderInterface
         $context = $this->decorated->createFromRequest($request, $normalization, $extractedAttributes);
         $resourceClass = $context['resource_class'] ?? null;
 
-        // Gestion du endpoint GetHome pour Category
         if (
-            $resourceClass === Category::class
-            && str_contains($request->getRequestUri(), '/forum_category/get-home')
+            $resourceClass === Topic::class
             && isset($context['groups'])
             && true === $normalization
         ) {
-            // Groups de base pour tous (guests et users)
-            $baseGroups = [
-                'category:read',
-                'category:forums',
-                'forum:read',
-                'forum:last-message',
-                'message:read',
-                'message:user',
-                'user:read:minimal',
-            ];
+            $baseGroups = $context['groups'];
 
-            // Si l'utilisateur est connecté, ajouter les groups spécifiques
             if ($this->authorizationChecker->isGranted('ROLE_USER')) {
-                $baseGroups[] = 'forum:read-status';
+                $baseGroups[] = 'topic:read-status';
             }
 
-            $context['groups'] = $baseGroups;
+            $context['groups'] = array_unique($baseGroups);
         }
-
         return $context;
     }
 }

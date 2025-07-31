@@ -33,19 +33,3 @@ services:
         manager_type: orm
         group: "group.forums"
         label: "label.message"
-  sonata.admin.forum.topicUser:
-    class: ProjetNormandie\ForumBundle\Admin\TopicUserAdmin
-    tags:
-      - name: sonata.admin
-        model_class: 'ProjetNormandie\ForumBundle\Entity\TopicUser'
-        manager_type: orm
-        group: "group.forums"
-        label: "label.topicUser"
-  sonata.admin.forum.forumUser:
-    class: ProjetNormandie\ForumBundle\Admin\ForumUserAdmin
-    tags:
-      - name: sonata.admin
-        model_class: 'ProjetNormandie\ForumBundle\Entity\ForumUser'
-        manager_type: orm
-        group: "group.forums"
-        label: "label.forumUser"

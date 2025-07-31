@@ -6,14 +6,12 @@ namespace ProjetNormandie\ForumBundle\EventListener\Entity;
 
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 use ProjetNormandie\ForumBundle\Entity\Message;
-use ProjetNormandie\ForumBundle\Service\MarkAsNotReadService;
 use Symfony\Bundle\SecurityBundle\Security;
 
-class MessageListener
+readonly class MessageListener
 {
     public function __construct(
-        private readonly Security $security,
-        private readonly MarkAsNotReadService $markAsNotReadService
+        private Security $security
     ) {
     }
 
@@ -35,24 +33,8 @@ class MessageListener
         $forum = $topic->getForum();
         $forum->setNbMessage($forum->getNbMessage() + 1);
         $forum->setLastMessage($message);
-
-        $parent = $forum->getParent();
-        if ($parent) {
-            $parent->setNbMessage($parent->getNbMessage());
-            $parent->setLastMessage($message);
-        }
     }
 
-
-    /**
-     * @param Message $message
-     * @param LifecycleEventArgs $event
-     * @return void
-     */
-    public function postPersist(Message $message, LifecycleEventArgs $event): void
-    {
-        $this->markAsNotReadService->notRead($message->getTopic());
-    }
 
     /**
      * @param Message $message
@@ -71,13 +53,10 @@ class MessageListener
 
         $forum = $topic->getForum();
         $forum->setNbMessage($forum->getNbMessage() - 1);
-
-        $parent = $forum->getParent();
-        $parent?->setNbMessage($parent->getNbMessage() - 1);
     }
 
     /**
-     * @param Message            $message
+     * @param Message $message
      * @param LifecycleEventArgs $event
      * @return void
      */
@@ -85,7 +64,6 @@ class MessageListener
     {
         $topic = $message->getTopic();
         $forum = $topic->getForum();
-        $parent = $forum->getParent();
         $lastMessage = $topic->getMessages()->last();
         if ($message === $topic->getLastMessage()) {
             $topic->setLastMessage($lastMessage);
@@ -94,9 +72,6 @@ class MessageListener
         if ($message === $forum->getLastMessage()) {
             $forum->setLastMessage($lastMessage);
             $event->getObjectManager()->flush();
-        }
-        if ($parent && $message === $parent->getLastMessage()) {
-            $parent->setLastMessage($lastMessage);
         }
     }
 }

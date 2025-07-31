@@ -13,13 +13,12 @@ use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\OpenApi\Model;
-use ApiPlatform\Serializer\Filter\GroupFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
-use ProjetNormandie\ForumBundle\Controller\ReadForum;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use ProjetNormandie\ForumBundle\Controller\Forum\MarkAsRead;
 use ProjetNormandie\ForumBundle\Repository\ForumRepository;
 use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -27,7 +26,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name:'pnf_forum')]
 #[ORM\Entity(repositoryClass: ForumRepository::class)]
-#[ORM\EntityListeners(["ProjetNormandie\ForumBundle\EventListener\Entity\ForumListener"])]
 #[ORM\Index(name: "idx_position", columns: ["position"])]
 #[ORM\Index(name: "idx_lib_forum", columns: ["lib_forum"])]
 #[ApiResource(
@@ -41,13 +39,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             security: 'object.getStatus() == "public" or is_granted(object.getRole())',
         ),
         new Get(
-            uriTemplate: '/forum_forums/{id}/read',
-            controller: ReadForum::class,
+            uriTemplate: '/forum_forums/{id}/mark-as-read',
+            controller: MarkAsRead::class,
             security: 'is_granted("ROLE_USER")',
-            openapi: new Model\Operation(
-                summary: 'Mark forum as read',
-                description: 'Mark forum as read'
-            ),
         ),
     ],
     normalizationContext: ['groups' => ['forum:read']
@@ -63,22 +57,6 @@ use Symfony\Component\Validator\Constraints as Assert;
     OrderFilter::class,
     properties: [
         'lastMessage.id' => 'DESC'
-    ]
-)]
-#[ApiFilter(
-    GroupFilter::class,
-    arguments: [
-        'parameterName' => 'groups',
-        'overrideDefaultGroups' => true,
-        'whitelist' => [
-            'forum:read',
-            'forum:user',
-            'forum:last-message',
-            'message:user',
-            'message:read',
-            'forum:forum-user-1',
-            'forum-user:read'
-        ]
     ]
 )]
 #[ApiFilter(DateFilter::class, properties: ['lastMessage.createdAt' => DateFilterInterface::EXCLUDE_NULL])]
@@ -119,6 +97,7 @@ class Forum
     #[ORM\Column(nullable: true, options: ['default' => 0])]
     private int $nbTopic = 0;
 
+    #[Groups(['forum:read'])]
     #[ORM\Column(length: 128)]
     #[Gedmo\Slug(fields: ['libForum'])]
     protected string $slug;
@@ -136,13 +115,26 @@ class Forum
     private ?Message $lastMessage;
 
     #[Groups(['forum:forum-user'])]
-    #[ORM\OneToMany(targetEntity: ForumUser::class, mappedBy: 'forum')]
-    private Collection $forumUser;
+    #[ORM\OneToMany(targetEntity: ForumUserLastVisit::class, mappedBy: 'forum')]
+    private Collection $userLastVisits;
+
+    #[Groups(['forum:read-status'])]
+    public ?int $unreadTopicsCount = null;
+
+    #[Groups(['forum:read-status'])]
+    public ?bool $isUnread = null;
+
+    #[Groups(['forum:read-status'])]
+    public ?bool $hasNewContent = null;
+
+    #[Groups(['forum:read-status'])]
+    public ?bool $hasBeenVisited = null;
+
 
     public function __construct()
     {
         $this->topics = new ArrayCollection();
-        $this->forumUser = new ArrayCollection();
+        $this->userLastVisits = new ArrayCollection();
     }
 
     public function __toString()
@@ -262,14 +254,37 @@ class Forum
         return $this->lastMessage;
     }
 
-    public function getForumUser(): Collection
+    public function getLastVisitData(): ?ForumUserLastVisit
     {
-        return $this->forumUser;
+        if ($this->userLastVisits->first()) {
+            return $this->userLastVisits->first();
+        }
+        return null;
     }
 
-    #[Groups(['forum:forum-user-1'])]
-    public function getForumUser1()
+    #[Groups(['forum:read-status'])]
+    public function getHasNewContent(): ?bool
     {
-        return $this->forumUser[0];
+        $forumVisit = $this->getLastVisitData();
+        if ($forumVisit && $this->getLastMessage()) {
+            return $this->getLastMessage()->getCreatedAt() > $forumVisit->getLastVisitedAt();
+        } else {
+            return $this->getLastMessage() !== null;
+        }
     }
+
+    #[Groups(['forum:read-status'])]
+    public function getHasBeenVisited(): ?bool
+    {
+        $forumVisit = $this->getLastVisitData();
+        return $forumVisit !== null;
+    }
+
+    #[Groups(['forum:read-status'])]
+    public function getLastVisitedAt(): ?\DateTime
+    {
+        $forumVisit = $this->getLastVisitData();
+        return $forumVisit?->getLastVisitedAt();
+    }
+
 }

@@ -1,6 +1,0 @@
-ProjetNormandie\ForumBundle\Entity\Topic:
-  attributes:
-    slug:
-      groups:
-        - 'message:read'
-        - 'topic:read'

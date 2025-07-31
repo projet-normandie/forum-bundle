@@ -31,14 +31,14 @@ class TopicType
     #[Groups(['topic-type:read'])]
     #[Assert\Length(max: 30)]
     #[ORM\Column(length: 30, nullable: false)]
-    private string $libType;
+    private string $name;
 
     #[ORM\Column(nullable: false, options: ['default' => 0])]
     private int $position = 0;
 
     public function __toString()
     {
-        return sprintf('%s [%s]', $this->getLibType(), $this->getId());
+        return sprintf('%s [%s]', $this->getName(), $this->getId());
     }
 
     public function setId(int $id): void
@@ -51,14 +51,14 @@ class TopicType
         return $this->id;
     }
 
-    public function setLibType(string $libType): void
+    public function setName(string $name): void
     {
-        $this->libType = $libType;
+        $this->name = $name;
     }
 
-    public function getLibType(): string
+    public function getName(): string
     {
-        return $this->libType;
+        return $this->name;
     }
 
     public function setPosition(int $position): void

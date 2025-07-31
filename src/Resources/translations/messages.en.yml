@@ -1,3 +1,15 @@
+error:
+    authentication_required: 'Authentication required'
+    notification_update_failed: 'Error updating notifications'
+    mark_as_read_failed: 'Error marking as read'
+
+topic:
+    notification:
+        enabled: 'Notifications enabled for this topic'
+        disabled: 'Notifications disabled for this topic'
+    marked_as_read: 'Topic marked as read'
+    already_read: 'Topic already marked as read'
+
 breadcrumb:
     link_category_list: 'Category list'
     link_forum_list: 'Forum list'
@@ -5,6 +17,7 @@ breadcrumb:
     link_message_list: 'Message list'
     link_topic_user_list: 'Topic/User list'
     link_forum_user_list: 'Forum/User list'
+
 label:
     id: 'id'
     category: 'Category'
@@ -28,12 +41,3 @@ label:
     status: 'Status'
     type: 'Type'
     user: 'User'
-topic:
-    notif:
-        object:
-            new : 'New answer on : %s'
-            edit: 'Edit answer on : %s'
-        message: |
-            <p><i>Message</i> : </p>
-            %s
-            <p><a href="%s">%s</a></p>
