@@ -12,13 +12,13 @@ use ProjetNormandie\ForumBundle\Controller\ReadAll;
     operations: [
         new Get(
             uriTemplate: '/forum_forums/read-all',
-            controller: ReadAll::class,
             read: false,
-            security: 'is_granted("ROLE_USER")',
+            controller: ReadAll::class,
             openapi: new Model\Operation(
                 summary: 'Mark all forums as read',
                 description: 'Mark all forums as read'
             ),
+            security: 'is_granted("ROLE_USER")',
         )
     ],
 )]

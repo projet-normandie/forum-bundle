@@ -12,12 +12,13 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\OpenApi\Model;
+use ApiPlatform\OpenApi\Model\Operation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use ProjetNormandie\ForumBundle\Controller\Forum\GetStats;
 use ProjetNormandie\ForumBundle\Controller\Forum\MarkAsRead;
 use ProjetNormandie\ForumBundle\Repository\ForumRepository;
 use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
@@ -36,6 +37,142 @@ use Symfony\Component\Validator\Constraints as Assert;
         ),
         new Get(
             uriTemplate: '/forum_forums/{id}',
+            security: 'object.getStatus() == "public" or is_granted(object.getRole())',
+        ),
+        new Get(
+            uriTemplate: '/forum_forums/{id}/stats',
+            controller: GetStats::class,
+            openapi: new Operation(
+                responses: [
+                    '200' => [
+                        'description' => 'Forum statistics',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'object',
+                                    'properties' => [
+                                        'nbTopic' => [
+                                            'type' => 'integer',
+                                            'description' => 'Number of non-archived topics in this forum'
+                                        ],
+                                        'nbMessage' => [
+                                            'type' => 'integer',
+                                            'description' => 'Number of messages in this forum'
+                                        ],
+                                        'activeUsers' => [
+                                            'type' => 'integer',
+                                            'description' => 'Number of active users in this forum in the last 24 hours'
+                                        ],
+                                        'todayActivity' => [
+                                            'type' => 'object',
+                                            'properties' => [
+                                                'nbNewTopic' => [
+                                                    'type' => 'integer',
+                                                    'description' => 'Number of new topics created today in this forum'
+                                                ],
+                                                'nbNewMessage' => [
+                                                    'type' => 'integer',
+                                                    'description' => 'Number of new messages created today in this forum'
+                                                ]
+                                            ]
+                                        ],
+                                        'lastMessage' => [
+                                            'type' => 'object',
+                                            'nullable' => true,
+                                            'properties' => [
+                                                'createdAt' => ['type' => 'string'],
+                                                'username' => ['type' => 'string']
+                                            ]
+                                        ],
+                                        'lastUpdate' => [
+                                            'type' => 'string',
+                                            'format' => 'date-time',
+                                            'description' => 'Timestamp of when statistics were generated'
+                                        ],
+                                        'weekActivity' => [
+                                            'type' => 'object',
+                                            'description' => 'Week activity (only when extended=true)',
+                                            'properties' => [
+                                                'nbNewTopicWeek' => [
+                                                    'type' => 'integer',
+                                                    'description' => 'Number of new topics created this week in this forum'
+                                                ],
+                                                'nbNewMessageWeek' => [
+                                                    'type' => 'integer',
+                                                    'description' => 'Number of new messages created this week in this forum'
+                                                ]
+                                            ]
+                                        ],
+                                        'topActiveUsers' => [
+                                            'type' => 'array',
+                                            'description' => 'Top active users in this forum (only when extended=true)',
+                                            'items' => [
+                                                'type' => 'object',
+                                                'properties' => [
+                                                    'user_id' => ['type' => 'integer'],
+                                                    'pseudo' => ['type' => 'string'],
+                                                    'activity_count' => ['type' => 'integer']
+                                                ]
+                                            ]
+                                        ],
+                                        'topTopics' => [
+                                            'type' => 'array',
+                                            'description' => 'Most active topics in this forum (only when extended=true)',
+                                            'items' => [
+                                                'type' => 'object',
+                                                'properties' => [
+                                                    'id' => ['type' => 'integer'],
+                                                    'name' => ['type' => 'string'],
+                                                    'nbMessage' => ['type' => 'integer'],
+                                                    'createdAt' => ['type' => 'string', 'format' => 'date-time']
+                                                ]
+                                            ]
+                                        ],
+                                        'recentActivity' => [
+                                            'type' => 'array',
+                                            'description' => 'Recent activity in this forum (only when extended=true)',
+                                            'items' => [
+                                                'type' => 'object',
+                                                'properties' => [
+                                                    'messageId' => ['type' => 'integer'],
+                                                    'topicId' => ['type' => 'integer'],
+                                                    'topicName' => ['type' => 'string'],
+                                                    'userPseudo' => ['type' => 'string'],
+                                                    'createdAt' => ['type' => 'string', 'format' => 'date-time']
+                                                ]
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
+                    '404' => [
+                        'description' => 'Forum not found'
+                    ],
+                    '403' => [
+                        'description' => 'Access denied to private forum'
+                    ]
+                ],
+                summary: 'Get forum specific statistics',
+                description: 'Returns statistics for a specific forum including topics, messages, active users and activity data',
+                parameters: [
+                    [
+                        'name' => 'extended',
+                        'in' => 'query',
+                        'required' => false,
+                        'schema' => ['type' => 'boolean'],
+                        'description' => 'Include extended statistics (week activity, top users, top topics, recent activity)'
+                    ],
+                    [
+                        'name' => 'refresh',
+                        'in' => 'query',
+                        'required' => false,
+                        'schema' => ['type' => 'boolean'],
+                        'description' => 'Force refresh of cached statistics'
+                    ]
+                ]
+            ),
             security: 'object.getStatus() == "public" or is_granted(object.getRole())',
         ),
         new Get(
