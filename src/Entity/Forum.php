@@ -20,6 +20,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use ProjetNormandie\ForumBundle\Controller\Forum\GetStats;
 use ProjetNormandie\ForumBundle\Controller\Forum\MarkAsRead;
+use ProjetNormandie\ForumBundle\Controller\ReadAll;
 use ProjetNormandie\ForumBundle\Repository\ForumRepository;
 use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -38,6 +39,16 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             uriTemplate: '/forum_forums/{id}',
             security: 'object.getStatus() == "public" or is_granted(object.getRole())',
+        ),
+        new Get(
+            uriTemplate: '/forum_forums/read-all',
+            read: false,
+            controller: ReadAll::class,
+            openapi: new Operation(
+                summary: 'Mark all forums as read',
+                description: 'Mark all forums as read'
+            ),
+            security: 'is_granted("ROLE_USER")',
         ),
         new Get(
             uriTemplate: '/forum_forums/{id}/stats',
@@ -156,7 +167,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                 ],
                 summary: 'Get forum specific statistics',
                 description: 'Returns statistics for a specific forum including topics, messages, active users and activity data',
-                parameters: [
+                /*parameters: [
                     [
                         'name' => 'extended',
                         'in' => 'query',
@@ -171,7 +182,7 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'schema' => ['type' => 'boolean'],
                         'description' => 'Force refresh of cached statistics'
                     ]
-                ]
+                ]*/
             ),
             security: 'object.getStatus() == "public" or is_granted(object.getRole())',
         ),
