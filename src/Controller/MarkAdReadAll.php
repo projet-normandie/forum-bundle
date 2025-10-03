@@ -9,8 +9,10 @@ use ProjetNormandie\ForumBundle\Entity\ForumUserLastVisit;
 use ProjetNormandie\ForumBundle\Entity\TopicUserLastVisit;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
-class ReadAll extends AbstractController
+#[AsController]
+class MarkAdReadAll extends AbstractController
 {
     private EntityManagerInterface $em;
 

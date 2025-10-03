@@ -16,7 +16,7 @@ use ProjetNormandie\ForumBundle\Controller\GetStats;
             uriTemplate: '/forum_stats',
             controller: GetStats::class,
             read: false,
-            openapi: new Model\Operation(
+            /*openapi: new Model\Operation(
                 summary: 'Get forum statistics',
                 description: 'Returns global forum statistics including number of forums, topics, messages, active users and today\'s activity',
                 parameters: [
@@ -121,7 +121,7 @@ use ProjetNormandie\ForumBundle\Controller\GetStats;
                         ]
                     ]
                 ]
-            ),
+            ),*/
         )
     ],
 )]
