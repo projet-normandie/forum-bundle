@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\OpenApi\Model\Operation;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,7 +21,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use ProjetNormandie\ForumBundle\Controller\Forum\GetStats;
 use ProjetNormandie\ForumBundle\Controller\Forum\MarkAsRead;
-use ProjetNormandie\ForumBundle\Controller\ReadAll;
+use ProjetNormandie\ForumBundle\Controller\MarkAdReadAll;
 use ProjetNormandie\ForumBundle\Repository\ForumRepository;
 use ProjetNormandie\ForumBundle\ValueObject\ForumStatus;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -40,10 +41,9 @@ use Symfony\Component\Validator\Constraints as Assert;
             uriTemplate: '/forum_forums/{id}',
             security: 'object.getStatus() == "public" or is_granted(object.getRole())',
         ),
-        new Get(
+        new Post(
             uriTemplate: '/forum_forums/read-all',
-            read: false,
-            controller: ReadAll::class,
+            controller: MarkAdReadAll::class,
             openapi: new Operation(
                 summary: 'Mark all forums as read',
                 description: 'Mark all forums as read'
@@ -53,7 +53,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Get(
             uriTemplate: '/forum_forums/{id}/stats',
             controller: GetStats::class,
-            openapi: new Operation(
+            /*openapi: new Operation(
                 responses: [
                     '200' => [
                         'description' => 'Forum statistics',
@@ -182,8 +182,8 @@ use Symfony\Component\Validator\Constraints as Assert;
                         'schema' => ['type' => 'boolean'],
                         'description' => 'Force refresh of cached statistics'
                     ]
-                ]*/
-            ),
+                ]
+            ),*/
             security: 'object.getStatus() == "public" or is_granted(object.getRole())',
         ),
         new Get(
